@@ -1,6 +1,7 @@
-package br.cin.ufpe.reviewer.search.provider.spi;
+package br.cin.ufpe.reviewer.search.provider.acm;
 
 import java.net.URL;
+import java.util.Set;
 
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.HtmlNode;
@@ -8,9 +9,15 @@ import org.htmlcleaner.SimpleHtmlSerializer;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.TagNodeVisitor;
 
+import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
+import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 
-public class DefaultHttpSearchProvider {
+public class AcmSearchProvider implements SearchProvider {
 
+	public Set<Study> search(String searchString) {
+		return null;
+	}
+	
 	public static void main(String[] args) {
 		try {
 			HtmlCleaner cleaner = new HtmlCleaner();
@@ -71,7 +78,7 @@ public class DefaultHttpSearchProvider {
 	        return true;
 	    }
 	}
-	
+
 //	public static void main(String[] args) {
 //		String html = null;
 //		
@@ -188,4 +195,5 @@ public class DefaultHttpSearchProvider {
 //		return title;
 //	}
 
+	
 }
