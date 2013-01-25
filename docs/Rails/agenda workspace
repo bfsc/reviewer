@@ -1,0 +1,258 @@
+<NotepadPlus>
+    <Project name="agenda">
+        <Folder name="app">
+            <Folder name="assets">
+                <Folder name="images">
+                    <File name="agenda\app\assets\images\rails.png" />
+                </Folder>
+                <Folder name="javascripts">
+                    <File name="agenda\app\assets\javascripts\application.js" />
+                    <File name="agenda\app\assets\javascripts\eventos.js.coffee" />
+                </Folder>
+                <Folder name="stylesheets">
+                    <File name="agenda\app\assets\stylesheets\application.css" />
+                    <File name="agenda\app\assets\stylesheets\eventos.css.scss" />
+                    <File name="agenda\app\assets\stylesheets\scaffolds.css.scss" />
+                </Folder>
+            </Folder>
+            <Folder name="controllers">
+                <File name="agenda\app\controllers\application_controller.rb" />
+                <File name="agenda\app\controllers\eventos_controller.rb" />
+            </Folder>
+            <Folder name="helpers">
+                <File name="agenda\app\helpers\application_helper.rb" />
+                <File name="agenda\app\helpers\eventos_helper.rb" />
+            </Folder>
+            <Folder name="mailers">
+                <File name="agenda\app\mailers\.gitkeep" />
+            </Folder>
+            <Folder name="models">
+                <File name="agenda\app\models\.gitkeep" />
+                <File name="agenda\app\models\evento.rb" />
+            </Folder>
+            <Folder name="views">
+                <Folder name="eventos">
+                    <File name="agenda\app\views\eventos\edit.html.erb" />
+                    <File name="agenda\app\views\eventos\index.html.erb" />
+                    <File name="agenda\app\views\eventos\new.html.erb" />
+                    <File name="agenda\app\views\eventos\show.html.erb" />
+                    <File name="agenda\app\views\eventos\_form.html.erb" />
+                </Folder>
+                <Folder name="layouts">
+                    <File name="agenda\app\views\layouts\application.html.erb" />
+                </Folder>
+            </Folder>
+        </Folder>
+        <Folder name="config">
+            <Folder name="environments">
+                <File name="agenda\config\environments\development.rb" />
+                <File name="agenda\config\environments\production.rb" />
+                <File name="agenda\config\environments\test.rb" />
+            </Folder>
+            <Folder name="initializers">
+                <File name="agenda\config\initializers\backtrace_silencers.rb" />
+                <File name="agenda\config\initializers\inflections.rb" />
+                <File name="agenda\config\initializers\mime_types.rb" />
+                <File name="agenda\config\initializers\secret_token.rb" />
+                <File name="agenda\config\initializers\session_store.rb" />
+                <File name="agenda\config\initializers\wrap_parameters.rb" />
+            </Folder>
+            <Folder name="locales">
+                <File name="agenda\config\locales\en.yml" />
+            </Folder>
+            <File name="agenda\config\application.rb" />
+            <File name="agenda\config\boot.rb" />
+            <File name="agenda\config\database.yml" />
+            <File name="agenda\config\environment.rb" />
+            <File name="agenda\config\routes.rb" />
+        </Folder>
+        <Folder name="db">
+            <Folder name="migrate">
+                <File name="agenda\db\migrate\20130113111555_create_eventos.rb" />
+            </Folder>
+            <File name="agenda\db\development.sqlite3" />
+            <File name="agenda\db\schema.rb" />
+            <File name="agenda\db\seeds.rb" />
+            <File name="agenda\db\test.sqlite3" />
+        </Folder>
+        <Folder name="doc">
+            <File name="agenda\doc\README_FOR_APP" />
+        </Folder>
+        <Folder name="lib">
+            <Folder name="assets">
+                <File name="agenda\lib\assets\.gitkeep" />
+            </Folder>
+            <Folder name="tasks">
+                <File name="agenda\lib\tasks\.gitkeep" />
+            </Folder>
+        </Folder>
+        <Folder name="log">
+            <File name="agenda\log\.gitkeep" />
+            <File name="agenda\log\development.log" />
+        </Folder>
+        <Folder name="public">
+            <File name="agenda\public\404.html" />
+            <File name="agenda\public\422.html" />
+            <File name="agenda\public\500.html" />
+            <File name="agenda\public\favicon.ico" />
+            <File name="agenda\public\index.html" />
+            <File name="agenda\public\robots.txt" />
+        </Folder>
+        <Folder name="script">
+            <File name="agenda\script\rails" />
+        </Folder>
+        <Folder name="test">
+            <Folder name="fixtures">
+                <File name="agenda\test\fixtures\.gitkeep" />
+                <File name="agenda\test\fixtures\eventos.yml" />
+            </Folder>
+            <Folder name="functional">
+                <File name="agenda\test\functional\.gitkeep" />
+                <File name="agenda\test\functional\eventos_controller_test.rb" />
+            </Folder>
+            <Folder name="integration">
+                <File name="agenda\test\integration\.gitkeep" />
+            </Folder>
+            <Folder name="performance">
+                <File name="agenda\test\performance\browsing_test.rb" />
+            </Folder>
+            <Folder name="unit">
+                <Folder name="helpers">
+                    <File name="agenda\test\unit\helpers\eventos_helper_test.rb" />
+                </Folder>
+                <File name="agenda\test\unit\.gitkeep" />
+                <File name="agenda\test\unit\evento_test.rb" />
+            </Folder>
+            <File name="agenda\test\test_helper.rb" />
+        </Folder>
+        <Folder name="tmp">
+            <Folder name="cache">
+                <Folder name="assets">
+                    <Folder name="C46">
+                        <Folder name="B90">
+                            <File name="agenda\tmp\cache\assets\C46\B90\sprockets%2F2c8cc3040a60d71c41979a3479143156" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CB5">
+                        <Folder name="9E0">
+                            <File name="agenda\tmp\cache\assets\CB5\9E0\sprockets%2Fe459168835a5f27b832ace20874f7c10" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CD7">
+                        <Folder name="6F0">
+                            <File name="agenda\tmp\cache\assets\CD7\6F0\sprockets%2Fbd3936370d0f952ada5774e2230046ed" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CD8">
+                        <Folder name="370">
+                            <File name="agenda\tmp\cache\assets\CD8\370\sprockets%2F357970feca3ac29060c1e3861e2c0953" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CDA">
+                        <Folder name="500">
+                            <File name="agenda\tmp\cache\assets\CDA\500\sprockets%2F62415d73d87be284f8cbea1613e71500" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CE7">
+                        <Folder name="3F0">
+                            <File name="agenda\tmp\cache\assets\CE7\3F0\sprockets%2Fd79806506e6ce5256dc286de80064b4a" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CE8">
+                        <Folder name="930">
+                            <File name="agenda\tmp\cache\assets\CE8\930\sprockets%2F0a2f1c9754f472c8c8f2e064927537ad" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="CEA">
+                        <Folder name="590">
+                            <File name="agenda\tmp\cache\assets\CEA\590\sprockets%2F275188521fc41476db264ff5b2d8b67f" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="D28">
+                        <Folder name="B10">
+                            <File name="agenda\tmp\cache\assets\D28\B10\sprockets%2F6da7c3fa34cb2e034b79122b0de01871" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="D32">
+                        <Folder name="A10">
+                            <File name="agenda\tmp\cache\assets\D32\A10\sprockets%2F13fe41fee1fe35b49d145bcc06610705" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="D4E">
+                        <Folder name="1B0">
+                            <File name="agenda\tmp\cache\assets\D4E\1B0\sprockets%2Ff7cbd26ba1d28d48de824f0e94586655" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="D5A">
+                        <Folder name="EA0">
+                            <File name="agenda\tmp\cache\assets\D5A\EA0\sprockets%2Fd771ace226fc8215a3572e0aa35bb0d6" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="D5E">
+                        <Folder name="830">
+                            <File name="agenda\tmp\cache\assets\D5E\830\sprockets%2F28fc5360f02f0c2e43007a29a7dffb2c" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="DA1">
+                        <Folder name="C40">
+                            <File name="agenda\tmp\cache\assets\DA1\C40\sprockets%2F27e84aeb13c6f0bd99505bac6efb5583" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="DA5">
+                        <Folder name="2A0">
+                            <File name="agenda\tmp\cache\assets\DA5\2A0\sprockets%2Fd896a3c9d8b1e94dcac8be0515c075b7" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="DDC">
+                        <Folder name="400">
+                            <File name="agenda\tmp\cache\assets\DDC\400\sprockets%2Fcffd775d018f68ce5dba1ee0d951a994" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="E04">
+                        <Folder name="890">
+                            <File name="agenda\tmp\cache\assets\E04\890\sprockets%2F2f5173deea6c795b8fdde723bb4b63af" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="E19">
+                        <Folder name="2A0">
+                            <File name="agenda\tmp\cache\assets\E19\2A0\sprockets%2F10fcfbe6ebae11a40c8eac41939a1b9a" />
+                        </Folder>
+                    </Folder>
+                    <Folder name="E28">
+                        <Folder name="8D0">
+                            <File name="agenda\tmp\cache\assets\E28\8D0\sprockets%2Fbc5ecbcbf3f94261ede22c6cf5a158d2" />
+                        </Folder>
+                    </Folder>
+                </Folder>
+                <Folder name="sass">
+                    <Folder name="bfd14f955c037b8313da0c9b0d0a05ff8f5b5220">
+                        <File name="agenda\tmp\cache\sass\bfd14f955c037b8313da0c9b0d0a05ff8f5b5220\eventos.css.scssc" />
+                        <File name="agenda\tmp\cache\sass\bfd14f955c037b8313da0c9b0d0a05ff8f5b5220\scaffolds.css.scssc" />
+                    </Folder>
+                </Folder>
+            </Folder>
+            <Folder name="pids" />
+            <Folder name="sessions" />
+            <Folder name="sockets" />
+        </Folder>
+        <Folder name="vendor">
+            <Folder name="assets">
+                <Folder name="javascripts">
+                    <File name="agenda\vendor\assets\javascripts\.gitkeep" />
+                </Folder>
+                <Folder name="stylesheets">
+                    <File name="agenda\vendor\assets\stylesheets\.gitkeep" />
+                </Folder>
+            </Folder>
+            <Folder name="plugins">
+                <File name="agenda\vendor\plugins\.gitkeep" />
+            </Folder>
+        </Folder>
+        <File name="agenda\.gitignore" />
+        <File name="agenda\config.ru" />
+        <File name="agenda\Gemfile" />
+        <File name="agenda\Gemfile.lock" />
+        <File name="agenda\Rakefile" />
+        <File name="agenda\README.rdoc" />
+    </Project>
+</NotepadPlus>

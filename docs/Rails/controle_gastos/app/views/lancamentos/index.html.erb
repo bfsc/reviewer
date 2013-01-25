@@ -1,0 +1,29 @@
+<h1>Listing lancamentos</h1>
+
+<table>
+  <tr>
+    <th>Descricao</th>
+    <th>Valor</th>
+    <th>Date</th>
+    <th>Centro de custo</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @lancamentos.each do |lancamento| %>
+  <tr>
+    <td><%= lancamento.descricao %></td>
+    <td><%= lancamento.valor %></td>
+    <td><%= lancamento.date %></td>
+    <td><%= lancamento.centro_de_custo %></td>
+    <td><%= link_to 'Show', lancamento %></td>
+    <td><%= link_to 'Edit', edit_lancamento_path(lancamento) %></td>
+    <td><%= link_to 'Destroy', lancamento, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Lancamento', new_lancamento_path %>
