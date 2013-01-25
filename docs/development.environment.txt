@@ -1,0 +1,7 @@
+========================================
+DEVELOPMENT ENVIRONMENT
+========================================
+
+[IDE] Eclipse Juno - 4.2.1 - M20120914-1800
+[Git Eclipse Plugin] - EGit - 2.2.0 - http://download.eclipse.org/egit/updates
+[Maven Eclipse Plugin] - M2E - http://download.eclipse.org/technology/m2e/releases
