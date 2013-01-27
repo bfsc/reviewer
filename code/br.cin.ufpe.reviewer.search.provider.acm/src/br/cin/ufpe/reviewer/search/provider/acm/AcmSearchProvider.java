@@ -133,6 +133,7 @@ public class AcmSearchProvider implements SearchProvider {
 		return toReturn;
 	}
 	
+	// TODO METODO DE TESTE
 	public static void main(String[] args) {
 		try {
 			SearchProvider searchProvider = new AcmSearchProvider();
