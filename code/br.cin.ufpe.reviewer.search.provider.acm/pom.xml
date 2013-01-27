@@ -19,14 +19,14 @@
   <name>br.cin.ufpe.reviewer.search.provider.acm</name>
   <dependencies>
   	<dependency>
-  		<groupId>net.sourceforge.htmlcleaner</groupId>
-  		<artifactId>htmlcleaner</artifactId>
-  		<version>2.2</version>
-  	</dependency>
-  	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
   		<artifactId>search.provider.spi</artifactId>
   		<version>0.0.1</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>net.sourceforge.htmlunit</groupId>
+  		<artifactId>htmlunit</artifactId>
+  		<version>2.11</version>
   	</dependency>
   </dependencies>
 </project>
