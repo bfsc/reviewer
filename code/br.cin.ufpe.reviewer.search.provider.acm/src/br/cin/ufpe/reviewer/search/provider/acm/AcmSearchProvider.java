@@ -1,5 +1,7 @@
 package br.cin.ufpe.reviewer.search.provider.acm;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +18,12 @@ import com.gargoylesoftware.htmlunit.html.HtmlStrong;
 public class AcmSearchProvider implements SearchProvider {
 
 	private static final String DOMAIN_DL_ACM = "http://dl.acm.org/";
+	private static final String URL_DL_ACM_SEARCH = DOMAIN_DL_ACM + "results.cfm?query=";
+
+	private static final String URL_ENCODE_UTF_8 = "UTF-8";
+	private static final String URL_ENCODE_ISO_8859_1 = "ISO-8859-1";
 
 	private static final String REGEX_POSITIVE_INTEGER_VALUE = "\\d+";
-
 	private static final String STUDY_ABSTRACT_END_MARKER = "...";
 	
 	private static final String XPATH_STUDY_TITLE_AND_URL = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//a[@class='medium-text']";
@@ -34,13 +39,18 @@ public class AcmSearchProvider implements SearchProvider {
 			// Create the web browser
 			WebClient browser = new WebClient();
 			
+			// Throwing an exception if the search string is invalid.
+			if (searchString == null || searchString.trim().equalsIgnoreCase("")) {
+				throw new RuntimeException("Invalid search string");
+			}
+			
 			// Assemble search URL
 			String searchUrl = assembleSearchUrl(searchString);
 			
 			// Extract studies data
 			toReturn.addAll(extractStudiesData(browser, searchUrl));
 		} catch (Exception e) {
-			throw new SearchProviderException("An error occurred trying to search for the following query string:" + searchString, e);
+			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return  toReturn;
@@ -49,13 +59,17 @@ public class AcmSearchProvider implements SearchProvider {
 	private String assembleSearchUrl(String searchString) {
 		String query = "";
 		
-		// Replacing double quotes
-		query = searchString.replaceAll("\"", "%22");
+		try {
+			query = URLEncoder.encode(searchString, URL_ENCODE_ISO_8859_1).toString();
+		} catch (UnsupportedEncodingException e) {
+			try {
+				query = URLEncoder.encode(searchString, URL_ENCODE_UTF_8).toString();
+			} catch (UnsupportedEncodingException e2) {
+				throw new RuntimeException("An error occurred tryinf to encode the url.", e2);
+			}
+		}
 		
-		// Replacing white spaces
-		query = searchString.replaceAll(" ", "%20"); 
-		
-		return "http://dl.acm.org/results.cfm?query=" + query;
+		return URL_DL_ACM_SEARCH + query;
 	}
 	
 	private List<Study> extractStudiesData(WebClient browser, String searchUrl) {
