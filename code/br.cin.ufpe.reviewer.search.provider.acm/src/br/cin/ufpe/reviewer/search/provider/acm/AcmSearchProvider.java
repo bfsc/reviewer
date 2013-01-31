@@ -1,5 +1,6 @@
 package br.cin.ufpe.reviewer.search.provider.acm;
 
+import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
@@ -13,24 +14,23 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlStrong;
 
 public class AcmSearchProvider implements SearchProvider {
 
 	private static final String DOMAIN_DL_ACM = "http://dl.acm.org/";
-	private static final String URL_DL_ACM_SEARCH = DOMAIN_DL_ACM + "results.cfm?query=";
+	private static final String URL_DL_ACM_SEARCH = "http://dl.acm.org/results.cfm?query=";
 
 	private static final String URL_ENCODE_UTF_8 = "UTF-8";
 	private static final String URL_ENCODE_ISO_8859_1 = "ISO-8859-1";
 
-	private static final String REGEX_POSITIVE_INTEGER_VALUE = "\\d+";
+	private static final String NEXT_PAGE_ANCHOR_TEXT = "next";
+	
 	private static final String STUDY_ABSTRACT_END_MARKER = "...";
 	
 	private static final String XPATH_STUDY_TITLE_AND_URL = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//a[@class='medium-text']";
 	private static final String XPATH_STUDY_ABSTRACT = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//div[@class='abstract2']";
 	
-	private static final String X_PATH_CURRENT_PAGE = "//td[@colspan='2' and @align='right']/strong";
-	private static final String X_PATH_PAGES = "//td[@colspan='2' and @align='right']/a";
+	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
 
 	public List<Study> search(String searchString) throws SearchProviderException {
 		List<Study> toReturn = new LinkedList<Study>();
@@ -87,11 +87,11 @@ public class AcmSearchProvider implements SearchProvider {
 				
 				// Extracting study title and URL
 				study.setTitle(anchor.getTextContent().trim());
-				study.setUrl(anchor.getHrefAttribute().trim());
+				study.setUrl(DOMAIN_DL_ACM + anchor.getHrefAttribute().trim());
 				
 				// Extracting study abstract.
 				List<?> studyDivsAbstracts = page.getByXPath(XPATH_STUDY_ABSTRACT);
-				if (studyDivsAbstracts.size() <= i) {
+				if (studyDivsAbstracts.size() >= i) {
 					HtmlDivision div = (HtmlDivision) studyDivsAbstracts.get(i);
 					
 					// Extracting study abstract div content.
@@ -126,24 +126,16 @@ public class AcmSearchProvider implements SearchProvider {
 	private String extractNextPageUrl(HtmlPage page) {
 		String toReturn = null;
 		
-		List<?> currentPageTags = page.getByXPath(X_PATH_CURRENT_PAGE);
-		if (currentPageTags.size() > 0) {
-			String currentPageString = ((HtmlStrong)currentPageTags.get(0)).getTextContent();
+		List<?> nextPageTags = page.getByXPath(X_PATH_NEXT_PAGE);
+		for (Object object : nextPageTags) {
+			HtmlAnchor nextPageAnchor = (HtmlAnchor)object;
+			String nextPageString = nextPageAnchor.getTextContent();
 			
-			if (currentPageString.trim().matches(REGEX_POSITIVE_INTEGER_VALUE)) {
-				int currentPage = Integer.parseInt(currentPageString);
-				
-				List<?> pages = page.getByXPath(X_PATH_PAGES);
-				for (Object object : pages) {
-					HtmlAnchor anchor = (HtmlAnchor) object;
-					
-					if ((anchor.getTextContent().trim().matches(REGEX_POSITIVE_INTEGER_VALUE)) && (Integer.parseInt(anchor.getTextContent().trim()) == currentPage + 1)) {
-						toReturn = DOMAIN_DL_ACM + anchor.getHrefAttribute().trim();
-						break;
-					}
-				}
+			if (nextPageString.trim().equalsIgnoreCase(NEXT_PAGE_ANCHOR_TEXT)) {
+				toReturn = DOMAIN_DL_ACM + nextPageAnchor.getHrefAttribute().trim();
 			}
 		}
+		
 		return toReturn;
 	}
 	
@@ -152,12 +144,22 @@ public class AcmSearchProvider implements SearchProvider {
 		try {
 			SearchProvider searchProvider = new AcmSearchProvider();
 			
-			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
+//			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
+			List<Study> studies = searchProvider.search("security AND \"cloud computing\"");
+			
+			StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : studies) {
-				System.out.println(study);
+				buffer.append(study.getTitle() + "\n");
+//				buffer.append(study.getAbstract() + "\n");
+//				buffer.append(study.getUrl() + "\n\n");
 			}
-		} catch (SearchProviderException e) {
+			
+			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
+			writer.write(buffer.toString());
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
