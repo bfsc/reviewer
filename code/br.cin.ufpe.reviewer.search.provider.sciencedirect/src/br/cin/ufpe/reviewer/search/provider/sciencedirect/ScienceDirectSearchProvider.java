@@ -2,14 +2,17 @@ package br.cin.ufpe.reviewer.search.provider.sciencedirect;
 
 import java.util.List;
 
-import br.cin.ufpe.reviewer.search.provider.sciencedirect.ScienceDirectSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 import br.cin.ufpe.reviewer.search.provider.spi.expetions.SearchProviderException;
 
+import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomElement;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
 
 public class ScienceDirectSearchProvider implements SearchProvider {
 	
@@ -25,9 +28,16 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			WebClient browser = new WebClient();
 			HtmlPage page = browser.getPage(DOMAIN_DL_SCIENCE_DIRECT);
 			
-			DomElement Advanced_Search_link = page.getFirstByXPath("/td[@a='Advanced search']");
-			String link = Advanced_Search_link.getAttribute("href");
-			System.out.print(link);
+			HtmlTableDataCell Advanced_Search_link = (HtmlTableDataCell) page.getFirstByXPath("//td[a='Advanced search']");
+			
+			DomNodeList<DomNode> childNodes = Advanced_Search_link.getChildNodes();
+			for (DomNode domNode : childNodes) {
+				if (domNode instanceof HtmlAnchor && domNode.getTextContent().equalsIgnoreCase("advanced search")) {
+					HtmlAnchor anchor = (HtmlAnchor) domNode;
+					String advancedSearchLink = anchor.getHrefAttribute();
+					HtmlPage advancedSearchPage = browser.getPage(advancedSearchLink);
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
