@@ -9,6 +9,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
 
@@ -26,12 +27,11 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 	private static final String SEARCH_URL_SCIENCE_DIRECT_1 = "http://www.sciencedirect.com/science?_ob=QuickSearchURL&_method=submitForm&_acct=C000228598&_origin=home&_zone=qSearch&md5=61ce8901b141d527683913a240486ac4&qs_all=";
 	private static final String SEARCH_URL_SCIENCE_DIRECT_2 = "&qs_author=&qs_title=&qs_vol=&qs_issue=&qs_pages=&sdSearch=Search";
 	
-	//private static final String XPATH_ADVANCED_SEARCH = "//td[@align='right' and @nowrap='nowrap' and @widht='90%' and @valign='middle']//a[@style='vertical-align:bottom;font-size:0.92em;']";
+	private static final String XPATH_STUDY_TITLE_AND_URL = "";
 	
-	//private static final String XPATH_EXPERT_SEARCH = "//div[@class='advExpertLink' and @style='float:right;']";
+	private static final String X_PATH_NEXT_PAGE = "";
 	
-	
-
+	private static final String NEXT_PAGE_ANCHOR_TEXT = "";
 	
 
 	
@@ -53,50 +53,15 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			System.out.println(searchUrl);
 			
 			// Extract studies data
-			//toReturn.addAll(extractStudiesData(browser, searchUrl));
+			toReturn.addAll(extractStudiesData(browser, searchUrl));
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
-		return  null;
+		return  toReturn;
 		
 		
-		
-		
-//		try {
-//			WebClient browser = new WebClient();
-//			HtmlPage page = browser.getPage(DOMAIN_DL_SCIENCE_DIRECT);
-//			HtmlPage advancedSearchPage = null;
-//			HtmlPage expertSearchPage = null;
-//			
-//			HtmlTableDataCell Advanced_Search_link = (HtmlTableDataCell) page.getFirstByXPath("//td[a='Advanced search']");
-//			
-//			DomNodeList<DomNode> advancedChildNodes = Advanced_Search_link.getChildNodes();
-//			for (DomNode domNode : advancedChildNodes) {
-//				if (domNode instanceof HtmlAnchor && domNode.getTextContent().equalsIgnoreCase("advanced search")) {
-//					HtmlAnchor anchor = (HtmlAnchor) domNode;
-//					String advancedSearchLink = anchor.getHrefAttribute();
-//					advancedSearchPage = browser.getPage(advancedSearchLink);
-//				}
-//			}
-//			
-//			HtmlTableDataCell Expert_Search_link = (HtmlTableDataCell) advancedSearchPage.getFirstByXPath("//div[a='Expert search']");
-//			
-//			DomNodeList<DomNode> expertChildNodes = Expert_Search_link.getChildNodes();
-//			for (DomNode domNode : expertChildNodes) {
-//				if (domNode instanceof HtmlAnchor && domNode.getTextContent().equalsIgnoreCase("expert search")){
-//					HtmlAnchor anchor = (HtmlAnchor) domNode;
-//					String expertSearchLink = anchor.getHrefAttribute();
-//					expertSearchPage = browser.getPage(DOMAIN_DL_SCIENCE_DIRECT + expertSearchLink);
-//				}
-//			}
-//			
-//			
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return null;
+
 	}
 	
 	private String assembleSearchUrl(String searchString) {
@@ -114,6 +79,60 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 		
 		return SEARCH_URL_SCIENCE_DIRECT_1 + query + SEARCH_URL_SCIENCE_DIRECT_2;
 	}
+	
+	private List<Study> extractStudiesData(WebClient browser, String searchUrl) {
+		List<Study> toReturn = new LinkedList<Study>();
+		
+		try {
+			HtmlPage page = browser.getPage(searchUrl);
+		
+			// Extracting studies data.
+			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
+			for (int i = 0; i < studyTablesAnchors.size(); i++) {
+				Study study = new Study();
+				
+				HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);
+				
+				// Extracting study title and URL
+				study.setTitle(anchor.getTextContent().trim());
+				study.setUrl(DOMAIN_DL_SCIENCE_DIRECT + anchor.getHrefAttribute().trim());
+				
+				
+				
+				toReturn.add(study);
+			}
+			
+			// Extracting the URL of next page.
+			String nextPageUrl = extractNextPageUrl(page);
+			
+			if (nextPageUrl != null) {
+				toReturn.addAll(extractStudiesData(browser, nextPageUrl));
+			}
+		} catch (Exception e) {
+			//TRATAR EXCECAO
+			e.printStackTrace();
+		}
+		
+		return toReturn;
+	}
+
+	private String extractNextPageUrl(HtmlPage page) {
+		String toReturn = null;
+		
+		List<?> nextPageTags = page.getByXPath(X_PATH_NEXT_PAGE);
+		for (Object object : nextPageTags) {
+			HtmlAnchor nextPageAnchor = (HtmlAnchor)object;
+			String nextPageString = nextPageAnchor.getTextContent();
+			
+			if (nextPageString.trim().equalsIgnoreCase(NEXT_PAGE_ANCHOR_TEXT)) {
+				toReturn = DOMAIN_DL_SCIENCE_DIRECT + nextPageAnchor.getHrefAttribute().trim();
+			}
+		}
+		
+		return toReturn;
+	}
+	
+	
 
 	public static void main(String[] args) {
 		try{
