@@ -1,7 +1,16 @@
 package br.cin.ufpe.reviewer.search.provider.scopus;
 
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.jbibtex.BibTeXDatabase;
+import org.jbibtex.BibTeXEntry;
+import org.jbibtex.BibTeXParser;
+import org.jbibtex.Key;
+import org.jbibtex.Value;
 
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
@@ -32,36 +41,23 @@ public class ScopusSearchProvider implements SearchProvider {
 				throw new RuntimeException("Invalid search string");
 			}
 
-			// Obtaining the TXGID in order to compose the search URL 
+			// Performing the search in the advanced search page
 			HtmlPage advancedSearchPage = browser.getPage("http://www.scopus.com/search/form.url?display=advanced");
-			
 			HtmlDivision searchDiv = advancedSearchPage.getFirstByXPath("//div[@id='searchfield']");
 			searchDiv.setTextContent(searchString);
 			HtmlSubmitInput searchButton = advancedSearchPage.getFirstByXPath("//input[@type='submit' and @value='Search']");
 			HtmlPage resultsPage = searchButton.click();
 			
-			// Extract studies data
-			toReturn.addAll(extractStudiesData(resultsPage));
-		} catch (Exception e) {
-			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
-		}
-		
-		return  toReturn;
-	}
-	
-	private List<Study> extractStudiesData(HtmlPage page) {
-		List<Study> toReturn = new LinkedList<Study>();
-		
-		try {
-//			HtmlPage page = browser.getPage(searchUrl);
-			
-			HtmlCheckBoxInput checkboxInput = page.getFirstByXPath("//input[@type='checkbox' and @name='selectAllCheckBox']");
+			// Selecting all results in order export then
+			HtmlCheckBoxInput checkboxInput = resultsPage.getFirstByXPath("//input[@type='checkbox' and @name='selectAllCheckBox']");
 			checkboxInput.click();
 			
-			HtmlAnchor exportAnchor = page.getFirstByXPath("//a[@class='jsEnabled icon export']");
+			// Calling the export page
+			HtmlAnchor exportAnchor = resultsPage.getFirstByXPath("//a[@class='jsEnabled icon export']");
 			exportAnchor.setAttribute("onclick", "");
 			HtmlPage exportPage = exportAnchor.click();
 			
+			// Selecting the export format (BIB) as well as the output informations (with abstract)
 			HtmlSelect exportFormatSelect = exportPage.getFirstByXPath("//select[@name='exportFormat' and @id='exportFormat']");
 			for (HtmlOption option : exportFormatSelect.getOptions()) {
 				if (option.getValueAttribute().equalsIgnoreCase("BIB")) {
@@ -80,12 +76,38 @@ public class ScopusSearchProvider implements SearchProvider {
 				}
 			}
 			
+			// Exporting the results according to the selecionts above
 			HtmlSubmitInput exportButton = exportPage.getFirstByXPath("//input[@type='submit' and @value='Export' and @class='jsEnabled Bold']");
-			Page exportedStudies = exportButton.click();
+			Page exportedStudiesPage = exportButton.click();
 			
-			System.out.println(exportedStudies.getWebResponse().getContentAsString());
+			// Extract studies data
+			toReturn.addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
+		} catch (Exception e) {
+			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
+		}
+		
+		return  toReturn;
+	}
+	
+	private List<Study> extractStudiesData(InputStream inputStream) {
+		List<Study> toReturn = new LinkedList<Study>();
+		
+		try {
+			BibTeXParser parser = new BibTeXParser();
 			
-			// TODO FAZER O PARSER DO BIBTEX
+			BibTeXDatabase bibtex = parser.parse(new InputStreamReader(inputStream));
+			for (BibTeXEntry bibTeXEntry : bibtex.getEntries().values()) {
+				Study study = new Study();
+				
+				Value titleField = bibTeXEntry.getField(new Key("title"));
+				study.setTitle(titleField.toUserString());
+				Value abstractField = bibTeXEntry.getField(new Key("abstract"));
+				study.setAbstract(abstractField.toUserString());
+				Value urlField = bibTeXEntry.getField(new Key("url"));
+				study.setUrl(urlField.toUserString());
+				
+				toReturn.add(study);
+			}
 		} catch (Exception e) {
 			//TRATAR EXCECAO
 			e.printStackTrace();
@@ -107,14 +129,14 @@ public class ScopusSearchProvider implements SearchProvider {
 			
 			for (Study study : studies) {
 				buffer.append(study.getTitle() + "\n");
-//				buffer.append(study.getAbstract() + "\n");
-//				buffer.append(study.getUrl() + "\n\n");
+				buffer.append(study.getAbstract() + "\n");
+				buffer.append(study.getUrl() + "\n\n");
 			}
 			
-//			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
-//			writer.write(buffer.toString());
-//			writer.flush();
-//			writer.close();
+			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
+			writer.write(buffer.toString());
+			writer.flush();
+			writer.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
