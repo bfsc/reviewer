@@ -12,6 +12,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 //import com.gargoylesoftware.htmlunit.html.DomNode;
 //import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 //import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -32,8 +33,10 @@ public class ScienceDirectSearchProvider implements SearchProvider {
         private static final String SEARCH_URL_SCIENCE_DIRECT_2 = "&qs_author=&qs_title=&qs_vol=&qs_issue=&qs_pages=&sdSearch=Search";
        
         private static final String XPATH_STUDY_TITLE_AND_URL = "//a[@class='cLink']";
-       
-        private static final String X_PATH_NEXT_PAGE = "//input[@name='topNext']";
+
+        private static final String X_PATH_NEXT_PAGE = "//form[@action='/science' and @style='padding:0px; margin:0px;']";
+        
+        private String NEXT_PAGE_link;
        
         //private static final String NEXT_PAGE_ANCHOR_TEXT = "Next &gt;";
        
@@ -120,12 +123,90 @@ public class ScienceDirectSearchProvider implements SearchProvider {
         private String extractNextPageUrl(HtmlPage page) throws IOException {
                 String toReturn = null;
                
-                List<?> nextPageTags = page.getByXPath(X_PATH_NEXT_PAGE);
-                for (Object object : nextPageTags) {
-            			System.out.println("chegou aqui");
-                		HtmlInput nextPageInput = (HtmlInput)object;
-                		HtmlPage nextPageString = (HtmlPage) nextPageInput.mouseDown();
-                		System.out.println(nextPageString);
+                HtmlForm nextPageForm = (HtmlForm) page.getFirstByXPath(X_PATH_NEXT_PAGE);
+                if (nextPageForm != null) {
+                		//recolhe todos os parametros para montar a url da proxima pagina
+                		//HtmlForm nextPageForm = (HtmlForm)object;
+                		
+                		HtmlInput _ob = (HtmlInput) nextPageForm.getInputByName("_ob");
+                		String value__ob = "_ob=" + _ob.getAttribute("value") + "&";
+                		
+                		HtmlInput _method = (HtmlInput) nextPageForm.getInputByName("_method");
+                		String value__method = "_method=" + _method.getAttribute("value") + "&";
+                		
+                		HtmlInput searchtype = (HtmlInput) nextPageForm.getInputByName("searchtype");
+                		String value_searchtype = "searchtype=" + searchtype.getAttribute("value") + "&";
+                		
+                		HtmlInput refSource = (HtmlInput) nextPageForm.getInputByName("refSource");
+                		String value_refSource = "refSource=" + refSource.getAttribute("value") + "&";
+                		
+                		HtmlInput pdfDownloadSort = (HtmlInput) nextPageForm.getInputByName("pdfDownloadSort");
+                		String value_pdfDownloadSort = "pdfDownloadSort=" + pdfDownloadSort.getAttribute("value") + "&";
+                		
+                		HtmlInput PDF_DDM_MAX = (HtmlInput) nextPageForm.getInputByName("PDF_DDM_MAX");
+                		String value_PDF_DDM_MAX = "PDF_DDM_MAX=" + PDF_DDM_MAX.getAttribute("value") + "&";
+                		
+                		HtmlInput _st = (HtmlInput) nextPageForm.getInputByName("_st");
+                		String value__st = "_st=" + _st.getAttribute("value") + "&";
+                		
+                		HtmlInput count = (HtmlInput) nextPageForm.getInputByName("count");
+                		String value_count = "count=" + count.getAttribute("value") + "&";
+                		
+                		HtmlInput sort = (HtmlInput) nextPageForm.getInputByName("sort");
+                		String value_sort = "sort=" + sort.getAttribute("value") + "&";
+                		
+                		HtmlInput _chunk = (HtmlInput) nextPageForm.getInputByName("_chunk");
+                		String value__chunk = "_chunk=" + _chunk.getAttribute("value") + "&";
+                		
+                		HtmlInput NEXT_LIST = (HtmlInput) nextPageForm.getInputByName("NEXT_LIST");
+                		String value_NEXT_LIST = "NEXT_LIST=" + NEXT_LIST.getAttribute("value") + "&";
+                		
+                		HtmlInput view = (HtmlInput) nextPageForm.getInputByName("view");
+                		String value_view = "view=" + view.getAttribute("value") + "&";
+                		
+                		HtmlInput md5 = (HtmlInput) nextPageForm.getInputByName("md5");
+                		String value_md5 = "md5=" + md5.getAttribute("value") + "&";
+                		
+                		HtmlInput _ArticleListID = (HtmlInput) nextPageForm.getInputByName("_ArticleListID");
+                		String value__ArticleListID = "_ArticleListID=" + _ArticleListID.getAttribute("value") + "&";
+                		
+                		HtmlInput sisr_search = (HtmlInput) nextPageForm.getInputByName("sisr_search");
+                		String value_sisr_search = "sisr_search=" + sisr_search.getAttribute("value") + "&";
+                		
+                		HtmlInput TOTAL_PAGES = (HtmlInput) nextPageForm.getInputByName("TOTAL_PAGES");
+                		String value_TOTAL_PAGES = "TOTAL_PAGES=" + TOTAL_PAGES.getAttribute("value") + "&";
+                		
+                		HtmlInput topPaginationBoxChanged = (HtmlInput) nextPageForm.getInputByName("topPaginationBoxChanged");
+                		String value_topPaginationBoxChanged = "topPaginationBoxChanged=" + topPaginationBoxChanged.getAttribute("value") + "&";
+                		
+                		HtmlInput pageNumberTop = (HtmlInput) nextPageForm.getInputByName("pageNumberTop");
+                		String value_pageNumberTop = "pageNumberTop=" + pageNumberTop.getAttribute("value") + "&";
+                		
+                		HtmlInput topNext = (HtmlInput) nextPageForm.getInputByName("topNext");
+                		String value_topNext = "topNext=" + URLEncoder.encode(topNext.getAttribute("value"), URL_ENCODE_UTF_8).toString() + "&";
+                		
+                		HtmlInput sisrterm = (HtmlInput) nextPageForm.getInputByName("sisrterm");
+                		String value_sisrterm = "sisrterm=" + sisrterm.getAttribute("value") + "&";
+                		
+                		HtmlInput pdfDownload = (HtmlInput) nextPageForm.getInputByName("pdfDownload");
+                		String value_pdfDownload = "pdfDownload=" + pdfDownload.getAttribute("value") + "&";
+                		
+                		HtmlInput bottomPaginationBoxChanged = (HtmlInput) nextPageForm.getInputByName("bottomPaginationBoxChanged");
+                		String value_bottomPaginationBoxChanged = "bottomPaginationBoxChanged=" + bottomPaginationBoxChanged.getAttribute("value") + "&";
+                		
+                		HtmlInput pageNumberBottom = (HtmlInput) nextPageForm.getInputByName("pageNumberBottom");
+                		String value_pageNumberBottom = "pageNumberBottom=" + pageNumberBottom.getAttribute("value") + "&";
+                		
+                		HtmlInput displayPerPageFlag = (HtmlInput) nextPageForm.getInputByName("displayPerPageFlag");
+                		String value_displayPerPageFlag = "displayPerPageFlag=" + displayPerPageFlag.getAttribute("value") + "&";
+                		
+                		//HtmlInput resultsPerPage = (HtmlInput) nextPageForm.getInputByName("resultsPerPage");
+                		//String value_resultsPerPage = "resultsPerPage=" + resultsPerPage.getAttribute("value");
+                		
+                		//monta a url da proxima pagina de busca
+                		NEXT_PAGE_link = DOMAIN_DL_SCIENCE_DIRECT + "science?" + value__ob + value__method + value_searchtype + value_refSource + value_pdfDownloadSort + value_PDF_DDM_MAX + value__st + value_count + value_sort + value__chunk + value_NEXT_LIST + value_view + value_md5 + value__ArticleListID + value_sisr_search + value_TOTAL_PAGES + value_topPaginationBoxChanged + value_pageNumberTop + value_topNext + value_sisrterm + value_pdfDownload + value_bottomPaginationBoxChanged + value_pageNumberBottom + value_displayPerPageFlag;// + value_resultsPerPage;
+                		
+                		System.out.println(NEXT_PAGE_link);
                        
 //                        if (nextPageString.trim().equalsIgnoreCase(NEXT_PAGE_ANCHOR_TEXT)) {
 //                                toReturn = DOMAIN_DL_SCIENCE_DIRECT + nextPageInput.getHrefAttribute().trim();
