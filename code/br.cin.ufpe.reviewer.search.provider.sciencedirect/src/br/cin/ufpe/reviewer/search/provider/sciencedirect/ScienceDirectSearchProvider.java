@@ -204,13 +204,11 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 		//String value_resultsPerPage = "resultsPerPage=" + resultsPerPage.getAttribute("value");
                 		
                 		//monta a url da proxima pagina de busca
-                		NEXT_PAGE_link = DOMAIN_DL_SCIENCE_DIRECT + "science?" + value__ob + value__method + value_searchtype + value_refSource + value_pdfDownloadSort + value_PDF_DDM_MAX + value__st + value_count + value_sort + value__chunk + value_NEXT_LIST + value_view + value_md5 + value__ArticleListID + value_sisr_search + value_TOTAL_PAGES + value_topPaginationBoxChanged + value_pageNumberTop + value_topNext + value_sisrterm + value_pdfDownload + value_bottomPaginationBoxChanged + value_pageNumberBottom + value_displayPerPageFlag;// + value_resultsPerPage;
+                		NEXT_PAGE_link = DOMAIN_DL_SCIENCE_DIRECT + "science?" + value__ob + value__method + value_searchtype + value_refSource + value_pdfDownloadSort + value_PDF_DDM_MAX + value__st + value_count + value_sort + value__chunk + value_NEXT_LIST + value_view + value_md5 + value__ArticleListID + value_sisr_search + value_TOTAL_PAGES + value_topPaginationBoxChanged + value_pageNumberTop + value_topNext + value_sisrterm + value_pdfDownload + value_bottomPaginationBoxChanged + value_pageNumberBottom + value_displayPerPageFlag + "resultsPerPage=25";
                 		
                 		System.out.println(NEXT_PAGE_link);
-                       
-//                        if (nextPageString.trim().equalsIgnoreCase(NEXT_PAGE_ANCHOR_TEXT)) {
-//                                toReturn = DOMAIN_DL_SCIENCE_DIRECT + nextPageInput.getHrefAttribute().trim();
-//                        }
+                		
+                		toReturn = NEXT_PAGE_link;
                 }
                
                 return toReturn;
@@ -222,13 +220,15 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 try{
                         SearchProvider searchProvider = new ScienceDirectSearchProvider();
                         List<Study> studies = searchProvider.search("\"Software Engineering\"");
+                        int count = 1;
                         
                         StringBuilder buffer = new StringBuilder();
             			
             			for (Study study : studies) {
-            				buffer.append(study.getTitle() + "\r\n");
+            				buffer.append(count + ": " + study.getTitle() + "\r\n");
 //            				buffer.append(study.getAbstract() + "\n");
             				buffer.append(study.getUrl() + "\r\n\r\n");
+            				count++;
             			}
             			
             			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
