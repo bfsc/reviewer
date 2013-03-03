@@ -240,7 +240,6 @@ public class ScienceDirectSearchProvider implements SearchProvider {
             			writer.flush();
             			writer.close();
                     
-            			
                 }
                 catch (Exception e) {
                         e.printStackTrace();
