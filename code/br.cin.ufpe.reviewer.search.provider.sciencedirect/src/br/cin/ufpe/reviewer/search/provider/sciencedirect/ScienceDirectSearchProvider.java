@@ -239,7 +239,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
             			writer.write(buffer.toString());
             			writer.flush();
             			writer.close();
-                       
+                    
+            			
                 }
                 catch (Exception e) {
                         e.printStackTrace();
