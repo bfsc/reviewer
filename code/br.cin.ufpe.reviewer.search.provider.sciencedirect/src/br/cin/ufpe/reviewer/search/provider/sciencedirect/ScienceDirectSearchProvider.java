@@ -42,6 +42,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
        
  
        
+        
        
         public List<Study> search(String searchString) throws SearchProviderException {
                 List<Study> toReturn = new LinkedList<Study>();
