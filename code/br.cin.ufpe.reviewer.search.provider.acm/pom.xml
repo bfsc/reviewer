@@ -28,22 +28,5 @@
   		<artifactId>htmlunit</artifactId>
   		<version>2.11</version>
   	</dependency>
-  	<dependency>
-  		<artifactId></artifactId>
-  		<version>2.11</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>net.sourceforge.htmlunit</groupId>
-  		<artifactId>htmlunit-core-js</artifactId>
-  		<version>2.11</version>
-  	</dependency>
   </dependencies>
-  <dependencyManagement>
-  	<dependencies>
-  		<dependency>
-  			<artifactId></artifactId>
-  			<version>2.11</version>
-  		</dependency>
-  	</dependencies>
-  </dependencyManagement>
 </project>
