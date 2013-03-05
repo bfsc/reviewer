@@ -163,6 +163,10 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 		HtmlInput _chunk = (HtmlInput) nextPageForm.getInputByName("_chunk");
                 		String value__chunk = "_chunk=" + _chunk.getAttribute("value") + "&";
                 		
+                		if(value__chunk.equals("_chunk=39&")){
+                			
+                			return null;
+                		}
                 		HtmlInput NEXT_LIST = (HtmlInput) nextPageForm.getInputByName("NEXT_LIST");
                 		String value_NEXT_LIST = "NEXT_LIST=" + NEXT_LIST.getAttribute("value") + "&";
                 		
@@ -209,6 +213,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 		//String value_resultsPerPage = "resultsPerPage=" + resultsPerPage.getAttribute("value");
                 		
                 		//monta a url da proxima pagina de busca
+                		
                 		NEXT_PAGE_link = DOMAIN_DL_SCIENCE_DIRECT + "science?" + value__ob + value__method + value_searchtype + value_refSource + value__st + value_count + value_sort + value__chunk + value_NEXT_LIST + value_view + value_md5 + value__ArticleListID + value_sisr_search + value_TOTAL_PAGES + value_topPaginationBoxChanged + value_pageNumberTop + value_topNext + value_sisrterm + value_bottomPaginationBoxChanged + value_pageNumberBottom + value_displayPerPageFlag + "resultsPerPage=25";
                 		
                 		//System.out.println(NEXT_PAGE_link);
