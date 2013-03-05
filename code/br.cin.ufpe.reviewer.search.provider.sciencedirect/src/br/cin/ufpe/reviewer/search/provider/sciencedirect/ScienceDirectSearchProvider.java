@@ -8,6 +8,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
  
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 //import com.gargoylesoftware.htmlunit.html.DomNode;
 //import com.gargoylesoftware.htmlunit.html.DomNodeList;
@@ -163,13 +164,14 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 		HtmlInput _chunk = (HtmlInput) nextPageForm.getInputByName("_chunk");
                 		String value__chunk = "_chunk=" + _chunk.getAttribute("value") + "&";
                 		
-                		if(value__chunk.equals("_chunk=39&")){
-                			
+                		HtmlInput NEXT_LIST;
+                		try{
+                			NEXT_LIST = (HtmlInput) nextPageForm.getInputByName("NEXT_LIST");
+                		}catch(ElementNotFoundException e){
                 			return null;
                 		}
-                		HtmlInput NEXT_LIST = (HtmlInput) nextPageForm.getInputByName("NEXT_LIST");
                 		String value_NEXT_LIST = "NEXT_LIST=" + NEXT_LIST.getAttribute("value") + "&";
-                		
+
                 		HtmlInput view = (HtmlInput) nextPageForm.getInputByName("view");
                 		String value_view = "view=" + view.getAttribute("value") + "&";
                 		
