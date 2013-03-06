@@ -31,7 +31,6 @@ public class AcmSearchProvider implements SearchProvider {
 	
 	private static final String XPATH_STUDY_TITLE_AND_URL = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//a[@class='medium-text']";
 	private static final String XPATH_STUDY_ABSTRACT = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//div[@class='abstract2']";
-	
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
 	
 	public SearchResult search(String searchString) throws SearchProviderException {

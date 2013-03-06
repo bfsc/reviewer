@@ -30,6 +30,19 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 public class ScopusSearchProvider implements SearchProvider {
 
+	private static final String EXPORT_FORMAT_BIBTEX = "BIB";
+	private static final String OUTPUT_FORMAT_WITH_ABSTRACT = "CiteAbsKeyws";
+	
+	private static final String XPATH_EXPORT_BUTTON = "//input[@type='submit' and @value='Export' and @class='jsEnabled Bold']";
+	private static final String XPATH_SELECT_OUTPUT_FORMAT = "//select[@name='view' and @onchange='javascript:changeHelpSection(this);']";
+	private static final String XPATH_SELECT_EXPORT_FORMAT = "//select[@name='exportFormat' and @id='exportFormat']";
+	private static final String XPATH_ANCHOR_EXPORT_RESULTS = "//a[@class='jsEnabled icon export']";
+	private static final String XPATH_SELECT_ALL_CHECKBOX = "//input[@type='checkbox' and @name='selectAllCheckBox']";
+	private static final String XPATH_SEARCH_BUTTON = "//input[@type='submit' and @value='Search']";
+	private static final String XPATH_DIV_SEARCH_FIELD = "//div[@id='searchfield']";
+	
+	private static final String URL_SCOPUS_ADVANCED_SEARCH = "http://www.scopus.com/search/form.url?display=advanced";
+
 	public SearchResult search(String searchString) throws SearchProviderException {
 		SearchResult result = new SearchResult();
 		
@@ -44,34 +57,34 @@ public class ScopusSearchProvider implements SearchProvider {
 			}
 
 			// Performing the search in the advanced search page
-			HtmlPage advancedSearchPage = browser.getPage("http://www.scopus.com/search/form.url?display=advanced");
-			HtmlDivision searchDiv = advancedSearchPage.getFirstByXPath("//div[@id='searchfield']");
+			HtmlPage advancedSearchPage = browser.getPage(URL_SCOPUS_ADVANCED_SEARCH);
+			HtmlDivision searchDiv = advancedSearchPage.getFirstByXPath(XPATH_DIV_SEARCH_FIELD);
 			searchDiv.setTextContent(searchString);
-			HtmlSubmitInput searchButton = advancedSearchPage.getFirstByXPath("//input[@type='submit' and @value='Search']");
+			HtmlSubmitInput searchButton = advancedSearchPage.getFirstByXPath(XPATH_SEARCH_BUTTON);
 			HtmlPage resultsPage = searchButton.click();
 			
 			// Selecting all results in order export then
-			HtmlCheckBoxInput checkboxInput = resultsPage.getFirstByXPath("//input[@type='checkbox' and @name='selectAllCheckBox']");
+			HtmlCheckBoxInput checkboxInput = resultsPage.getFirstByXPath(XPATH_SELECT_ALL_CHECKBOX);
 			checkboxInput.click();
 			
 			// Calling the export page
-			HtmlAnchor exportAnchor = resultsPage.getFirstByXPath("//a[@class='jsEnabled icon export']");
+			HtmlAnchor exportAnchor = resultsPage.getFirstByXPath(XPATH_ANCHOR_EXPORT_RESULTS);
 			exportAnchor.setAttribute("onclick", "");
 			HtmlPage exportPage = exportAnchor.click();
 			
 			// Selecting the export format (BIB) as well as the output informations (with abstract)
-			HtmlSelect exportFormatSelect = exportPage.getFirstByXPath("//select[@name='exportFormat' and @id='exportFormat']");
+			HtmlSelect exportFormatSelect = exportPage.getFirstByXPath(XPATH_SELECT_EXPORT_FORMAT);
 			for (HtmlOption option : exportFormatSelect.getOptions()) {
-				if (option.getValueAttribute().equalsIgnoreCase("BIB")) {
+				if (option.getValueAttribute().equalsIgnoreCase(EXPORT_FORMAT_BIBTEX)) {
 					option.setSelected(true);
 				} else {
 					option.setSelected(false);
 				}
 			}
 			
-			HtmlSelect outputSelect = exportPage.getFirstByXPath("//select[@name='view' and @onchange='javascript:changeHelpSection(this);']");
+			HtmlSelect outputSelect = exportPage.getFirstByXPath(XPATH_SELECT_OUTPUT_FORMAT);
 			for (HtmlOption option : outputSelect.getOptions()) {
-				if (option.getValueAttribute().equalsIgnoreCase("CiteAbsKeyws")) {
+				if (option.getValueAttribute().equalsIgnoreCase(OUTPUT_FORMAT_WITH_ABSTRACT)) {
 					option.setSelected(true);
 				} else {
 					option.setSelected(false);
@@ -79,7 +92,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			}
 			
 			// Exporting the results according to the selecionts above
-			HtmlSubmitInput exportButton = exportPage.getFirstByXPath("//input[@type='submit' and @value='Export' and @class='jsEnabled Bold']");
+			HtmlSubmitInput exportButton = exportPage.getFirstByXPath(XPATH_EXPORT_BUTTON);
 			Page exportedStudiesPage = exportButton.click();
 			
 			// Extract studies data
