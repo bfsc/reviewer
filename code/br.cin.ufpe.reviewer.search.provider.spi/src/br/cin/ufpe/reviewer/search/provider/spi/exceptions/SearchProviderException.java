@@ -1,4 +1,4 @@
-package br.cin.ufpe.reviewer.search.provider.spi.expetions;
+package br.cin.ufpe.reviewer.search.provider.spi.exceptions;
 
 public class SearchProviderException extends Exception {
 

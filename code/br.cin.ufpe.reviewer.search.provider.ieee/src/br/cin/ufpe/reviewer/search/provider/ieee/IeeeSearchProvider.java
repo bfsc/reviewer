@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.cin.ufpe.reviewer.search.provider.ieee.IeeeSearchProvider;
+import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
+import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
-import br.cin.ufpe.reviewer.search.provider.spi.expetions.SearchProviderException;
+import br.cin.ufpe.reviewer.search.provider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomElement;
@@ -23,8 +25,8 @@ public class IeeeSearchProvider implements SearchProvider {
 	private int count = 1;
 	private int numeroDeEstudos = 1000;
 	
-	public List<Study> search(String searchString) throws SearchProviderException {
-		List<Study> toReturn = new ArrayList<Study>(); 
+	public SearchResult search(String searchString) throws SearchProviderException {
+		SearchResult result = new SearchResult();
 		int totalFound;
 		
 		try {
@@ -58,7 +60,7 @@ public class IeeeSearchProvider implements SearchProvider {
 							study.setUrl(domNode.getTextContent());
 						}
 					}
-					toReturn.add(study);
+					result.getStudies().add(study);
 				}
 				count = count + 1000;
 				if(count - 1 + numeroDeEstudos > totalFound){
@@ -70,7 +72,15 @@ public class IeeeSearchProvider implements SearchProvider {
 			e.printStackTrace();
 		}
 		
-		return toReturn;
+		return result;
+	}
+	
+	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
+		SearchResult result = new SearchResult();
+		
+		// TODO IMPLEMENTAR
+		
+		return result;
 	}
 	
 	private String mountSearchUrl(String searchString) {
@@ -83,11 +93,11 @@ public class IeeeSearchProvider implements SearchProvider {
 	public static void main(String[] args) {
 		try{
 			SearchProvider searchProvider = new IeeeSearchProvider();
-			List<Study> studies = searchProvider.search("\"software\"AND\"java\"");
+			SearchResult result = searchProvider.search("\"software\"AND\"java\"");
 
 			StringBuilder buffer = new StringBuilder();
 			
-			for (Study study : studies) {
+			for (Study study : result.getStudies()) {
 				buffer.append(study.getTitle() + "\n");
 				buffer.append(study.getAbstract() + "\n");
 				buffer.append(study.getUrl() + "\n\n");

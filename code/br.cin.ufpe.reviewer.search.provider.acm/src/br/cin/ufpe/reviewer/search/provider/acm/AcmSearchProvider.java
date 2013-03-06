@@ -6,9 +6,11 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
+import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
-import br.cin.ufpe.reviewer.search.provider.spi.expetions.SearchProviderException;
+import br.cin.ufpe.reviewer.search.provider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -31,9 +33,9 @@ public class AcmSearchProvider implements SearchProvider {
 	private static final String XPATH_STUDY_ABSTRACT = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//div[@class='abstract2']";
 	
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
-
-	public List<Study> search(String searchString) throws SearchProviderException {
-		List<Study> toReturn = new LinkedList<Study>();
+	
+	public SearchResult search(String searchString) throws SearchProviderException {
+		SearchResult result = new SearchResult();
 		
 		try {
 			// Create the web browser
@@ -48,12 +50,20 @@ public class AcmSearchProvider implements SearchProvider {
 			String searchUrl = assembleSearchUrl(searchString);
 			
 			// Extract studies data
-			toReturn.addAll(extractStudiesData(browser, searchUrl));
+			result.getStudies().addAll(extractStudiesData(browser, searchUrl));
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
-		return  toReturn;
+		return result;
+	}
+	
+	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
+		SearchResult result = new SearchResult();
+		
+		// TODO IMPLEMENTAR
+		
+		return result;
 	}
 	
 	private String assembleSearchUrl(String searchString) {
@@ -145,11 +155,11 @@ public class AcmSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new AcmSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			List<Study> studies = searchProvider.search("security AND \"cloud computing\"");
+			SearchResult result = searchProvider.search("security AND \"cloud computing\"");
 			
 			StringBuilder buffer = new StringBuilder();
 			
-			for (Study study : studies) {
+			for (Study study : result.getStudies()) {
 				buffer.append(study.getTitle() + "\n");
 //				buffer.append(study.getAbstract() + "\n");
 //				buffer.append(study.getUrl() + "\n\n");

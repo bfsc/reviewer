@@ -12,9 +12,11 @@ import org.jbibtex.BibTeXParser;
 import org.jbibtex.Key;
 import org.jbibtex.Value;
 
+import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
+import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
-import br.cin.ufpe.reviewer.search.provider.spi.expetions.SearchProviderException;
+import br.cin.ufpe.reviewer.search.provider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -28,8 +30,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 public class ScopusSearchProvider implements SearchProvider {
 
-	public List<Study> search(String searchString) throws SearchProviderException {
-		List<Study> toReturn = new LinkedList<Study>();
+	public SearchResult search(String searchString) throws SearchProviderException {
+		SearchResult result = new SearchResult();
 		
 		try {
 			// Create the web browser
@@ -81,12 +83,20 @@ public class ScopusSearchProvider implements SearchProvider {
 			Page exportedStudiesPage = exportButton.click();
 			
 			// Extract studies data
-			toReturn.addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
+			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
-		return  toReturn;
+		return  result;
+	}
+	
+	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
+		SearchResult result = new SearchResult();
+		
+		// TODO IMPLEMENTAR
+		
+		return result;
 	}
 	
 	private List<Study> extractStudiesData(InputStream inputStream) {
@@ -123,11 +133,11 @@ public class ScopusSearchProvider implements SearchProvider {
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
 //			List<Study> studies = searchProvider.search("security AND \"cloud computing\"");
-			List<Study> studies = searchProvider.search("\"systematic mapping study\"");
+			SearchResult result = searchProvider.search("\"systematic mapping study\"");
 			
 			StringBuilder buffer = new StringBuilder();
 			
-			for (Study study : studies) {
+			for (Study study : result.getStudies()) {
 				buffer.append(study.getTitle() + "\n");
 				buffer.append(study.getAbstract() + "\n");
 				buffer.append(study.getUrl() + "\n\n");
