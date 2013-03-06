@@ -1,11 +1,8 @@
 package br.cin.ufpe.reviewer.search.provider.ieee;
 
 import java.io.FileWriter;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import br.cin.ufpe.reviewer.search.provider.ieee.IeeeSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
