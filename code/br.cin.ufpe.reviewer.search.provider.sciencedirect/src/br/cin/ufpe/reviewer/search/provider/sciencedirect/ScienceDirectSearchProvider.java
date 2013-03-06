@@ -19,11 +19,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-//import java.net.URL;
-//import com.gargoylesoftware.htmlunit.html.DomNode;
-//import com.gargoylesoftware.htmlunit.html.DomNodeList;
-//import com.gargoylesoftware.htmlunit.html.HtmlDivision;
-//import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
  
 public class ScienceDirectSearchProvider implements SearchProvider {
        
