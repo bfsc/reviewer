@@ -1,8 +1,10 @@
 package br.cin.ufpe.reviewer.search.provider.scopus;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -118,7 +120,7 @@ public class ScopusSearchProvider implements SearchProvider {
 		try {
 			BibTeXParser parser = new BibTeXParser();
 			
-			BibTeXDatabase bibtex = parser.parse(new InputStreamReader(inputStream));
+			BibTeXDatabase bibtex = parser.parse(new AsciiNormalizerReader(new InputStreamReader(inputStream)));
 			for (BibTeXEntry bibTeXEntry : bibtex.getEntries().values()) {
 				Study study = new Study();
 				
@@ -165,4 +167,32 @@ public class ScopusSearchProvider implements SearchProvider {
 		}
 	}
 
+	private class AsciiNormalizerReader extends Reader {
+
+		private Reader reader;
+		
+		public AsciiNormalizerReader(Reader reader) {
+			this.reader = reader;
+		}
+
+		public void close() throws IOException {
+			this.reader.close();
+		}
+
+		public int read(char[] cbuf, int off, int len) throws IOException {
+			int read = this.reader.read(cbuf, off, len);
+			
+			for (int i = 0; i < cbuf.length; i++) {
+				char c = cbuf[i];
+				
+				if (!Character.toString(c).matches("[\\w|\\s|@|,|=|#|\\(|\\)|\\\\|\\{|\\}|]")) {
+					cbuf[i] = '-';
+				}
+			}
+					
+			return read;
+		}
+		
+	}
+	
 }
