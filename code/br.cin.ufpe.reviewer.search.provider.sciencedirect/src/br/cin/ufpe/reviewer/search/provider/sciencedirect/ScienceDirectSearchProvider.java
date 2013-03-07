@@ -104,7 +104,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                            
                             // Extracting study title and URL
                             study.setTitle(anchor.getTextContent().trim());
-                            study.setUrl(DOMAIN_DL_SCIENCE_DIRECT + anchor.getHrefAttribute().trim());
+                            study.setUrl(anchor.getHrefAttribute().trim());
                         
                             toReturn.add(study);
                     }
