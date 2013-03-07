@@ -1,18 +1,11 @@
 package br.cin.ufpe.reviewer.search.provider.scopus;
 
+import java.io.BufferedReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.jbibtex.BibTeXDatabase;
-import org.jbibtex.BibTeXEntry;
-import org.jbibtex.BibTeXParser;
-import org.jbibtex.Key;
-import org.jbibtex.Value;
 
 import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
@@ -118,21 +111,40 @@ public class ScopusSearchProvider implements SearchProvider {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		try {
-			BibTeXParser parser = new BibTeXParser();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			
-			BibTeXDatabase bibtex = parser.parse(new AsciiNormalizerReader(new InputStreamReader(inputStream)));
-			for (BibTeXEntry bibTeXEntry : bibtex.getEntries().values()) {
-				Study study = new Study();
-				
-				Value titleField = bibTeXEntry.getField(new Key("title"));
-				study.setTitle(titleField.toUserString());
-				Value abstractField = bibTeXEntry.getField(new Key("abstract"));
-				study.setAbstract(abstractField.toUserString());
-				Value urlField = bibTeXEntry.getField(new Key("url"));
-				study.setUrl(urlField.toUserString());
-				
-				toReturn.add(study);
+			String line = null;
+			
+			while ((line = reader.readLine()) != null && (line.startsWith("[@\\s]") || line.equals(""))){
+				// Consuming the initial white spaces from the input stream and the first bibtex entry
 			}
+			
+			Study study = null;
+			while ((line = reader.readLine()) != null){
+				if (study == null) {
+					study = new Study();
+				}
+				
+				if (line.startsWith("title={")) {
+					study.setTitle(line.substring(7).replaceAll("},", ""));
+				}
+				
+				if (line.startsWith("abstract={")) {
+					study.setAbstract(line.substring(10).replaceAll("},", ""));
+				}
+				
+				if (line.startsWith("url={")) {
+					study.setUrl(line.substring(5).replaceAll("},", ""));
+				}
+				
+				if (line.indexOf("@") == 0) {
+					toReturn.add(study);
+					study = null;
+				}
+			}
+			
+			//Adding the last study
+			toReturn.add(study);
 		} catch (Exception e) {
 			//TRATAR EXCECAO
 			e.printStackTrace();
@@ -148,14 +160,15 @@ public class ScopusSearchProvider implements SearchProvider {
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
 //			List<Study> studies = searchProvider.search("security AND \"cloud computing\"");
-			SearchResult result = searchProvider.search("\"systematic mapping study\"");
+//			SearchResult result = searchProvider.search("\"systematic mapping study\"");
+			SearchResult result = searchProvider.search("\"software engineering\"");
 			
 			StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : result.getStudies()) {
 				buffer.append(study.getTitle() + "\n");
-				buffer.append(study.getAbstract() + "\n");
-				buffer.append(study.getUrl() + "\n\n");
+//				buffer.append(study.getAbstract() + "\n");
+//				buffer.append(study.getUrl() + "\n\n");
 			}
 			
 			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
@@ -165,34 +178,6 @@ public class ScopusSearchProvider implements SearchProvider {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private class AsciiNormalizerReader extends Reader {
-
-		private Reader reader;
-		
-		public AsciiNormalizerReader(Reader reader) {
-			this.reader = reader;
-		}
-
-		public void close() throws IOException {
-			this.reader.close();
-		}
-
-		public int read(char[] cbuf, int off, int len) throws IOException {
-			int read = this.reader.read(cbuf, off, len);
-			
-			for (int i = 0; i < cbuf.length; i++) {
-				char c = cbuf[i];
-				
-				if (!Character.toString(c).matches("[\\w|\\s|@|,|=|#|\\(|\\)|\\\\|\\{|\\}|]")) {
-					cbuf[i] = '-';
-				}
-			}
-					
-			return read;
-		}
-		
 	}
 	
 }
