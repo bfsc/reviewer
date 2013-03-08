@@ -2,7 +2,7 @@ package br.cin.ufpe.reviewer.core.search;
 
 import java.io.FileWriter;
 
-import br.cin.ufpe.reviewer.core.exceptions.ReviewerCoreException;
+import br.cin.ufpe.reviewer.core.exceptions.CoreException;
 import br.cin.ufpe.reviewer.search.provider.acm.AcmSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.engineeringvillage.EngineeringVillageSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.ieee.IeeeSearchProvider;
@@ -44,7 +44,7 @@ public class SearchController {
 					result.addStudies(engineeringVillageSearchProvider.getKey(), engineeringVillageSearchProvider.search(searchString).getStudies());
 					break;
 				default:
-					throw new ReviewerCoreException("Invalid search provider key: " + searchProviderKey);
+					throw new CoreException("Invalid search provider key: " + searchProviderKey);
 				}
 			}
 		} catch (Exception e) {
