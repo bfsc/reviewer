@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
@@ -25,6 +24,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 public class ScopusSearchProvider implements SearchProvider {
 
+	private static final String SEARCH_PROVIDER_KEY_SCOPUS = "SCOPUS";
+	
 	private static final String EXPORT_FORMAT_BIBTEX = "BIB";
 	private static final String OUTPUT_FORMAT_WITH_ABSTRACT = "CiteAbsKeyws";
 	
@@ -99,12 +100,8 @@ public class ScopusSearchProvider implements SearchProvider {
 		return  result;
 	}
 	
-	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
-		SearchResult result = new SearchResult();
-		
-		// TODO IMPLEMENTAR
-		
-		return result;
+	public String getKey() {
+		return SEARCH_PROVIDER_KEY_SCOPUS;
 	}
 	
 	private List<Study> extractStudiesData(InputStream inputStream) {
