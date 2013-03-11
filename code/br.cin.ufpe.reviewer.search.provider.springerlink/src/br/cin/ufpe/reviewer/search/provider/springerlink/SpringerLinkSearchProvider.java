@@ -15,6 +15,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
 
 public class SpringerLinkSearchProvider implements SearchProvider {
@@ -30,6 +31,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 	
 	private static final String XPATH_STUDY_TITLE_AND_URL = "//a[@class='title']";
 	private static final String XPATH_STUDY_ABSTRACT = "//p[@class='snippet']";
+	private static final String XPATH_STUDY_NUMBER_OF_PAGES = "//span[@class='number-of-pages']";
 	private static final String STUDY_ABSTRACT_END_MARKER = "...";
 	
 	private int NEXT_PAGE_COUNTER = 2;
@@ -83,6 +85,9 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		
 		try {
 			HtmlPage page = browser.getPage(searchUrl);
+			List<?> studyNumberSpan = page.getByXPath(XPATH_STUDY_NUMBER_OF_PAGES);
+			HtmlSpan s = (HtmlSpan) studyNumberSpan.get(0);
+			String numberOfPages = s.getTextContent().trim();
 			
 			// Extracting studies data.
 			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
@@ -117,7 +122,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			}
 			
 			// Extracting the URL of next page.
-			String nextPageUrl = extractNextPageUrl();
+			String nextPageUrl = extractNextPageUrl(numberOfPages);
 			
 			if (nextPageUrl != null) {
 				toReturn.addAll(extractStudiesData(browser, nextPageUrl));
@@ -130,13 +135,23 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		return toReturn;
 	}
 
-	private String extractNextPageUrl() {
+	private String extractNextPageUrl(String numberOfPages) {
 		String toReturn = null;
-		if(NEXT_PAGE_COUNTER < 24){
-			toReturn = DOMAIN_DL_SPRINGER_LINK + "/search/page/" + NEXT_PAGE_COUNTER + "?query=" + SEARCH_STRING + URL_DL_SPRINGER_LINK_ARTICLE_SEARCH;
-			NEXT_PAGE_COUNTER++;
-			//System.out.println(toReturn);
-			}
+		String numberEdited = numberOfPages.replaceAll(",","");
+		int number = Integer.parseInt(numberEdited);
+		if(number > 999){
+			if(NEXT_PAGE_COUNTER < 1000){
+				toReturn = DOMAIN_DL_SPRINGER_LINK + "/search/page/" + NEXT_PAGE_COUNTER + "?query=" + SEARCH_STRING + URL_DL_SPRINGER_LINK_ARTICLE_SEARCH;
+				NEXT_PAGE_COUNTER++;
+				//System.out.println(toReturn);
+			}			
+		}else{
+			if(NEXT_PAGE_COUNTER <= number){
+				toReturn = DOMAIN_DL_SPRINGER_LINK + "/search/page/" + NEXT_PAGE_COUNTER + "?query=" + SEARCH_STRING + URL_DL_SPRINGER_LINK_ARTICLE_SEARCH;
+				NEXT_PAGE_COUNTER++;
+				//System.out.println(toReturn);
+			}			
+		}
 		return toReturn;
 	}
 	public String getKey() {
@@ -150,7 +165,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new SpringerLinkSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			SearchResult result = searchProvider.search("\"Software Engineering\"");
+			SearchResult result = searchProvider.search("\"project design\"");
 			
 			int count = 1;
             
