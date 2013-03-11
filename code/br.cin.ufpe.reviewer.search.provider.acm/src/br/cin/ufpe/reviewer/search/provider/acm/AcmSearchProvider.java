@@ -6,7 +6,6 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
@@ -19,6 +18,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class AcmSearchProvider implements SearchProvider {
 
+	private static final String SEARCH_PROVIDER_KEY_ACM = "ACM";
+	
 	private static final String DOMAIN_DL_ACM = "http://dl.acm.org/";
 	private static final String URL_DL_ACM_SEARCH = "http://dl.acm.org/results.cfm?query=";
 
@@ -57,12 +58,8 @@ public class AcmSearchProvider implements SearchProvider {
 		return result;
 	}
 	
-	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
-		SearchResult result = new SearchResult();
-		
-		// TODO IMPLEMENTAR
-		
-		return result;
+	public String getKey() {
+		return SEARCH_PROVIDER_KEY_ACM;
 	}
 	
 	private String assembleSearchUrl(String searchString) {
@@ -172,5 +169,5 @@ public class AcmSearchProvider implements SearchProvider {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

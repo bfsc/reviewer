@@ -7,7 +7,6 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
@@ -22,7 +21,9 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  
 public class ScienceDirectSearchProvider implements SearchProvider {
        
-    private static final String DOMAIN_DL_SCIENCE_DIRECT = "http://www.sciencedirect.com/";
+    private static final String SEARCH_PROVIDER_KEY_SCIENCE_DIRECT = "SCIENCE_DIRECT";
+
+	private static final String DOMAIN_DL_SCIENCE_DIRECT = "http://www.sciencedirect.com/";
    
     private static final String URL_ENCODE_UTF_8 = "UTF-8";
     private static final String URL_ENCODE_ISO_8859_1 = "ISO-8859-1";
@@ -65,14 +66,10 @@ public class ScienceDirectSearchProvider implements SearchProvider {
  
         }
        
-	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
-		SearchResult result = new SearchResult();
-		
-		// TODO IMPLEMENTAR
-	
-		return result;
+	public String getKey() {
+		return SEARCH_PROVIDER_KEY_SCIENCE_DIRECT;
 	}
-    
+	
     private String assembleSearchUrl(String searchString) {
             String query = "";
            

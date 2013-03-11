@@ -6,6 +6,6 @@ public interface SearchProvider {
 
 	public SearchResult search(String searchString) throws SearchProviderException;
 	
-	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException;
+	public String getKey();
 	
 }

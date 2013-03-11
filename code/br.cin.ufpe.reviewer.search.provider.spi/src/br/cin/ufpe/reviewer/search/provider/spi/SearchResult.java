@@ -1,24 +1,35 @@
 package br.cin.ufpe.reviewer.search.provider.spi;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 
 public class SearchResult {
 
-	private List<Study> studies;
+	private int totalResults;
+	private int fetchedResults;
+	private List<Study> studies = new LinkedList<Study>();
 
 	public SearchResult() {
-		this.studies = new ArrayList<Study>();
+		
 	}
-
-	public SearchResult(List<Study> studies) {
-		this.studies = studies;
+	
+	public SearchResult(int totalResults, int fetchedResults) {
+		this.totalResults = totalResults;
+		this.fetchedResults = fetchedResults;
 	}
 
 	public List<Study> getStudies() {
 		return studies;
+	}
+
+	public int getTotalResults() {
+		return totalResults;
+	}
+
+	public int getFetchedResults() {
+		return fetchedResults;
 	}
 	
 }

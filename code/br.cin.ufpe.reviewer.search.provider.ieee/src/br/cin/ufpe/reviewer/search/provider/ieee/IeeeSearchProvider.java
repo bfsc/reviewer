@@ -3,7 +3,6 @@ package br.cin.ufpe.reviewer.search.provider.ieee;
 import java.io.FileWriter;
 import java.util.List;
 
-import br.cin.ufpe.reviewer.search.provider.spi.SearchFilter;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
@@ -17,6 +16,8 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 
 public class IeeeSearchProvider implements SearchProvider {
 	
+	private static final String SEARCH_PROVIDER_KEY_IEEE = "IEEE";
+
 	private static final String URL_DL_IEEE_SEARCH = "http://ieeexplore.ieee.org/gateway/ipsSearch.jsp?";
 
 	private int count = 1;
@@ -72,12 +73,8 @@ public class IeeeSearchProvider implements SearchProvider {
 		return result;
 	}
 	
-	public SearchResult search(String searchString, SearchFilter filter) throws SearchProviderException {
-		SearchResult result = new SearchResult();
-		
-		// TODO IMPLEMENTAR
-		
-		return result;
+	public String getKey() {
+		return SEARCH_PROVIDER_KEY_IEEE;
 	}
 	
 	private String mountSearchUrl(String searchString) {
@@ -111,4 +108,5 @@ public class IeeeSearchProvider implements SearchProvider {
 		}
 	}
 	//http://ieeexplore.ieee.org/gateway/ipsSearch.jsp?ti=software&hc=1000&rs=1001
+
 }
