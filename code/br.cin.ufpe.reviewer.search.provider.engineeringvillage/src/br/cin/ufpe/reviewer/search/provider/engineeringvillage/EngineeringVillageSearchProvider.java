@@ -1,6 +1,7 @@
 package br.cin.ufpe.reviewer.search.provider.engineeringvillage;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.LinkedList;
@@ -10,7 +11,9 @@ import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.exceptions.SearchProviderException;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -28,8 +31,14 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
     private static final String X_PATH_SEARCH_INPUT = "//input[@type='submit' and @value='Search']";
 
     private static final String X_PATH_STUDY_TITLE = "//p[@class='resulttitle']";
-    
+
+    private static final String X_PATH_STUDY_ABSTRACT = "//a[@class='externallink']";
+
     private static final String X_PATH_STUDY_LINK = "//a[@title='Full-text']";
+
+    private static final String X_PATH_NEXT_PAGE = "//a[@title='Go to next page']";
+    
+    private static final String X_PATH_STUDY_ABSTRACT_TEXT = "//td/p[8]";
 
 	public SearchResult search(String searchString) throws SearchProviderException {
     	SearchResult result = new SearchResult();
@@ -47,18 +56,6 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	            String searchUrl = EXPERT_SEARCH_LINK;
 	           
 	            // Extract studies data
-	            result.getStudies().addAll(extractStudiesData(browser, searchUrl, searchString));
-        	} catch (Exception e) {
-        		throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
-            }
-           
-            return  result;
-	}
-   
-    private List<Study> extractStudiesData(WebClient browser, String searchUrl, String searchString) {
-            List<Study> toReturn = new LinkedList<Study>();
-           
-            try {
                 	System.out.println(searchUrl);
                     HtmlPage page = browser.getPage(searchUrl);
            
@@ -73,33 +70,58 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                     }
                     HtmlPage search_result_page = input_search.click(); 
                     
-                    System.out.println(search_result_page.getUrl());
+	            result.getStudies().addAll(extractStudiesData(browser, search_result_page));
+        	} catch (Exception e) {
+        		throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
+            }
+           
+            return  result;
+	}
+   
+    private List<Study> extractStudiesData(WebClient browser, HtmlPage search_result_page) {
+            List<Study> toReturn = new LinkedList<Study>();
+           
+            try {
+                    
                     List<?> studyTablesParagraph = search_result_page.getByXPath(X_PATH_STUDY_TITLE);
-                    List<?> studyTablesAnchor = search_result_page.getByXPath(X_PATH_STUDY_LINK);
+                    List<?> studyTablesAbstract = search_result_page.getByXPath(X_PATH_STUDY_ABSTRACT);
+                    List<?> studyTablesLink = search_result_page.getByXPath(X_PATH_STUDY_LINK);
                     
                     
+                    System.out.println(search_result_page.getUrl());
                     for (int i = 0; i < studyTablesParagraph .size(); i++) {
                             Study study = new Study();
-
+                            HtmlAnchor Link = null;
+                            
                             HtmlParagraph Paragraph = (HtmlParagraph) studyTablesParagraph.get(i);
-                            HtmlAnchor Link = (HtmlAnchor) studyTablesAnchor.get(i);
+//                            if(studyTablesLink.get(i) != null){
+//                            	Link = (HtmlAnchor) studyTablesLink.get(i);
+//                            }
+                            if(studyTablesAbstract.get(i) != null){
+                            	HtmlAnchor AbstractAnchor = (HtmlAnchor) studyTablesAbstract.get(i);
+                            	String AbstractUrl = "http://www.engineeringvillage.com" + AbstractAnchor.getAttribute("href");
+                            }
+                            //System.out.println(AbstractUrl);
+                            //HtmlPage AbstractPage = browser.getPage(AbstractUrl);
+                            //HtmlParagraph ParagraphAbstract = (HtmlParagraph) AbstractPage.getFirstByXPath(X_PATH_STUDY_ABSTRACT_TEXT);
                            
-                            // Extracting study title and URL
+                            // Extracting study title abstract and URL
                             study.setTitle(Paragraph.asText());
-                            study.setUrl(Link.getAttribute("href"));
+                            //study.setAbstract(ParagraphAbstract.asText());
+//                            if(Link != null)
+//                            	study.setUrl(Link.getAttribute("href"));
                             //study.setUrl(Paragraph.getHrefAttribute().trim());
                         
                             toReturn.add(study);
                     }
                    
                     // Extracting the URL of next page.
-                    /*
-                    String nextPageUrl = extractNextPageUrl(page);
+                    
+                    HtmlPage next_result_page = extractNextPageUrl(browser, search_result_page);
                    
-                    if (nextPageUrl != null) {
-                            toReturn.addAll(extractStudiesData(browser, nextPageUrl));
+                    if (next_result_page != null) {
+                            toReturn.addAll(extractStudiesData(browser, next_result_page));
                     }
-                    */
                     
             } catch (Exception e) {
                     //TRATAR EXCECAO
@@ -108,6 +130,19 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                
                 return toReturn;
         }
+ 
+    private HtmlPage extractNextPageUrl(WebClient browser, HtmlPage page) throws IOException {
+    	HtmlPage toReturn = null;
+       
+        HtmlAnchor nextPageAnchor = (HtmlAnchor) page.getFirstByXPath(X_PATH_NEXT_PAGE);
+
+        if (nextPageAnchor != null) {
+        	String Url = "http://www.engineeringvillage.com" + nextPageAnchor.getAttribute("href");
+        	toReturn = browser.getPage(Url);
+        }
+        
+        return toReturn;
+    }
 
 	public String getKey() {
 		return SEARCH_PROVIDER_KEY_ENGINEERING_VILLAGE;
@@ -125,7 +160,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	     			for (Study study : result.getStudies()) {
 	     				buffer.append(count + ": " + study.getTitle() + "\r\n");
 	             		//buffer.append(study.getAbstract() + "\n");
-	     				buffer.append(study.getUrl() + "\r\n\r\n");
+	     				//buffer.append(study.getUrl() + "\r\n\r\n");
 	     				count++;
 	     			}
 	     			
