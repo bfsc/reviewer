@@ -1,5 +1,6 @@
 package br.cin.ufpe.reviewer.search.provider.engineeringvillage;
 
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -39,7 +40,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	            String searchUrl = EXPERT_SEARCH_LINK;
 	           
 	            // Extract studies data
-	            result.getStudies().addAll(extractStudiesData(browser, searchUrl));
+	            result.getStudies().addAll(extractStudiesData(browser, searchUrl, searchString));
         	} catch (Exception e) {
         		throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
             }
@@ -47,7 +48,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
             return  result;
 	}
    
-    private List<Study> extractStudiesData(WebClient browser, String searchUrl) {
+    private List<Study> extractStudiesData(WebClient browser, String searchUrl, String searchString) {
             List<Study> toReturn = new LinkedList<Study>();
            
             try {
@@ -59,7 +60,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                     HtmlInput input_search = (HtmlInput) page.getFirstByXPath(X_PATH_SEARCH_INPUT);
 
                     if (string_field != null) {
-                    		string_field.setText(searchUrl);                    		
+                    		string_field.setText(searchString);                    		
                     }
                     if (input_search != null) {                   		
                     }
