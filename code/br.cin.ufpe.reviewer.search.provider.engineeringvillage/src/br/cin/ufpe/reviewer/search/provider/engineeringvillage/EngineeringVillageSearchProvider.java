@@ -1,5 +1,6 @@
 package br.cin.ufpe.reviewer.search.provider.engineeringvillage;
 
+import java.io.FileWriter;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.LinkedList;
@@ -12,6 +13,8 @@ import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 
 public class EngineeringVillageSearchProvider implements SearchProvider {
@@ -21,8 +24,12 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
     private static final String EXPERT_SEARCH_LINK = "http://www.engineeringvillage.com/controller/servlet/Controller?CID=expertSearch";
 
     private static final String X_PATH_TEXT_AREA = "//textarea[@name='searchWord1' and @id='srchWrd1']";
-    
+
     private static final String X_PATH_SEARCH_INPUT = "//input[@type='submit' and @value='Search']";
+
+    private static final String X_PATH_STUDY_TITLE = "//p[@class='resulttitle']";
+    
+    private static final String X_PATH_STUDY_LINK = "//a[@title='Full-text']";
 
 	public SearchResult search(String searchString) throws SearchProviderException {
     	SearchResult result = new SearchResult();
@@ -67,27 +74,33 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                     HtmlPage search_result_page = input_search.click(); 
                     
                     System.out.println(search_result_page.getUrl());
+                    List<?> studyTablesParagraph = search_result_page.getByXPath(X_PATH_STUDY_TITLE);
+                    List<?> studyTablesAnchor = search_result_page.getByXPath(X_PATH_STUDY_LINK);
                     
-                    /*
-                    for (int i = 0; i < studyTablesAnchors.size(); i++) {
+                    
+                    for (int i = 0; i < studyTablesParagraph .size(); i++) {
                             Study study = new Study();
-                           
-                            HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);
+
+                            HtmlParagraph Paragraph = (HtmlParagraph) studyTablesParagraph.get(i);
+                            HtmlAnchor Link = (HtmlAnchor) studyTablesAnchor.get(i);
                            
                             // Extracting study title and URL
-                            study.setTitle(anchor.getTextContent().trim());
-                            study.setUrl(anchor.getHrefAttribute().trim());
+                            study.setTitle(Paragraph.asText());
+                            study.setUrl(Link.getAttribute("href"));
+                            //study.setUrl(Paragraph.getHrefAttribute().trim());
                         
                             toReturn.add(study);
                     }
                    
                     // Extracting the URL of next page.
+                    /*
                     String nextPageUrl = extractNextPageUrl(page);
                    
                     if (nextPageUrl != null) {
                             toReturn.addAll(extractStudiesData(browser, nextPageUrl));
                     }
                     */
+                    
             } catch (Exception e) {
                     //TRATAR EXCECAO
                         e.printStackTrace();
@@ -104,6 +117,23 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	         try{	
 	                 SearchProvider searchProvider = new EngineeringVillageSearchProvider();
 	                 SearchResult result = searchProvider.search("Software");
+	                 
+	                 int count = 1;
+	                 
+	                 StringBuilder buffer = new StringBuilder();
+	     			
+	     			for (Study study : result.getStudies()) {
+	     				buffer.append(count + ": " + study.getTitle() + "\r\n");
+	             		//buffer.append(study.getAbstract() + "\n");
+	     				buffer.append(study.getUrl() + "\r\n\r\n");
+	     				count++;
+	     			}
+	     			
+	     			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
+	     			writer.write(buffer.toString());
+	     			writer.flush();
+	     			writer.close();
+	     			
 	         }
 	         catch (Exception e) {
 	                 e.printStackTrace();
