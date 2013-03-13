@@ -13,9 +13,12 @@ import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.DomNode;
+import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
@@ -30,15 +33,17 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 
     private static final String X_PATH_SEARCH_INPUT = "//input[@type='submit' and @value='Search']";
 
-    private static final String X_PATH_STUDY_TITLE = "//p[@class='resulttitle']";
+    private static final String X_PATH_STUDY_TITLE = "/*/p[@class='resulttitle']";
 
-    private static final String X_PATH_STUDY_ABSTRACT = "//a[@class='externallink']";
+    private static final String X_PATH_STUDY_ABSTRACT = "/*/*/a[@class='externallink' and @title='Abstract']";
 
-    private static final String X_PATH_STUDY_LINK = "//a[@title='Full-text']";
+    private static final String X_PATH_STUDY_LINK = "/*/*/a[title='Full-text']";
 
     private static final String X_PATH_NEXT_PAGE = "//a[@title='Go to next page']";
     
     private static final String X_PATH_STUDY_ABSTRACT_TEXT = "//td/p[8]";
+    
+    private static final String X_PATH_STUDY_LIST = "//div[@class='result' or @class='result odd']";
 
 	public SearchResult search(String searchString) throws SearchProviderException {
     	SearchResult result = new SearchResult();
@@ -83,40 +88,50 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
            
             try {
                     
-                    List<?> studyTablesParagraph = search_result_page.getByXPath(X_PATH_STUDY_TITLE);
-                    List<?> studyTablesAbstract = search_result_page.getByXPath(X_PATH_STUDY_ABSTRACT);
-                    List<?> studyTablesLink = search_result_page.getByXPath(X_PATH_STUDY_LINK);
+                    //List<?> studyTablesParagraph = search_result_page.getByXPath(X_PATH_STUDY_TITLE);
+                    //List<?> studyTablesAbstract = search_result_page.getByXPath(X_PATH_STUDY_ABSTRACT);
+                    //List<?> studyTablesLink = search_result_page.getByXPath(X_PATH_STUDY_LINK);
+                    List<?> studyTables = search_result_page.getByXPath(X_PATH_STUDY_LIST);
                     
                     
                     System.out.println(search_result_page.getUrl());
-                    for (int i = 0; i < studyTablesParagraph .size(); i++) {
+                    for (int i = 0; i < studyTables .size(); i++) {
                             Study study = new Study();
-                            HtmlAnchor Link = null;
                             
-                            HtmlParagraph Paragraph = (HtmlParagraph) studyTablesParagraph.get(i);
-//                            if(studyTablesLink.get(i) != null){
-//                            	Link = (HtmlAnchor) studyTablesLink.get(i);
-//                            }
-                            if(studyTablesAbstract.get(i) != null){
-                            	HtmlAnchor AbstractAnchor = (HtmlAnchor) studyTablesAbstract.get(i);
-                            	String AbstractUrl = "http://www.engineeringvillage.com" + AbstractAnchor.getAttribute("href");
-                            }
-                            //System.out.println(AbstractUrl);
-                            //HtmlPage AbstractPage = browser.getPage(AbstractUrl);
-                            //HtmlParagraph ParagraphAbstract = (HtmlParagraph) AbstractPage.getFirstByXPath(X_PATH_STUDY_ABSTRACT_TEXT);
-                           
+
+                            HtmlDivision Division = (HtmlDivision) studyTables.get(i);
+                            System.out.println(Division.getCanonicalXPath() + X_PATH_STUDY_TITLE);
+                            HtmlParagraph Paragraph = (HtmlParagraph)search_result_page.getFirstByXPath(Division.getCanonicalXPath() + X_PATH_STUDY_TITLE);
+                            HtmlAnchor AbstractAnchor = (HtmlAnchor)search_result_page.getFirstByXPath(Division.getCanonicalXPath() + X_PATH_STUDY_ABSTRACT);
+                            HtmlAnchor Link = (HtmlAnchor)search_result_page.getFirstByXPath(Division.getCanonicalXPath() + X_PATH_STUDY_LINK);
+                            
+                            
+                            //HtmlAnchor AbstractAnchor = (HtmlAnchor)Division.getFirstByXPath(X_PATH_STUDY_ABSTRACT);
+                            //HtmlAnchor Link = (HtmlAnchor)Division.getFirstByXPath(X_PATH_STUDY_LINK);
+                            
+                            
+                            System.out.println(AbstractAnchor.asXml());
+                            //taking the link page of Abstract
+                            //HtmlParagraph Paragraph = (HtmlParagraph) studyTablesParagraph.get(i);
+                            //HtmlAnchor AbstractAnchor = (HtmlAnchor) studyTablesAbstract.get(i);
+                            String AbstractUrl = "http://www.engineeringvillage.com" + AbstractAnchor.getAttribute("href");
+                            
+                            //Acessing the abstract page
+                            System.out.println(AbstractUrl);
+                            HtmlPage AbstractPage = browser.getPage(AbstractUrl);
+                            HtmlParagraph ParagraphAbstract = (HtmlParagraph) AbstractPage.getFirstByXPath(X_PATH_STUDY_ABSTRACT_TEXT);
+                            
                             // Extracting study title abstract and URL
                             study.setTitle(Paragraph.asText());
-                            //study.setAbstract(ParagraphAbstract.asText());
-//                            if(Link != null)
-//                            	study.setUrl(Link.getAttribute("href"));
-                            //study.setUrl(Paragraph.getHrefAttribute().trim());
+                            System.out.println(ParagraphAbstract.asXml());
+                            study.setAbstract(ParagraphAbstract.getTextContent());
+                            if(Link != null)
+                            	study.setUrl(Link.getAttribute("href"));
                         
                             toReturn.add(study);
                     }
                    
                     // Extracting the URL of next page.
-                    
                     HtmlPage next_result_page = extractNextPageUrl(browser, search_result_page);
                    
                     if (next_result_page != null) {
@@ -125,7 +140,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                     
             } catch (Exception e) {
                     //TRATAR EXCECAO
-                        e.printStackTrace();
+                    e.printStackTrace();
                 }
                
                 return toReturn;
@@ -151,7 +166,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	 public static void main(String[] args) {
 	         try{	
 	                 SearchProvider searchProvider = new EngineeringVillageSearchProvider();
-	                 SearchResult result = searchProvider.search("Software");
+	                 SearchResult result = searchProvider.search("software \"engineering abstract\"");
 	                 
 	                 int count = 1;
 	                 
@@ -159,8 +174,8 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	     			
 	     			for (Study study : result.getStudies()) {
 	     				buffer.append(count + ": " + study.getTitle() + "\r\n");
-	             		//buffer.append(study.getAbstract() + "\n");
-	     				//buffer.append(study.getUrl() + "\r\n\r\n");
+	             		buffer.append(study.getAbstract() + "\n");
+	     				buffer.append(study.getUrl() + "\r\n\r\n");
 	     				count++;
 	     			}
 	     			
@@ -176,3 +191,4 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	     }
 
 }
+//\"software engineering\" compute
