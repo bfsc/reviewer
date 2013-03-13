@@ -2,7 +2,6 @@ package br.cin.ufpe.reviewer.search.provider.engineeringvillage;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -11,11 +10,7 @@ import br.cin.ufpe.reviewer.search.provider.spi.SearchResult;
 import br.cin.ufpe.reviewer.search.provider.spi.exceptions.SearchProviderException;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
 
-import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.DomNode;
-import com.gargoylesoftware.htmlunit.html.DomNodeList;
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
