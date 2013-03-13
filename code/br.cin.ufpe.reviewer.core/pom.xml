@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>br.cin.ufpe.reviewer</groupId>
-  <artifactId>core</artifactId>
+  <artifactId>br.cin.ufpe.reviewer.core</artifactId>
   <version>0.0.1</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -20,42 +20,56 @@
   <dependencies>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.spi</artifactId>
+  		<artifactId>br.cin.ufpe.reviewer.model</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>model</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.acm
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.acm</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.engineeringvillage
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.engineeringvillage</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.ieee
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.ieee</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.sciencedirect
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.sciencedirect</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.scopus
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.scopus</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.spi
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   	<dependency>
   		<groupId>br.cin.ufpe.reviewer</groupId>
-  		<artifactId>search.provider.springerlink</artifactId>
+  		<artifactId>
+  			br.cin.ufpe.reviewer.search.provider.springerlink
+  		</artifactId>
   		<version>0.0.1</version>
   	</dependency>
   </dependencies>

@@ -15,6 +15,7 @@ public class SearchController {
 
 	public SearchResult search(String searchString, SearchFilter filter) {
 		SearchResult result = new SearchResult();
+		result.setSearchString(searchString);
 		
 		try {
 			for (String searchProviderKey : filter.getSearchProvidersKeys()) {
@@ -48,8 +49,7 @@ public class SearchController {
 				}
 			}
 		} catch (Exception e) {
-			// TODO TRATAR EXCECAO
-			e.printStackTrace();
+			throw new CoreException("Error trying to perform the search for: " + searchString, e);
 		}
 		
 		return result;
@@ -65,6 +65,7 @@ public class SearchController {
 
 			SearchController searchController = new SearchController();
 			SearchResult result = searchController.search("\"systematic mapping study\"", filter);
+//			SearchResult result = searchController.search("\"software engineering\"", filter);
 			
 			StringBuilder buffer = new StringBuilder();
 			for (String searchProviderKey : result.getAllStudies().keySet()) {
