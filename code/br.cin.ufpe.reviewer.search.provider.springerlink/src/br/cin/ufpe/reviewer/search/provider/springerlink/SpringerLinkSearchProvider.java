@@ -85,9 +85,15 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		
 		try {
 			HtmlPage page = browser.getPage(searchUrl);
-			List<?> studyNumberSpan = page.getByXPath(XPATH_STUDY_NUMBER_OF_PAGES);
-			HtmlSpan s = (HtmlSpan) studyNumberSpan.get(0);
-			String numberOfPages = s.getTextContent().trim();
+			
+			String numberOfPages;
+			try {
+				List<?> studyNumberSpan = page.getByXPath(XPATH_STUDY_NUMBER_OF_PAGES);
+				HtmlSpan s = (HtmlSpan) studyNumberSpan.get(0);
+				numberOfPages = s.getTextContent().trim();
+			} catch (Exception e) {
+				numberOfPages = "1";
+			}
 			
 			// Extracting studies data.
 			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
@@ -165,7 +171,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new SpringerLinkSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			SearchResult result = searchProvider.search("\"project design\"");
+			SearchResult result = searchProvider.search("\"systematic mapping study\"");
 			
 			int count = 1;
             
