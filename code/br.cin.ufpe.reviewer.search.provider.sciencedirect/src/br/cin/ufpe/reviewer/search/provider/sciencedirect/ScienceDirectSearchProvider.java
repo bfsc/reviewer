@@ -234,7 +234,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
     			
     			for (Study study : result.getStudies()) {
     				buffer.append(count + ": " + study.getTitle() + "\r\n");
-//            				buffer.append(study.getAbstract() + "\n");
+            		buffer.append(study.getAbstract() + "\r\n");
     				buffer.append(study.getUrl() + "\r\n\r\n");
     				count++;
     			}
