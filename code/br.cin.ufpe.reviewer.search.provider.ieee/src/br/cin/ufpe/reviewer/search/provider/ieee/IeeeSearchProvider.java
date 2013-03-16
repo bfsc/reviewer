@@ -88,13 +88,15 @@ public class IeeeSearchProvider implements SearchProvider {
 		try{
 			SearchProvider searchProvider = new IeeeSearchProvider();
 			SearchResult result = searchProvider.search("\"software\"AND\"java\"");
+			int count = 1;
 
 			StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : result.getStudies()) {
-				buffer.append(study.getTitle() + "\n");
-				buffer.append(study.getAbstract() + "\n");
-				buffer.append(study.getUrl() + "\n\n");
+				buffer.append(count + ": " + study.getTitle() + "\r\n");
+        		buffer.append(study.getAbstract() + "\n");
+				buffer.append(study.getUrl() + "\r\n\r\n");
+				count++;
 			}
 			
 			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
