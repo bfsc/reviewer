@@ -1,6 +1,7 @@
 package br.cin.ufpe.reviewer.search.provider.ieee;
 
 import java.io.FileWriter;
+import java.net.URLEncoder;
 import java.util.List;
 
 import br.cin.ufpe.reviewer.search.provider.spi.SearchProvider;
@@ -15,6 +16,8 @@ import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.xml.XmlPage;
 
 public class IeeeSearchProvider implements SearchProvider {
+
+	private static final String URL_ENCODE_UTF_8 = "UTF-8";
 	
 	private static final String SEARCH_PROVIDER_KEY_IEEE = "IEEE";
 
@@ -30,7 +33,9 @@ public class IeeeSearchProvider implements SearchProvider {
 		try {
 			WebClient browser = new WebClient();
 			
-			String searchUrl = mountSearchUrl(searchString);
+			String query = URLEncoder.encode(searchString, URL_ENCODE_UTF_8).toString();
+			String searchUrl = mountSearchUrl(query);
+			System.out.print(searchUrl + "\n" );			
 			
 			XmlPage page = browser.getPage(searchUrl);
 			DomElement totalFoundElement = page.getFirstByXPath("/root/totalfound");
@@ -54,7 +59,7 @@ public class IeeeSearchProvider implements SearchProvider {
 						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("abstract")) {
 							study.setAbstract(domNode.getTextContent());
 						}
-						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("mdurl")) {
+						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("rank")) {
 							study.setUrl(domNode.getTextContent());
 						}
 					}
@@ -62,7 +67,7 @@ public class IeeeSearchProvider implements SearchProvider {
 				}
 				count = count + 1000;
 				if(count - 1 + numeroDeEstudos > totalFound){
-					numeroDeEstudos = totalFound - count - 1;
+					numeroDeEstudos = totalFound - count + 1;
 				}
 			}
 			
@@ -79,7 +84,7 @@ public class IeeeSearchProvider implements SearchProvider {
 	
 	private String mountSearchUrl(String searchString) {
 		String query = "";
-		query = "ti=" + searchString + "&hc="+ numeroDeEstudos + "&rs=" + count;
+		query = "md=" + searchString + "&hc="+ numeroDeEstudos + "&rs=" + count;
 		
 		return URL_DL_IEEE_SEARCH + query;
 	}
@@ -87,7 +92,7 @@ public class IeeeSearchProvider implements SearchProvider {
 	public static void main(String[] args) {
 		try{
 			SearchProvider searchProvider = new IeeeSearchProvider();
-			SearchResult result = searchProvider.search("\"software\"AND\"java\"");
+			SearchResult result = searchProvider.search("\"Software engineering\" AND Mapping");
 			int count = 1;
 
 			StringBuilder buffer = new StringBuilder();

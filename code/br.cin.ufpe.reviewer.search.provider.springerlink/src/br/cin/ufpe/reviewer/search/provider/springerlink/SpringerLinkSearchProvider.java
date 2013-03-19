@@ -171,7 +171,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new SpringerLinkSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			SearchResult result = searchProvider.search("\"systematic mapping study\"");
+			SearchResult result = searchProvider.search("\"Software engineering\"");
 			
 			int count = 1;
             

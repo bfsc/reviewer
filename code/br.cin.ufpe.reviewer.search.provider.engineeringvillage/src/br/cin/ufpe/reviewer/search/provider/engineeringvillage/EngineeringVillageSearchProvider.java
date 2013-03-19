@@ -109,7 +109,9 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                             }
                             
                             // Extracting study title abstract and URL
-                            study.setTitle(Paragraph.asText());
+                            if(Paragraph != null){
+                            	study.setTitle(Paragraph.asText());
+                            }
                             if(ParagraphAbstract != null){
                             	study.setAbstract(ParagraphAbstract.getTextContent());
                             }
