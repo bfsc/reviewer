@@ -172,7 +172,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	     				count++;
 	     			}
 	     			
-	     			FileWriter writer = new FileWriter("C:/Users/Pedro/Desktop/search.result.txt");
+	     			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
 	     			writer.write(buffer.toString());
 	     			writer.flush();
 	     			writer.close();
