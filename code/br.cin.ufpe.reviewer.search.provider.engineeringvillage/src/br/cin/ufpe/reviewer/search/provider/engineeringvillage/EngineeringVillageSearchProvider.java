@@ -81,10 +81,13 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
             try {
                     //taking the studys tags
                     List<?> studyTables = search_result_page.getByXPath(X_PATH_STUDY_LIST);
+        			System.out.print(search_result_page.getUrl());	
                     
                     //taking the studys from the tags
                     for (int i = 0; i < studyTables .size(); i++) {
                             Study study = new Study();
+                            String AbstractUrl = null;
+                            HtmlPage AbstractPage = null;
                             boolean sair = false;
                             
                             //taking the tags of each part of the studys
@@ -94,18 +97,22 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                             HtmlAnchor Link = (HtmlAnchor)search_result_page.getFirstByXPath(Division.getCanonicalXPath() + X_PATH_STUDY_LINK);
                             
                             //taking the link page of Abstract
-                            String AbstractUrl = "http://www.engineeringvillage.com" + AbstractAnchor.getAttribute("href");
+                            if(AbstractAnchor != null)
+                            	AbstractUrl = "http://www.engineeringvillage.com" + AbstractAnchor.getAttribute("href");
                             
                             //Acessing the abstract page
-                            HtmlPage AbstractPage = browser.getPage(AbstractUrl);
+                            if(AbstractUrl != null)
+                            	AbstractPage = browser.getPage(AbstractUrl);
                             HtmlParagraph ParagraphAbstract = null;
-                            List<?> studyTablesParagraph = AbstractPage.getByXPath(X_PATH_STUDY_ABSTRACT_TEXT);
-                            for(int j = 0; j < studyTablesParagraph .size() && sair != true; j++){
-                            	HtmlParagraph verifica = (HtmlParagraph)studyTablesParagraph.get(j);
-                            	if(verifica.getAttribute("class").equalsIgnoreCase("abstracttext sectionstart")){
-                            		sair = true;
-                            		ParagraphAbstract = (HtmlParagraph)studyTablesParagraph.get(j+1);
-                            	}
+                            if(AbstractPage != null){
+	                            List<?> studyTablesParagraph = AbstractPage.getByXPath(X_PATH_STUDY_ABSTRACT_TEXT);
+	                            for(int j = 0; j < studyTablesParagraph .size() && sair != true; j++){
+	                            	HtmlParagraph verifica = (HtmlParagraph)studyTablesParagraph.get(j);
+	                            	if(verifica.getAttribute("class").equalsIgnoreCase("abstracttext sectionstart")){
+	                            		sair = true;
+	                            		ParagraphAbstract = (HtmlParagraph)studyTablesParagraph.get(j+1);
+	                            	}
+	                            }
                             }
                             
                             // Extracting study title abstract and URL
@@ -141,12 +148,18 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
  
     private HtmlPage extractNextPageUrl(WebClient browser, HtmlPage page) throws IOException {
     	HtmlPage toReturn = null;
+    	String Url;
        
         HtmlAnchor nextPageAnchor = (HtmlAnchor) page.getFirstByXPath(X_PATH_NEXT_PAGE);
 
         if (nextPageAnchor != null) {
-        	String Url = "http://www.engineeringvillage.com" + nextPageAnchor.getAttribute("href");
-        	toReturn = browser.getPage(Url);
+        	if(nextPageAnchor.getAttribute("href").equalsIgnoreCase("javascript:window.alert('Only the first 4000 records can be viewed.')")){
+        		toReturn = null;
+        	}
+        	else{
+        		Url = "http://www.engineeringvillage.com" + nextPageAnchor.getAttribute("href");
+        		toReturn = browser.getPage(Url);
+        	}
         }
         
         return toReturn;
@@ -159,7 +172,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	 public static void main(String[] args) {
 	         try{	
 	                 SearchProvider searchProvider = new EngineeringVillageSearchProvider();
-	                 SearchResult result = searchProvider.search("software engineering abstract");
+	                 SearchResult result = searchProvider.search("systematic mapping studies");
 	                 
 	                 int count = 1;
 	                 
