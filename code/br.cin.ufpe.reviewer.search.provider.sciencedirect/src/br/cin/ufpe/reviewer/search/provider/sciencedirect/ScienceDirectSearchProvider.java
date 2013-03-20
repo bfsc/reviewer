@@ -227,7 +227,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
     public static void main(String[] args) {
             try{
                     SearchProvider searchProvider = new ScienceDirectSearchProvider();
-                    SearchResult result = searchProvider.search("\"Software AND cloud\" OR \"computing science\"");
+                    SearchResult result = searchProvider.search("Software AND cloud OR computing");
                 int count = 1;
                 
                 StringBuilder buffer = new StringBuilder();
