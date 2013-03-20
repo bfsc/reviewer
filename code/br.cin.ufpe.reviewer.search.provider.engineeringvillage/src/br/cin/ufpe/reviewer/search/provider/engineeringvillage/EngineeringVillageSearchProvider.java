@@ -157,7 +157,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	 public static void main(String[] args) {
 	         try{	
 	                 SearchProvider searchProvider = new EngineeringVillageSearchProvider();
-	                 SearchResult result = searchProvider.search("software engineering abstract");
+	                 SearchResult result = searchProvider.search("");
 	                 
 	                 int count = 1;
 	                 
@@ -170,7 +170,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	     				count++;
 	     			}
 	     			
-	     			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
+	     			FileWriter writer = new FileWriter("C:/Users/Pedro/Desktop/search.result.txt");
 	     			writer.write(buffer.toString());
 	     			writer.flush();
 	     			writer.close();

@@ -87,17 +87,20 @@ public class IeeeSearchProvider implements SearchProvider {
 	public static void main(String[] args) {
 		try{
 			SearchProvider searchProvider = new IeeeSearchProvider();
-			SearchResult result = searchProvider.search("\"software\"AND\"java\"");
+			SearchResult result = searchProvider.search("\"project design\" AND \"software engineering\"");
 
-			StringBuilder buffer = new StringBuilder();
+			int count = 1;
+            
+            StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : result.getStudies()) {
-				buffer.append(study.getTitle() + "\n");
-				buffer.append(study.getAbstract() + "\n");
-				buffer.append(study.getUrl() + "\n\n");
+				buffer.append(count + ": " + study.getTitle() + "\r\n");
+        		buffer.append(study.getAbstract() + "\n");
+				buffer.append(study.getUrl() + "\r\n\r\n");
+				count++;
 			}
 			
-			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
+			FileWriter writer = new FileWriter("C:/Users/Pedro/Desktop/search.result.txt");
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();
