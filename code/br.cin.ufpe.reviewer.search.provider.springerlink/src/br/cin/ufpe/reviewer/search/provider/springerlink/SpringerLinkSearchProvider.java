@@ -171,7 +171,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new SpringerLinkSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			SearchResult result = searchProvider.search("\"systematic mapping study\"");
+			SearchResult result = searchProvider.search("\"Software cloud\"");
 			
 			int count = 1;
             
@@ -184,7 +184,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 				count++;
 			}
 			
-			FileWriter writer = new FileWriter("C:/Users/Pedro/Desktop/search.result.txt");
+			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();

@@ -234,12 +234,12 @@ public class ScienceDirectSearchProvider implements SearchProvider {
     			
     			for (Study study : result.getStudies()) {
     				buffer.append(count + ": " + study.getTitle() + "\r\n");
-//            				buffer.append(study.getAbstract() + "\n");
+            		buffer.append(study.getAbstract() + "\r\n");
     				buffer.append(study.getUrl() + "\r\n\r\n");
     				count++;
     			}
     			
-    			FileWriter writer = new FileWriter("C:/Users/Pedro/Desktop/search.result.txt");
+    			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
     			writer.write(buffer.toString());
     			writer.flush();
     			writer.close();

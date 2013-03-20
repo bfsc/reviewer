@@ -156,22 +156,19 @@ public class ScopusSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new ScopusSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-//			List<Study> result = searchProvider.search("security AND \"cloud computing\"");
+//			List<Study> studies = searchProvider.search("security AND \"cloud computing\"");
 //			SearchResult result = searchProvider.search("\"systematic mapping study\"");
 			SearchResult result = searchProvider.search("\"software engineering\"");
 			
-			int count = 1;
-            
-            StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : result.getStudies()) {
-				buffer.append(count + ": " + study.getTitle() + "\r\n");
-        		buffer.append(study.getAbstract() + "\n");
-				buffer.append(study.getUrl() + "\r\n\r\n");
-				count++;
+				buffer.append(study.getTitle() + "\n");
+//				buffer.append(study.getAbstract() + "\n");
+//				buffer.append(study.getUrl() + "\n\n");
 			}
 			
-			FileWriter writer = new FileWriter("C:/Users/Pedro/Desktop/search.result.txt");
+			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();

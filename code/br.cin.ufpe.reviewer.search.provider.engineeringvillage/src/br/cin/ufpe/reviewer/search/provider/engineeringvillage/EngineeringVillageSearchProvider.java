@@ -109,7 +109,9 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                             }
                             
                             // Extracting study title abstract and URL
-                            study.setTitle(Paragraph.asText());
+                            if(Paragraph != null){
+                            	study.setTitle(Paragraph.asText());
+                            }
                             if(ParagraphAbstract != null){
                             	study.setAbstract(ParagraphAbstract.getTextContent());
                             }
@@ -157,7 +159,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	 public static void main(String[] args) {
 	         try{	
 	                 SearchProvider searchProvider = new EngineeringVillageSearchProvider();
-	                 SearchResult result = searchProvider.search("");
+	                 SearchResult result = searchProvider.search("software engineering abstract");
 	                 
 	                 int count = 1;
 	                 

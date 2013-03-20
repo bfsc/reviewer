@@ -151,17 +151,19 @@ public class AcmSearchProvider implements SearchProvider {
 			SearchProvider searchProvider = new AcmSearchProvider();
 			
 //			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			SearchResult result = searchProvider.search("security AND \"cloud computing\"");
+			SearchResult result = searchProvider.search("Software AND cloud OR computing");
+			int count = 1;
 			
 			StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : result.getStudies()) {
-				buffer.append(study.getTitle() + "\n");
-//				buffer.append(study.getAbstract() + "\n");
-//				buffer.append(study.getUrl() + "\n\n");
+				buffer.append(count + ": " + study.getTitle() + "\r\n");
+        		buffer.append(study.getAbstract() + "\n");
+				buffer.append(study.getUrl() + "\r\n\r\n");
+				count++;
 			}
 			
-			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
+			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();
