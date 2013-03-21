@@ -5,7 +5,7 @@
 		<table name="literature_review" />
 		<attributes>
 			<id name="id">
-				<column name="ID" />
+				<column name="id" />
 			</id>
 			<basic name="title">
 				<column name="title" />

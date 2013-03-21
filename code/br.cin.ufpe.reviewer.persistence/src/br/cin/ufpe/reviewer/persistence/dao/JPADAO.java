@@ -2,6 +2,7 @@ package br.cin.ufpe.reviewer.persistence.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import br.cin.ufpe.reviewer.persistence.exceptions.PersistenceException;
@@ -25,7 +26,10 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 
 	public void create(E entity) throws PersistenceException {
 		try {
+//			EntityTransaction transaction = this.entityManager.getTransaction();
+//			transaction.begin();
 			this.entityManager.persist(entity);
+//			transaction.commit();
 		} catch (Exception e) {
 			throw new PersistenceException("An error occurred trying to create an entity." ,e);
 		}

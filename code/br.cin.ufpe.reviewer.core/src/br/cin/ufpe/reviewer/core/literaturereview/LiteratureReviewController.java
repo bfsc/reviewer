@@ -7,6 +7,7 @@ import br.cin.ufpe.reviewer.model.literaturereview.Protocol;
 import br.cin.ufpe.reviewer.persistence.dao.literaturereview.ILiteratureReviewDAO;
 import br.cin.ufpe.reviewer.persistence.dao.literaturereview.LiteratureReviewJPADAO;
 import br.cin.ufpe.reviewer.persistence.exceptions.PersistenceException;
+import br.cin.ufpe.reviewer.persistence.util.HSQLUtil;
 
 public class LiteratureReviewController {
 
@@ -33,12 +34,13 @@ public class LiteratureReviewController {
 	}
 	
 	public static void main(String[] args) {
-		LiteratureReviewController controller = new LiteratureReviewController();
+		HSQLUtil.initDatabase();
 		
-//		LiteratureReview literatureReview = new LiteratureReview();
-//		literatureReview.setId(1);
-//		literatureReview.setTitle("TITLE 1");
-//		controller.createLiteratureReview(literatureReview);
+		LiteratureReviewController controller = new LiteratureReviewController();
+		LiteratureReview literatureReview = new LiteratureReview();
+		literatureReview.setId(1);
+		literatureReview.setTitle("TITLE 1");
+		controller.createLiteratureReview(literatureReview);
 	}
 	
 }
