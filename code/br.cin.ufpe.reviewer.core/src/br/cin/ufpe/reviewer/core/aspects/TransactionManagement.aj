@@ -2,29 +2,29 @@ package br.cin.ufpe.reviewer.core.aspects;
 
 public abstract aspect TransactionManagement {
 
-	private static int methodCallQuantity = 0;
+	private static int methodCallCount = 0;
 	
 	public abstract pointcut transactionalMethods();
 	
 	before() : transactionalMethods() {
-		if (methodCallQuantity == 0) {
+		if (methodCallCount == 0) {
 			beginTransaction();
 		}
 		
-		methodCallQuantity++;
+		methodCallCount++;
 	}
 
 	after() returning : transactionalMethods() {
-		methodCallQuantity--;
+		methodCallCount--;
 		
-		if (methodCallQuantity == 0) {
+		if (methodCallCount == 0) {
 			commit();
 		}
 	}
 
 	after() throwing() : transactionalMethods()  {
 		rollback();
-		methodCallQuantity = 0;
+		methodCallCount = 0;
 	}
 
 	protected abstract void beginTransaction();

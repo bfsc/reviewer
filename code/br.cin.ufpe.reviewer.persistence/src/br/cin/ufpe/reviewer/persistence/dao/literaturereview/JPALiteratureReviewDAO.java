@@ -5,8 +5,14 @@ import br.cin.ufpe.reviewer.persistence.dao.JPADAO;
 
 public class JPALiteratureReviewDAO extends JPADAO<LiteratureReview, Integer> implements ILiteratureReviewDAO {
 
-	public JPALiteratureReviewDAO() {
+	private static JPALiteratureReviewDAO instance = new JPALiteratureReviewDAO();
+	
+	private JPALiteratureReviewDAO() {
 		super(LiteratureReview.class);
 	}
 
+	public static JPALiteratureReviewDAO getInstance(){
+		return instance;
+	}
+	
 }
