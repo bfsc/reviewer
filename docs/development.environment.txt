@@ -16,6 +16,8 @@ DEVELOPMENT ENVIRONMENT
 
 [Git Eclipse Plugin] - EGit - 2.2.0 - http://download.eclipse.org/egit/updates
 
+[AspecJ Eclipse Plugin] - AJDT - http://download.eclipse.org/tools/ajdt/42/update
+
 [Maven Eclipse Plugin] - M2E - 1.2.0 - http://download.eclipse.org/technology/m2e/releases
 
 [Maven WTP Eclipse PLugin] - m2e-wtp - 0.17.0 - http://download.eclipse.org/m2e-wtp/releases/juno/
