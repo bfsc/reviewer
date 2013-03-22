@@ -7,21 +7,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import br.cin.ufpe.reviewer.persistence.JPAEntityManager;
 import br.cin.ufpe.reviewer.persistence.PersistenceConstants;
 import br.cin.ufpe.reviewer.persistence.exceptions.PersistenceException;
 
 public class JPADAO<E,K> implements IDAO<E, K> {
 	
-	private static final EntityManagerFactory ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("br.cin.ufpe.reviewer");
-	
 	private static Properties queries;
-	
-	private EntityManager entityManager;
 	private Class<E> entityClass;
 	
 	static {
@@ -34,18 +28,12 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 	}
 		
 	public JPADAO(Class<E> entityClass) {
-		this.entityManager = ENTITY_MANAGER_FACTORY.createEntityManager();
-		this.entityClass = entityClass;
-	}
-	
-	public JPADAO(EntityManager entityManager, Class<E> entityClass) {
-		this.entityManager = entityManager;
 		this.entityClass = entityClass;
 	}
 
 	public void create(E entity) throws PersistenceException {
 		try {
-			this.entityManager.persist(entity);
+			JPAEntityManager.ENTITY_MANAGER.persist(entity);
 		} catch (Exception e) {
 			throw new PersistenceException("An error occurred trying to create an entity." ,e);
 		}
@@ -55,7 +43,7 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 		E entity = null;
 		
 		try {
-			this.entityManager.find(entityClass, key);
+			JPAEntityManager.ENTITY_MANAGER.find(entityClass, key);
 		} catch (Exception e) {
 			throw new PersistenceException("An error occurred trying to retrieve an entity with key: " + key ,e);
 		}
@@ -84,7 +72,7 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 	
 	public void update(E entity) throws PersistenceException {
 		try {
-			this.entityManager.merge(entity);
+			JPAEntityManager.ENTITY_MANAGER.merge(entity);
 		} catch (Exception e) {
 			throw new PersistenceException("An error occurred trying to update an entity.",e);
 		}
@@ -92,14 +80,14 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 
 	public void delete(E entity) throws PersistenceException {
 		try {
-			this.entityManager.remove(entity);
+			JPAEntityManager.ENTITY_MANAGER.remove(entity);
 		} catch (Exception e) {
 			throw new PersistenceException("An error occurred trying to delete an entity.",e);
 		}
 	}
 	
 	protected Query createQuery(String key, Map<String, String> queryParameters) {
-		Query query = this.entityManager.createQuery(queries.getProperty(getClass() + "." + key));
+		Query query = JPAEntityManager.ENTITY_MANAGER.createQuery(queries.getProperty(getClass() + "." + key));
 		
 		if (queryParameters != null) {
 			for (String parameterName : queryParameters.keySet()) {

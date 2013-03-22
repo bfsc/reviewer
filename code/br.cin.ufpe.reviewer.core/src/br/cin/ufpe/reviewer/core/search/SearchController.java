@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import br.cin.ufpe.reviewer.core.exceptions.CoreException;
 import br.cin.ufpe.reviewer.search.provider.acm.AcmSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.engineeringvillage.EngineeringVillageSearchProvider;
-import br.cin.ufpe.reviewer.search.provider.ieee.IeeeSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.sciencedirect.ScienceDirectSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.scopus.ScopusSearchProvider;
 import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;

@@ -1,5 +1,6 @@
 package br.cin.ufpe.reviewer.core.literaturereview;
 
+import br.cin.ufpe.reviewer.core.ITransactionalController;
 import br.cin.ufpe.reviewer.core.exceptions.CoreException;
 import br.cin.ufpe.reviewer.core.search.SearchResult;
 import br.cin.ufpe.reviewer.model.literaturereview.LiteratureReview;
@@ -9,7 +10,7 @@ import br.cin.ufpe.reviewer.persistence.dao.literaturereview.JPALiteratureReview
 import br.cin.ufpe.reviewer.persistence.exceptions.PersistenceException;
 import br.cin.ufpe.reviewer.persistence.util.HSQLUtil;
 
-public class LiteratureReviewController {
+public class LiteratureReviewController implements ITransactionalController {
 
 	private ILiteratureReviewDAO dao = new JPALiteratureReviewDAO();
 	
@@ -38,9 +39,14 @@ public class LiteratureReviewController {
 		
 		LiteratureReviewController controller = new LiteratureReviewController();
 		LiteratureReview literatureReview = new LiteratureReview();
-		literatureReview.setId(1);
 		literatureReview.setTitle("TITLE 1");
 		controller.createLiteratureReview(literatureReview);
+
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

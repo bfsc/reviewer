@@ -12,7 +12,7 @@ import br.cin.ufpe.reviewer.persistence.PersistenceConstants;
 
 public class HSQLUtil {
 
-	private static final String QUERY_REVIEWER_SCHEMA = "SELECT * FROM information_schema.schemata WHERE schema_name = 'reviewer'";
+	private static final String QUERY_REVIEWER_SCHEMA = "SELECT * FROM information_schema.schemata WHERE schema_name = 'REVIEWER';";
 
 	public static void initDatabase() {
 		try {

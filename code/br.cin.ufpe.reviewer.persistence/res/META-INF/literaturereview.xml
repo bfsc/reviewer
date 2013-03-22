@@ -5,10 +5,11 @@
 		<table name="literature_review" schema="reviewer" />
 		<attributes>
 			<id name="id">
-				<column name="id" />
+				<column name="ID" />
+				<generated-value strategy="AUTO" />
 			</id>
 			<basic name="title">
-				<column name="title" />
+				<column name="TITLE" />
 			</basic>
 		</attributes>
 	</entity>  
