@@ -8,12 +8,16 @@ import java.sql.Statement;
 
 import javax.persistence.PersistenceException;
 
+import br.cin.ufpe.reviewer.persistence.PersistenceConstants;
+
 public class HSQLUtil {
+
+	private static final String QUERY_REVIEWER_SCHEMA = "SELECT * FROM information_schema.schemata WHERE schema_name = 'reviewer'";
 
 	public static void initDatabase() {
 		try {
-			Class.forName("org.hsqldb.jdbcDriver");
-			Connection connection = DriverManager.getConnection("jdbc:hsqldb:file:data/br.cin.ufpe.reviewer.db", "sa", "");
+			Class.forName(PersistenceConstants.JDBC_DRIVER);
+			Connection connection = DriverManager.getConnection(PersistenceConstants.DB_CONNECTION_STRING, PersistenceConstants.DB_USER, PersistenceConstants.DB_PASSWORD);
 			
 			if (!existDatabase(connection)) {
 				createDatabase(connection);
@@ -28,7 +32,7 @@ public class HSQLUtil {
 	private static void createDatabase(Connection connection) {
 		try {
 			ScriptRunner scriptRunner = new ScriptRunner(connection, true, true);
-			scriptRunner.runScript(new InputStreamReader(ClassLoader.getSystemResourceAsStream("create.database.script.sql")));
+			scriptRunner.runScript(new InputStreamReader(ClassLoader.getSystemResourceAsStream(PersistenceConstants.DDL_SCRIPT_FILE_NAME)));
 		} catch (Exception e) {
 			throw new PersistenceException("Error trying to create the system database.", e);
 		}
@@ -39,7 +43,7 @@ public class HSQLUtil {
 		
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_name = 'literature_review'");
+			ResultSet resultSet = statement.executeQuery(QUERY_REVIEWER_SCHEMA);
 			
 			exist = resultSet.next();
 			

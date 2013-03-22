@@ -5,13 +5,13 @@ import br.cin.ufpe.reviewer.core.search.SearchResult;
 import br.cin.ufpe.reviewer.model.literaturereview.LiteratureReview;
 import br.cin.ufpe.reviewer.model.literaturereview.Protocol;
 import br.cin.ufpe.reviewer.persistence.dao.literaturereview.ILiteratureReviewDAO;
-import br.cin.ufpe.reviewer.persistence.dao.literaturereview.LiteratureReviewJPADAO;
+import br.cin.ufpe.reviewer.persistence.dao.literaturereview.JPALiteratureReviewDAO;
 import br.cin.ufpe.reviewer.persistence.exceptions.PersistenceException;
 import br.cin.ufpe.reviewer.persistence.util.HSQLUtil;
 
 public class LiteratureReviewController {
 
-	private ILiteratureReviewDAO dao = new LiteratureReviewJPADAO();
+	private ILiteratureReviewDAO dao = new JPALiteratureReviewDAO();
 	
 	public void createLiteratureReview(LiteratureReview literatureReview) {
 		try {

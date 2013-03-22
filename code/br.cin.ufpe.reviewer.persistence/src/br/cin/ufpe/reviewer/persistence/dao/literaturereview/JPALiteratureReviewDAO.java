@@ -5,13 +5,13 @@ import javax.persistence.EntityManager;
 import br.cin.ufpe.reviewer.model.literaturereview.LiteratureReview;
 import br.cin.ufpe.reviewer.persistence.dao.JPADAO;
 
-public class LiteratureReviewJPADAO extends JPADAO<LiteratureReview, Integer> implements ILiteratureReviewDAO {
+public class JPALiteratureReviewDAO extends JPADAO<LiteratureReview, Integer> implements ILiteratureReviewDAO {
 
-	public LiteratureReviewJPADAO() {
+	public JPALiteratureReviewDAO() {
 		super(LiteratureReview.class);
 	}
 
-	public LiteratureReviewJPADAO(EntityManager entityManager) {
+	public JPALiteratureReviewDAO(EntityManager entityManager) {
 		super(entityManager, LiteratureReview.class);
 	}
 	
