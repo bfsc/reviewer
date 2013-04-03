@@ -5,14 +5,14 @@ import br.cin.ufpe.reviewer.core.exceptions.CoreException;
 import br.cin.ufpe.reviewer.core.search.SearchResult;
 import br.cin.ufpe.reviewer.model.literaturereview.LiteratureReview;
 import br.cin.ufpe.reviewer.model.literaturereview.Protocol;
+import br.cin.ufpe.reviewer.persistence.dao.DAOFactory;
 import br.cin.ufpe.reviewer.persistence.dao.literaturereview.ILiteratureReviewDAO;
-import br.cin.ufpe.reviewer.persistence.dao.literaturereview.JPALiteratureReviewDAO;
 import br.cin.ufpe.reviewer.persistence.exceptions.PersistenceException;
 import br.cin.ufpe.reviewer.persistence.util.HSQLUtil;
 
 public class LiteratureReviewController implements ITransactionalController {
 
-	private ILiteratureReviewDAO dao = new JPALiteratureReviewDAO();
+	private ILiteratureReviewDAO dao = (ILiteratureReviewDAO) DAOFactory.getInstance().getDAO(ILiteratureReviewDAO.class);
 	
 	public void createLiteratureReview(LiteratureReview literatureReview) {
 		try {
