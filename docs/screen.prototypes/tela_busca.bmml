@@ -1,0 +1,64 @@
+<mockup version="1.0" skin="sketch" measuredW="1139" measuredH="551" mockupW="987" mockupH="528">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::TitleWindow" x="152" y="23" w="987" h="528" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Reviewer</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::TextArea" x="176" y="76" w="846" h="88" measuredW="200" measuredH="140" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="1047" y="91" w="-1" h="-1" measuredW="66" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Search</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::CheckBox" x="245" y="173" w="-1" h="-1" measuredW="54" measuredH="22" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <state>selected</state>
+        <text>IEEE</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::CheckBox" x="176" y="173" w="-1" h="-1" measuredW="54" measuredH="22" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ACM</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::CheckBox" x="314" y="173" w="-1" h="-1" measuredW="110" measuredH="22" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Science%20Direct</text>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::CheckBox" x="439" y="173" w="-1" h="-1" measuredW="67" measuredH="22" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <state>selected</state>
+        <text>Scopus</text>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::CheckBox" x="521" y="173" w="-1" h="-1" measuredW="100" measuredH="22" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Springer%20Link</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::CheckBox" x="637" y="173" w="-1" h="-1" measuredW="131" measuredH="22" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Engineering%20Village</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1113" y="204" w="-1" h="282" measuredW="16" measuredH="100" zOrder="9" locked="false" isInGroup="-1"/>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::DataGrid" x="176" y="204" w="926" h="283" measuredW="384" measuredH="175" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Title%20%5E%2C%20Authors%20%5E%2C%20Year%20%5E%0AExperimentation%20in%20Software%20Engineering%2C%20Victor%20Basili%2C%201985%0AExperimentation%20in%20Software%20Engineering%2C%20Victor%20Basili%2C%201985%0AExperimentation%20in%20Software%20Engineering%2C%20Victor%20Basili%2C%201985%0AExperimentation%20in%20Software%20Engineering%2C%20Victor%20Basili%2C%201985%0AExperimentation%20in%20Software%20Engineering%2C%20Victor%20Basili%2C%201985</text>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Link" x="875" y="495" w="-1" h="-1" measuredW="227" measuredH="21" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Create%20new%20study%20from%20these%20results...</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::MenuBar" x="176" y="47" w="-1" h="-1" measuredW="168" measuredH="29" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>-1</selectedIndex>
+        <text>My%20Studies%2C%20Search</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

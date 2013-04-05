@@ -1,0 +1,30 @@
+<mockup version="1.0" skin="sketch" measuredW="1201" measuredH="521" mockupW="1167" mockupH="508">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::DataGrid" x="59" y="125" w="1117" h="359" measuredW="375" measuredH="145" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>ID%2C%20Status%2C%20Title%2C%20Year%0A1%2C%20%5Bx%5D%2C%20Experimentation%20in%20Software%20Engineering%2C%201985%0A2%2C%20%5B%5D%2C%20Experimentation%20in%20Software%20Engineering%2C%201985%0A3%2C%20S%2C%20Experimentation%20in%20Software%20Engineering%2C%201985%0A4%2C%20P%2C%20Experimentation%20in%20Software%20Engineering%2C%201985</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::TitleWindow" x="34" y="13" w="1167" h="508" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Analysis</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::MenuBar" x="59" y="41" w="-1" h="-1" measuredW="168" measuredH="29" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <selectedIndex>-1</selectedIndex>
+        <text>My%20Studies%2C%20Search</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="60" y="89" w="-1" h="-1" measuredW="78" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Study%20name%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::TextInput" x="146" y="89" w="1030" h="-1" measuredW="79" measuredH="27" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
