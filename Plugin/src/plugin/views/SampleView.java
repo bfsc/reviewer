@@ -4,17 +4,23 @@ package plugin.views;
 
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.GCData;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
@@ -55,11 +61,13 @@ public class SampleView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		toolkit = new FormToolkit(parent.getDisplay());
+
 		form = toolkit.createScrolledForm(parent);
 		form.setText("Reviewer");
 		TableWrapLayout layout = new TableWrapLayout();
 		form.getBody().setLayout(layout);
 		layout.numColumns = 7;
+
 		
 		TableWrapData td = new TableWrapData();
 		Label label = toolkit.createLabel(form.getBody(),"Search bar");
@@ -78,6 +86,8 @@ public class SampleView extends ViewPart {
 				
 			}
 		});
+
+		
 		td.colspan = 6;
 		text.setLayoutData(td);
 		Button search = toolkit.createButton(form.getBody(), "Search", SWT.PUSH);
@@ -122,9 +132,27 @@ public class SampleView extends ViewPart {
 				 button = toolkit.createButton(sectionClient, "Radio 1", SWT.RADIO);
 				 button = toolkit.createButton(sectionClient, "Radio 2", SWT.RADIO);
 				 section.setClient(sectionClient);
-				 
-		
-		
+
+		Section section2 = toolkit.createSection(form.getBody(), 
+				  Section.DESCRIPTION|Section.NO_TITLE);
+		td = new TableWrapData(TableWrapData.FILL);
+		section2.setLayoutData(td);
+		Composite sectionClient2 = toolkit.createComposite(section2);
+		sectionClient2.setLayout(new GridLayout());
+
+//			CTabFolder folder = new CTabFolder(sectionClient2, SWT.BORDER);
+//			folder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+//			folder.setSimple(false);
+//			folder.setUnselectedImageVisible(false);
+//			folder.setUnselectedCloseVisible(false);
+//			for (int i = 0; i < 8; i++) {
+//				CTabItem item = new CTabItem(folder, SWT.CLOSE);
+//				item.setText("Item "+i);
+//				Text text8 = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+//				text.setText("Text for item "+i+"\n\none, two, three\n\nabcdefghijklmnop");
+//				item.setControl(text);
+//			}
+			section2.setClient(sectionClient2);
 	}
 
 	@Override
