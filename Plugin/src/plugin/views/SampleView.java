@@ -18,6 +18,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -133,26 +134,96 @@ public class SampleView extends ViewPart {
 				 button = toolkit.createButton(sectionClient, "Radio 2", SWT.RADIO);
 				 section.setClient(sectionClient);
 
-		Section section2 = toolkit.createSection(form.getBody(), 
-				  Section.DESCRIPTION|Section.NO_TITLE);
+				
+		
+		Section tableSection = toolkit.createSection(form.getBody(), 
+				Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED 
+				| SWT.H_SCROLL);
 		td = new TableWrapData(TableWrapData.FILL);
-		section2.setLayoutData(td);
-		Composite sectionClient2 = toolkit.createComposite(section2);
-		sectionClient2.setLayout(new GridLayout());
+		td.colspan = 2;
+		tableSection.setLayoutData(td); 
+		Composite tableSectionClient = toolkit.createComposite(tableSection); 
+		tableSectionClient.setLayoutData(td); 
+		
+		tableSectionClient.setLayout(new GridLayout(1, true)); 
+		tableSection.setClient(tableSectionClient);
 
-//			CTabFolder folder = new CTabFolder(sectionClient2, SWT.BORDER);
-//			folder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-//			folder.setSimple(false);
-//			folder.setUnselectedImageVisible(false);
-//			folder.setUnselectedCloseVisible(false);
-//			for (int i = 0; i < 8; i++) {
-//				CTabItem item = new CTabItem(folder, SWT.CLOSE);
+		Group parentGroup = new Group(tableSectionClient, SWT.H_SCROLL);
+		parentGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
+		parentGroup.setLayout(new GridLayout(1, true)); 
+		CTabFolder tabFolder = new CTabFolder(parentGroup, SWT.H_SCROLL);
+		
+		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		tabFolder.setSimple(false);
+		tabFolder.setUnselectedImageVisible(false);
+		tabFolder.setUnselectedCloseVisible(false);
+//			for (int i = 0; i < 4; i++) {
+//				CTabItem item = new CTabItem(tabFolder, SWT.CLOSE);
 //				item.setText("Item "+i);
-//				Text text8 = new Text(folder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+//				Text text8 = new Text(tabFolder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 //				text.setText("Text for item "+i+"\n\none, two, three\n\nabcdefghijklmnop");
 //				item.setControl(text);
-//			}
-			section2.setClient(sectionClient2);
+//			} 
+		Group group = new Group(tabFolder, SWT.H_SCROLL); 
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false)); 
+		group.setLayout(new GridLayout(1, false)); 
+		
+		CTabItem aba1 = new CTabItem(tabFolder, SWT.CLOSE);
+		aba1.setText("ACM");
+		Button aba1Button = toolkit.createButton(tabFolder,"Select all papers in this tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba1Button.setLayoutData(td);
+		aba1.setControl(aba1Button);
+		Button aba1Button2 = toolkit.createButton(tabFolder,"Select all papers in all tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba1Button2.setLayoutData(td);
+		//aba1.setControl(aba1Button2);
+		Text aba1Text = new Text(tabFolder, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		aba1Text.setText("Texto da aba do ACM");
+		
+		CTabItem aba2 = new CTabItem(tabFolder, SWT.CLOSE);
+		aba2.setText("IEEE");
+		Button aba2Button = toolkit.createButton(tabFolder,"Select all papers in this tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba2Button.setLayoutData(td);
+		aba2.setControl(aba2Button);
+		
+		CTabItem aba3 = new CTabItem(tabFolder, SWT.CLOSE);
+		aba3.setText("Science Direct");
+		Button aba3Button = toolkit.createButton(tabFolder,"Select all papers in this tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba3Button.setLayoutData(td);
+		aba3.setControl(aba3Button);
+		
+		CTabItem aba4 = new CTabItem(tabFolder, SWT.CLOSE);
+		aba4.setText("Scopus");
+		Button aba4Button = toolkit.createButton(tabFolder,"Select all papers in this tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba4Button.setLayoutData(td);
+		aba4.setControl(aba4Button);
+		
+		CTabItem aba5 = new CTabItem(tabFolder, SWT.CLOSE);
+		aba5.setText("Springer Link");
+		Button aba5Button = toolkit.createButton(tabFolder,"Select all papers in this tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba5Button.setLayoutData(td);
+		aba5.setControl(aba5Button);
+		
+		CTabItem aba6 = new CTabItem(tabFolder, SWT.CLOSE);
+		aba6.setText("Engineering Village");
+		Button aba6Button = toolkit.createButton(tabFolder,"Select all papers in this tab", SWT.CHECK);
+		td = new TableWrapData();
+		td.colspan = 1;
+		aba6Button.setLayoutData(td);
+		aba6.setControl(aba6Button);
+				
+//			section2.setClient(sectionClient2);
 	}
 
 	@Override
