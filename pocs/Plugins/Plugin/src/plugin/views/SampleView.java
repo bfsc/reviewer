@@ -137,7 +137,7 @@ public class SampleView extends ViewPart {
 				
 		
 		Section tableSection = toolkit.createSection(form.getBody(), 
-				Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED 
+				Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED
 				| SWT.H_SCROLL);
 		td = new TableWrapData(TableWrapData.FILL);
 		td.colspan = 2;
