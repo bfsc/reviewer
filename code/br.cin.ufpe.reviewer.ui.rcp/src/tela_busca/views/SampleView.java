@@ -1,4 +1,4 @@
-package plugin.views;
+package tela_busca.views;
 
 
 import org.eclipse.swt.SWT;
