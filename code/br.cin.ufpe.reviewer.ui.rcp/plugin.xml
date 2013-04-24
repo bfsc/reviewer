@@ -15,6 +15,11 @@
             class="tela_busca.views.SampleView"
             id="tela_busca.views.SampleView">
       </view>
+      <view
+            class="tela_busca.views.Tela_estudos"
+            id="tela_busca.views.Tela_estudos"
+            name="tela_estudos">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

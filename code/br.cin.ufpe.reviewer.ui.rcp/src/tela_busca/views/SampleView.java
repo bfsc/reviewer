@@ -23,25 +23,6 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 
 
-
-/**
- * This sample class demonstrates how to plug-in a new
- * workbench view. The view shows data obtained from the
- * model. The sample creates a dummy model on the fly,
- * but a real implementation would connect to the model
- * available either in this or another plug-in (e.g. the workspace).
- * The view is connected to the model using a content provider.
- * <p>
- * The view uses a label provider to define how model
- * objects should be presented in the view. Each
- * view can present the same model objects using
- * different labels and icons, if needed. Alternatively,
- * a single label provider can be shared between views
- * in order to ensure that objects of the same type are
- * presented in the same way everywhere.
- * <p>
- */
-
 public class SampleView extends ViewPart {
 	private FormToolkit toolkit;
 	private ScrolledForm form;
@@ -51,7 +32,7 @@ public class SampleView extends ViewPart {
 		toolkit = new FormToolkit(parent.getDisplay());
 
 		form = toolkit.createScrolledForm(parent);
-		form.setText("Reviewer");
+		form.setText("Rev");
 		TableWrapLayout layout = new TableWrapLayout();
 		form.getBody().setLayout(layout);
 		layout.numColumns = 7;
@@ -71,7 +52,7 @@ public class SampleView extends ViewPart {
 				
 			}
 		});
-		final Text text = toolkit.createText(form.getBody(), "Type your text here...");
+		final Text text = toolkit.createText(form.getBody(), "Type your text here...", SWT.MULTI);
 		td = new TableWrapData(TableWrapData.FILL_GRAB);
 		text.addMouseListener(new MouseAdapter(){
 			public void mouseActivated(MouseEvent e){

@@ -1,4 +1,4 @@
-package plugin.views;
+package tela_busca.views;
 
 
 import org.eclipse.swt.SWT;
@@ -21,7 +21,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 
 
-public class SampleView extends ViewPart {
+public class Tela_estudos extends ViewPart {
 	private FormToolkit toolkit;
 	private ScrolledForm form;
 
