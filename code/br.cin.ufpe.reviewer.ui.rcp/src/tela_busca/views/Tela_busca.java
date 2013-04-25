@@ -60,10 +60,13 @@ public class Tela_busca extends ViewPart {
 			}
 		});
 
-		
+		td.heightHint = 80;
 		td.colspan = 6;
 		text.setLayoutData(td);
+		td = new TableWrapData();
 		Button search = toolkit.createButton(form.getBody(), "Search", SWT.PUSH);
+		td.colspan = 1;
+		search.setLayoutData(td);
 		Button button = toolkit.createButton(form.getBody(),"ACM", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 1;
