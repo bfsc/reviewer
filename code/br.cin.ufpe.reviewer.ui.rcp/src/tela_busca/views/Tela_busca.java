@@ -2,6 +2,7 @@ package tela_busca.views;
 
 
 import org.eclipse.swt.SWT;
+import org.eclipse.jface.action.Action;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
@@ -36,8 +37,14 @@ public class Tela_busca extends ViewPart {
 		TableWrapLayout layout = new TableWrapLayout();
 		form.getBody().setLayout(layout);
 		layout.numColumns = 7;
-
 		
+		toolkit.decorateFormHeading(form.getForm());
+		//form.getForm().setHeadClient(toolkit.createButton(form.getForm().getHead(), "Search", SWT.PUSH));
+		form.getForm().getToolBarManager().update(true);
+		form.getForm().getMenuManager().add(new Action("MyStudies") { });	// NEW LINE
+		form.getForm().getMenuManager().add(new Action("Search") { });	// NEW LINE
+		
+
 		TableWrapData td = new TableWrapData();
 		Button MyStudies = toolkit.createButton(form.getBody(), "MyStudies", SWT.PUSH);
 		td.colspan = 1;
