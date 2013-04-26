@@ -43,24 +43,25 @@ public class SampleView extends ViewPart {
 		toolkit.decorateFormHeading(form.getForm());
 		//form.getForm().setHeadClient(toolkit.createButton(form.getForm().getHead(), "Search", SWT.PUSH));
 		form.getForm().getToolBarManager().update(true);
+		
 		form.getForm().getMenuManager().add(new Action("MyStudies") { });	// NEW LINE
 		form.getForm().getMenuManager().add(new Action("Search") { });	// NEW LINE
 		
 
 		TableWrapData td = new TableWrapData();
-		Button MyStudies = toolkit.createButton(form.getBody(), "MyStudies", SWT.PUSH);
-		td.colspan = 1;
-		MyStudies.setLayoutData(td);
-		td = new TableWrapData();
-		Button searchTop = toolkit.createButton(form.getBody(), "Search", SWT.PUSH);
-		td.colspan = 5;
-		searchTop.setLayoutData(td);
-		Hyperlink link = toolkit.createHyperlink(form.getBody(), "How to search", SWT.WRAP);
-		link.addHyperlinkListener(new HyperlinkAdapter(){
-			public void linkActivated(HyperlinkEvent e){
-				
-			}
-		});
+//		Button MyStudies = toolkit.createButton(form.getBody(), "MyStudies", SWT.PUSH);
+//		td.colspan = 1;
+//		MyStudies.setLayoutData(td);
+//		td = new TableWrapData();
+//		Button searchTop = toolkit.createButton(form.getBody(), "Search", SWT.PUSH);
+//		td.colspan = 5;
+//		searchTop.setLayoutData(td);
+//		Hyperlink link = toolkit.createHyperlink(form.getBody(), "How to search", SWT.WRAP);
+//		link.addHyperlinkListener(new HyperlinkAdapter(){
+//			public void linkActivated(HyperlinkEvent e){
+//				
+//			}
+//		});
 		final Text text = toolkit.createText(form.getBody(), "Type your text here...");
 		td = new TableWrapData(TableWrapData.FILL_GRAB);
 		text.addMouseListener(new MouseAdapter(){
