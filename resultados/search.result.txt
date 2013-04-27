@@ -1,0 +1,16 @@
+1: A Systematic Mapping Study on Software Engineering Testbeds
+Even though empirical research has grown in interest, techniques, methodologies and best practices are still in debate. In this context, test beds are effective when one needs to evaluate and compare technologies. The concept is well disseminated in other areas such as Computer Networks, but remains poorly explored in Software Engineering (SE). This paper presents a systematic mapping study on the SE test beds literature. From the initial set of 4239 studies, 13 primary studies were selected and categorized. Based on that, we found that Software Architecture is the most investigated topic, controlled experiment is the most used method to evaluate such test beds, 20 benefits of using test beds in SE have been identified and that test beds comprise very heterogeneous structural elements.
+http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=6092559&contentType=Conference+Publications
+
+2: Systematic mapping study of quality attributes measurement in service oriented architecture
+Background: Service oriented architecture (SOA) promotes software reuse and interoperability as its niche. Developer usually expects that services being used are performing as promised. Capability to measure quality of services helps developer to predict the software behavior. Measuring quality attributes of software can be treated as a way to ensure that the developed software will/does meet expected qualities.
+http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=6269349&contentType=Conference+Publications
+
+3: Table of contents
+Presents the table of contents of the proceedings.
+http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=6092547&contentType=Conference+Publications
+
+4: Aspect-oriented software maintenance metrics: A systematic mapping study
+Background: Despite the number of empirical studies that assess Aspect-Oriented Software Development (AOSD) techniques, more research is required to investigate, for example, how software maintainability is impacted when these techniques are employed. One way to minimize the effort and increase the reliability of results in further research is to systematize empirical studies in Aspect-Oriented Software Maintainability (AOSM). In this context, metrics are useful as indicators to quantify software quality attributes, such as maintenance. Currently, a high number of metrics have been used throughout the literature to measure software maintainability. However, there is no comprehensive catalogue showing which metrics can be used to measure AOSM. Aim: To identify an AOSM metrics suite to be used by researchers in AOSM research.
+http://ieeexplore.ieee.org/xpl/articleDetails.jsp?tp=&arnumber=6272522&contentType=Conference+Publications
+
