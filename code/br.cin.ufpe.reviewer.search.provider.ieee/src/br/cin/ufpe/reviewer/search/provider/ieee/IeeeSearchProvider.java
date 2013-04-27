@@ -92,7 +92,7 @@ public class IeeeSearchProvider implements SearchProvider {
 	public static void main(String[] args) {
 		try{
 			SearchProvider searchProvider = new IeeeSearchProvider();
-			SearchResult result = searchProvider.search("\"Software engineering\"");
+			SearchResult result = searchProvider.search("\"Software engineering testbeds\"");
 			int count = 1;
 
 			StringBuilder buffer = new StringBuilder();
@@ -104,7 +104,7 @@ public class IeeeSearchProvider implements SearchProvider {
 				count++;
 			}
 			
-			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
+			FileWriter writer = new FileWriter("/Users/emanoel/Documents/workspace-rcp/reviewer/resultados/search.result.txt");
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();
