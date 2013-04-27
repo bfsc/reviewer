@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: br.ufpe.cin.reviewer.ui.rcp
+Bundle-SymbolicName: br.ufpe.cin.reviewer.ui.rcp; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: br.ufpe.cin.reviewer.ui.rcp.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.forms;bundle-version="3.5.200"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

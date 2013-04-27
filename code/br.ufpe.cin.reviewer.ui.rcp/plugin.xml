@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="br.ufpe.cin.reviewer.ui.rcp.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="Search Perspective"
+            class="br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective"
+            id="br.ufpe.cin.reviewer.ui.rcp.SearchPerspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            class="br.ufpe.cin.reviewer.ui.rcp.search.SearchView"
+            id="br.ufpe.cin.reviewer.ui.rcp.search.SearchView"
+            name="Search View">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="*">
+         <view
+               id="br.ufpe.cin.reviewer.ui.rcp.search.SearchView"
+               minimized="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="true">
+         </view>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>
