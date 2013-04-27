@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: REviewER
+Bundle-SymbolicName: br.cin.ufpe.reviewer.ui.rcp; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: br.cin.ufpe.reviewer.ui.rcp.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
