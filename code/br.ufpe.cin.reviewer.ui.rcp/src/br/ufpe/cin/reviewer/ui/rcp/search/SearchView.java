@@ -1,5 +1,7 @@
 package br.ufpe.cin.reviewer.ui.rcp.search;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -18,17 +20,29 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 
+import br.cin.ufpe.reviewer.core.search.SearchController;
+import br.cin.ufpe.reviewer.core.search.SearchFilter;
+import br.cin.ufpe.reviewer.core.search.SearchResult;
+import br.cin.ufpe.reviewer.search.provider.spi.entities.Study;
+
 public class SearchView extends ViewPart {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
 	
 	private FormToolkit toolkit;
 	private ScrolledForm form;
+	
+	private Text searchText;
+	private Button acmCheckBox;
+	private Button ieeeCheckBox;
+	private Button scienceDirectCheckBox;
+	private Button scopusCheckBox;
+	private Button springerLinkCheckBox;
+	private Button engineeringVillageCheckBox;
 
 	public void createPartControl(Composite parent) {
 		configureView(parent);
 		createSearchComponents(parent);
-		createResultComponents();
 	}
 
 	private void configureView(Composite parent) {
@@ -51,12 +65,12 @@ public class SearchView extends ViewPart {
 		searchComposite.setLayout(layout);
 		layout.numColumns = 7;
 		
-		Text text = toolkit.createText(searchComposite, "Type your text here...");
+		searchText = toolkit.createText(searchComposite, "Type your text here...");
 		td = new TableWrapData(TableWrapData.FILL_GRAB);
 
 		td.heightHint = 80;
 		td.colspan = 6;
-		text.setLayoutData(td);
+		searchText.setLayoutData(td);
 		td = new TableWrapData();
 		
 		Button search = toolkit.createButton(searchComposite, "Search", SWT.PUSH);
@@ -64,61 +78,71 @@ public class SearchView extends ViewPart {
 		search.setLayoutData(td);
 		search.addSelectionListener(new SearchButtonHandler());
 		
-		Button button = toolkit.createButton(searchComposite,"ACM", SWT.CHECK);
+		acmCheckBox = toolkit.createButton(searchComposite,"ACM", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 1;
-		button.setLayoutData(td);
+		acmCheckBox.setLayoutData(td);
 		
-		Button button2 = toolkit.createButton(searchComposite,"IEEE", SWT.CHECK);
+		ieeeCheckBox = toolkit.createButton(searchComposite,"IEEE", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 1;
-		button2.setLayoutData(td);
+		ieeeCheckBox.setLayoutData(td);
 		
-		Button button3 = toolkit.createButton(searchComposite,"Science Direct", SWT.CHECK);
+		scienceDirectCheckBox = toolkit.createButton(searchComposite,"Science Direct", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 1;
-		button3.setLayoutData(td);
-		Button button4 = toolkit.createButton(searchComposite,"Scopus", SWT.CHECK);
+		scienceDirectCheckBox.setLayoutData(td);
+		
+		scopusCheckBox = toolkit.createButton(searchComposite,"Scopus", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 1;
-		button4.setLayoutData(td);
-		Button button5 = toolkit.createButton(searchComposite,"Springer Link", SWT.CHECK);
+		scopusCheckBox.setLayoutData(td);
+		
+		springerLinkCheckBox = toolkit.createButton(searchComposite,"Springer Link", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 1;
-		button5.setLayoutData(td);
-		Button button6 = toolkit.createButton(searchComposite,"Engineering Village", SWT.CHECK);
+		springerLinkCheckBox.setLayoutData(td);
+		
+		engineeringVillageCheckBox = toolkit.createButton(searchComposite,"Engineering Village", SWT.CHECK);
 		td = new TableWrapData();
 		td.colspan = 2;
-		button6.setLayoutData(td);
+		engineeringVillageCheckBox.setLayoutData(td);
 		
 		section.setClient(searchComposite);
 	}
 	
-	private void createResultComponents(){
+	private void createResultComponents(SearchResult searchResult){
 	    Section section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout());
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		Composite resultComposite = toolkit.createComposite(section);
 		resultComposite.setLayout(new GridLayout(1, true));
 		resultComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 		Table table = toolkit.createTable(resultComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
 		GridData data = new GridData(GridData.FILL_BOTH);
-//		data.heightHint = 200;
 		table.setLayoutData(data);
-		String[] titles = {"Title", "Authors", "Year"};
+		
+		String[] titles = {"Title", "Source", "Authors", "Year"};
 		for (int i=0; i<titles.length; i++) {
 			TableColumn column = new TableColumn (table, SWT.NONE);
 			column.setText (titles [i]);
 		}
-		int count = 5;
-		for (int i=0; i<count; i++) {
-			TableItem item = new TableItem (table, SWT.NONE);
-			item.setText (0, "Experimentation in Software Engineering");
-			item.setText (1, "Victor Basili");
-			item.setText (2, " " + (1980 + i));
+		
+		for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
+			List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
+			for (Study study : studies) {
+				TableItem item = new TableItem (table, SWT.NONE);
+				item.setText (0, study.getTitle());
+				item.setText (1, searchProviderKey);
+				item.setText (2, "");
+				item.setText (3, "");
+			}
 		}
+		
 		for (int i=0; i<titles.length; i++) {
 			table.getColumn (i).pack ();
 		}
@@ -134,7 +158,36 @@ public class SearchView extends ViewPart {
 	private class SearchButtonHandler implements SelectionListener{
 
 		public void widgetSelected(SelectionEvent e) {
-						
+			SearchController searchController = new SearchController();
+			
+			SearchFilter searchFilter = new SearchFilter();
+			if (acmCheckBox.getSelection()) {
+				searchFilter.addSearchProviderKey("ACM");
+			}
+			
+			if (ieeeCheckBox.getSelection()) {
+				searchFilter.addSearchProviderKey("IEEE");
+			}
+			
+			if (scienceDirectCheckBox.getSelection()) {
+				searchFilter.addSearchProviderKey("SCIENCE_DIRECT");
+			}
+			
+			if (springerLinkCheckBox.getSelection()) {
+				searchFilter.addSearchProviderKey("SPRINGER_LINK");
+			}
+			
+			if (scopusCheckBox.getSelection()) {
+				searchFilter.addSearchProviderKey("SCOPUS");
+			}
+
+			if (engineeringVillageCheckBox.getSelection()) {
+				searchFilter.addSearchProviderKey("ENGINEERING_VILLAGE");
+			}
+			
+			SearchResult searchResult = searchController.search(searchText.getText(), searchFilter);
+
+			createResultComponents(searchResult);
 		}
 
 		public void widgetDefaultSelected(SelectionEvent e) {
