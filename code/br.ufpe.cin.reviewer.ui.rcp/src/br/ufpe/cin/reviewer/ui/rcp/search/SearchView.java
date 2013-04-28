@@ -9,12 +9,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
@@ -31,9 +33,16 @@ public class SearchView extends ViewPart {
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
 	
 	private FormToolkit toolkit;
-//	private Form form;
-	private ScrolledForm form;
+	private Form form;
 	
+	//Results Widgets
+	private Table table;
+	private Composite resultCompositeLabels;
+	private Composite resultCompositeTable;
+	private Label labelTotalFound;
+	private Label labelTotalFetched;
+
+	//Search Widgets
 	private Text searchText;
 	private Button acmCheckBox;
 	private Button ieeeCheckBox;
@@ -41,17 +50,20 @@ public class SearchView extends ViewPart {
 	private Button scopusCheckBox;
 	private Button springerLinkCheckBox;
 	private Button engineeringVillageCheckBox;
+	
+	private int totalFound;
 
 	public void createPartControl(Composite parent) {
 		configureView(parent);
 		createSearchWidgets(parent);
+		createResultWidgets();
 	}
 
 	private void configureView(Composite parent) {
 		this.toolkit = new FormToolkit(parent.getDisplay());
-		this.form = toolkit.createScrolledForm(parent);
-//		this.form = toolkit.createForm(parent);
-//		this.toolkit.decorateFormHeading(this.form);
+//		this.form = toolkit.createScrolledForm(parent);
+		this.form = toolkit.createForm(parent);
+		this.toolkit.decorateFormHeading(this.form);
 		this.form.setText("Reviewer");
 		this.form.getBody().setLayout(new GridLayout(1, false));
 	}
@@ -59,6 +71,8 @@ public class SearchView extends ViewPart {
 	private void createSearchWidgets(Composite parent) {
 	    Section section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout());
+//	    GridData sectionLayoutData = new GridData(GridData.FILL_HORIZONTAL);
+//	    sectionLayoutData.horizontalIndent = 20;
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Composite searchComposite = this.toolkit.createComposite(section);
 		
@@ -76,6 +90,7 @@ public class SearchView extends ViewPart {
 		td = new TableWrapData();
 		
 		Button search = toolkit.createButton(searchComposite, "Search", SWT.PUSH);
+		td.heightHint = 40;
 		td.colspan = 1;
 		search.setLayoutData(td);
 		search.addSelectionListener(new SearchButtonHandler());
@@ -113,27 +128,57 @@ public class SearchView extends ViewPart {
 		section.setClient(searchComposite);
 	}
 	
-	private void createResultWidgets(SearchResult searchResult){
+	private void createResultWidgets(){
 	    Section section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout());
-		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//	    GridData sectionLayoutData = new GridData(GridData.FILL_BOTH);
+//	    sectionLayoutData.horizontalIndent = 20;
+		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Composite resultComposite = toolkit.createComposite(section);
-		resultComposite.setLayout(new GridLayout(1, true));
-		resultComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//Composite for Table and Link
+		resultCompositeTable = toolkit.createComposite(section);
+		resultCompositeTable.setLayout(new GridLayout(1, true));
+		resultCompositeTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+		resultCompositeTable.setVisible(false);
 		
-		Table table = toolkit.createTable(resultComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		//Composite for labels
+		resultCompositeLabels = toolkit.createComposite(resultCompositeTable);
+		resultCompositeLabels.setLayout(new GridLayout(2, true));
+		resultCompositeLabels.setLayoutData(new GridData());
+		resultCompositeLabels.setVisible(false);
+
+		labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
+		GridData totalFoundLayout = new GridData();
+		totalFoundLayout.horizontalSpan = 1;
+		labelTotalFound.setLayoutData(totalFoundLayout);
+		labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
+		GridData totalFetchedLayout = new GridData();
+		totalFetchedLayout.horizontalSpan = 1;
+		labelTotalFound.setLayoutData(totalFetchedLayout);
+		
+		table = toolkit.createTable(resultCompositeTable, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
-		GridData data = new GridData(GridData.FILL_BOTH);
-		table.setLayoutData(data);
+		GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
+		table.setLayoutData(tableLayoutData);
+		
+		Hyperlink studyLink = toolkit.createHyperlink(resultCompositeTable, "Create new study from these results...", SWT.WRAP);
+		GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		studyLink.setLayoutData(studyLinkLayout);
+
+		section.setClient(resultCompositeTable);
+	}
+	
+	public void addResults(SearchResult searchResult){
+
+		table.removeAll();
 		
 		String[] titles = {"N#", "Title", "Source", "Authors", "Year"};
 		for (int i=0; i<titles.length; i++) {
 			TableColumn column = new TableColumn (table, SWT.NONE);
 			column.setText (titles [i]);
 		}
-		
+
 		int currentStudyNumber = 0;
 		for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
 			List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
@@ -148,14 +193,18 @@ public class SearchView extends ViewPart {
 				item.setText (4, "");
 			}
 		}
+		totalFound = currentStudyNumber;
+		labelTotalFound.setText("Total Found: " + totalFound);
+		labelTotalFetched.setText("Total Fetched: " + totalFound);
 		
 		for (int i=0; i<titles.length; i++) {
 			table.getColumn (i).pack ();
 		}
 		
-		section.setClient(resultComposite);
-		
 		WidgetsUtil.refreshComposite(this.form.getBody());
+		resultCompositeLabels.setVisible(true);
+		resultCompositeTable.setVisible(true);
+		
 	}
 
 	public void setFocus() {
@@ -194,7 +243,7 @@ public class SearchView extends ViewPart {
 			
 			SearchResult searchResult = searchController.search(searchText.getText(), searchFilter);
 
-			createResultWidgets(searchResult);
+			addResults(searchResult);
 		}
 
 		public void widgetDefaultSelected(SelectionEvent e) {

@@ -4,15 +4,15 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
+import br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective;
 
-	private static final String PERSPECTIVE_ID = "br.ufpe.cin.reviewer.ui.rcp.perspective"; //$NON-NLS-1$
+public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
     public WorkbenchWindowAdvisor createWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         return new ApplicationWorkbenchWindowAdvisor(configurer);
     }
 
 	public String getInitialWindowPerspectiveId() {
-		return PERSPECTIVE_ID;
+		return SearchPerspective.ID;
 	}
 }

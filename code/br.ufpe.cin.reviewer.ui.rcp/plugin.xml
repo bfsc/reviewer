@@ -18,6 +18,11 @@
             class="br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective"
             id="br.ufpe.cin.reviewer.ui.rcp.SearchPerspective">
       </perspective>
+      <perspective
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective"
+            id="br.ufpe.cin.reviewer.ui.rcp.LiteratureReviewPerspective"
+            name="Literature Review Perspective">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -27,11 +32,17 @@
             id="br.ufpe.cin.reviewer.ui.rcp.search.SearchView"
             name="Search View">
       </view>
+      <view
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView"
+            id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView"
+            name="Literature Review View"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
-            targetID="*">
+            targetID="br.ufpe.cin.reviewer.ui.rcp.SearchPerspective">
          <view
                id="br.ufpe.cin.reviewer.ui.rcp.search.SearchView"
                minimized="false"
@@ -39,6 +50,15 @@
                relative="org.eclipse.ui.editorss"
                showTitle="false"
                standalone="true">
+         </view>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="br.ufpe.cin.reviewer.ui.rcp.LiteratureReview">
+         <view
+               id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView"
+               minimized="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss">
          </view>
       </perspectiveExtension>
    </extension>
