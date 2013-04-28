@@ -12,6 +12,7 @@ import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderExceptio
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlBold;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
@@ -33,6 +34,7 @@ public class AcmSearchProvider implements SearchProvider {
 	private static final String XPATH_STUDY_AUTHORS = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//div[@class='authors']";
 	private static final String XPATH_STUDY_YEAR = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//td[@class='small-text' and @nowrap and (not(@colspan='3'))]";
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
+	private static final String XPATH_STUDY_TOTAL_RESULTS = "//p[@style='margin-bottom: 0px; margin-top: 10px']//b";
 	
 	public SearchResult search(String searchString) throws SearchProviderException {
 		SearchResult result = new SearchResult();
@@ -50,7 +52,9 @@ public class AcmSearchProvider implements SearchProvider {
 			String searchUrl = assembleSearchUrl(searchString);
 			
 			// Extract studies data
+			result.setTotalResults(extractTotalResults(browser, searchUrl));
 			result.getStudies().addAll(extractStudiesData(browser, searchUrl));
+			result.setFetchedResults(result.getStudies().size());
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
@@ -174,6 +178,31 @@ public class AcmSearchProvider implements SearchProvider {
 		}
 		
 		return toReturn;
+	}
+	
+	private int extractTotalResults(WebClient browser, String searchUrl) {
+		int total = 0;
+
+		try {
+			HtmlPage page = browser.getPage(searchUrl);
+
+			// Extracting studies data.
+			List<?> studyTotalResult = page.getByXPath(XPATH_STUDY_TOTAL_RESULTS);
+			
+			if (studyTotalResult.size() > 0) {
+				HtmlBold paragraph = (HtmlBold) studyTotalResult.get(0);
+				
+				// Extracting study abstract div content.
+				String paragraphContent = paragraph.getTextContent().trim();
+				total = Integer.parseInt(paragraphContent);
+			}		
+			
+		} catch (Exception e) {
+			//TRATAR EXCECAO
+			e.printStackTrace();
+		}
+		
+		return total;
 	}
 
 }

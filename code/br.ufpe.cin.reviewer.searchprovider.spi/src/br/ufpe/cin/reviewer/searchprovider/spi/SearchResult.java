@@ -27,9 +27,16 @@ public class SearchResult {
 	public int getTotalResults() {
 		return totalResults;
 	}
+	
+	public void setTotalResults(int totalResults) {
+		this.totalResults = totalResults;
+	}
 
 	public int getFetchedResults() {
 		return fetchedResults;
 	}
 	
+	public void setFetchedResults(int fetchedResults) {
+		this.fetchedResults = fetchedResults;
+	}
 }
