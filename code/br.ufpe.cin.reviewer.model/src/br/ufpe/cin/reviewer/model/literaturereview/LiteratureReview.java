@@ -1,9 +1,12 @@
 package br.ufpe.cin.reviewer.model.literaturereview;
 
+import br.ufpe.cin.reviewer.model.common.SearchResult;
+
 public class LiteratureReview {
 
 	private int id;
 	private String title;
+	private SearchResult searchResult;
 	
 	public int getId() {
 		return id;
@@ -19,6 +22,14 @@ public class LiteratureReview {
 	
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public SearchResult getSearchResult() {
+		return searchResult;
+	}
+
+	public void setSearchResult(SearchResult searchResult) {
+		this.searchResult = searchResult;
 	}
 	
 }

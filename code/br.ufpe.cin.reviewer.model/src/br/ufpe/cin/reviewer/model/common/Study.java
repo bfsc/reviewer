@@ -1,15 +1,37 @@
 package br.ufpe.cin.reviewer.model.common;
 
+import java.util.List;
+
 public class Study {
 
-	private String title;
-	private String studyAbstract;
-	private String url;
-	private String authors;
-	private String institution;
-	private String country;
-	private String year;
+	private int id;
 	
+	private String code;
+	private String title;
+	private String source;
+	private String studyAbstract;
+	private String year;
+	private String url;
+	private List<StudyAuthor> studyAuthors;
+	private List<StudyInstitution> studyInstitutions;
+	private List<StudyCountry> studyCountries;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -18,6 +40,14 @@ public class Study {
 		this.title = title;
 	}
 	
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
 	public String getAbstract() {
 		return studyAbstract;
 	}
@@ -37,36 +67,61 @@ public class Study {
 	public String toString() {
 		return title;
 	}
-
-	public String getAuthors() {
-		return authors;
+	
+	public String getSource() {
+		return source;
 	}
 
-	public void setAuthors(String authors) {
-		this.authors = authors;
+	public void setSource(String source) {
+		this.source = source;
+	}
+	
+	public List<StudyAuthor> getStudyAuthors() {
+		return studyAuthors;
 	}
 
-	public String getInstitution() {
-		return institution;
+	public void setStudyAuthors(List<StudyAuthor> studyAuthors) {
+		this.studyAuthors = studyAuthors;
 	}
 
-	public void setInstitution(String institution) {
-		this.institution = institution;
+	public List<StudyInstitution> getStudyInstitutions() {
+		return studyInstitutions;
 	}
 
-	public String getCountry() {
-		return country;
+	public void setStudyInstitutions(List<StudyInstitution> studyInstitutions) {
+		this.studyInstitutions = studyInstitutions;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public List<StudyCountry> getStudyCountries() {
+		return studyCountries;
 	}
 
-	public String getYear() {
-		return year;
+	public void setStudyCountries(List<StudyCountry> studyCountries) {
+		this.studyCountries = studyCountries;
 	}
-
-	public void setYear(String year) {
-		this.year = year;
+	
+	public void addStudyAuthor(StudyAuthor studyAuthor) {
+		this.studyAuthors.add(studyAuthor);
 	}
+	
+	public void removeStudyAuthor(StudyAuthor studyAuthor) {
+		this.studyAuthors.remove(studyAuthor);
+	}
+	
+	public void addStudyInstitution(StudyInstitution studyInstitution) {
+		this.studyInstitutions.add(studyInstitution);
+	}
+	
+	public void removeStudyInstitution(StudyInstitution studyInstitution) {
+		this.studyInstitutions.remove(studyInstitution);
+	}
+	
+	public void addStudyCountry(StudyCountry studyCountry) {
+		this.studyCountries.add(studyCountry);
+	}
+	
+	public void removeStudyCountry(StudyCountry studyCountry) {
+		this.studyCountries.remove(studyCountry);
+	}
+	
 }
