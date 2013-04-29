@@ -1,12 +1,15 @@
 package br.ufpe.cin.reviewer.model.literaturereview;
 
-import br.ufpe.cin.reviewer.model.common.SearchResult;
+import java.util.LinkedList;
+import java.util.List;
+
+import br.ufpe.cin.reviewer.model.common.Study;
 
 public class LiteratureReview {
 
 	private int id;
 	private String title;
-	private SearchResult searchResult;
+	private List<Study> studies = new LinkedList<Study>();
 	
 	public int getId() {
 		return id;
@@ -24,12 +27,20 @@ public class LiteratureReview {
 		this.title = title;
 	}
 
-	public SearchResult getSearchResult() {
-		return searchResult;
+	public List<Study> getStudies() {
+		return studies;
 	}
 
-	public void setSearchResult(SearchResult searchResult) {
-		this.searchResult = searchResult;
+	public void setStudies(List<Study> studies) {
+		this.studies = studies;
+	}
+	
+	public void addStudy(Study study) {
+		this.studies.add(study);
+	}
+	
+	public void removeStudy(Study study) {
+		this.studies.remove(study);
 	}
 	
 }

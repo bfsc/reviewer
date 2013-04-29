@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
-import br.ufpe.cin.reviewer.model.common.StudyAuthor;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
@@ -103,7 +102,7 @@ public class AcmSearchProvider implements SearchProvider {
 					// Removing non-abstract informations from div content.
 					if (divContent.trim().length() >= 0) {
 						divContent = divContent.replaceAll("[\t\n]", "");
-						study.addStudyAuthor(new StudyAuthor(divContent));
+						study.addAuthor(divContent);
 						
 					} else {
 //						study.addStudyAuthor(new StudyAuthor(""));

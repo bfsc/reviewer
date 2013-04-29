@@ -1,5 +1,6 @@
 package br.ufpe.cin.reviewer.model.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Study {
@@ -12,9 +13,9 @@ public class Study {
 	private String studyAbstract;
 	private String year;
 	private String url;
-	private List<StudyAuthor> studyAuthors;
-	private List<StudyInstitution> studyInstitutions;
-	private List<StudyCountry> studyCountries;
+	private List<String> authors = new ArrayList<String>();
+	private List<String> institutions = new ArrayList<String>();
+	private List<String> countries = new ArrayList<String>();
 	
 	public int getId() {
 		return id;
@@ -64,10 +65,6 @@ public class Study {
 		this.url = url;
 	}
 	
-	public String toString() {
-		return title;
-	}
-	
 	public String getSource() {
 		return source;
 	}
@@ -75,53 +72,57 @@ public class Study {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
-	public List<StudyAuthor> getStudyAuthors() {
-		return studyAuthors;
+
+	public List<String> getAuthors() {
+		return authors;
 	}
 
-	public void setStudyAuthors(List<StudyAuthor> studyAuthors) {
-		this.studyAuthors = studyAuthors;
+	public void setAuthors(List<String> authors) {
+		this.authors = authors;
 	}
 
-	public List<StudyInstitution> getStudyInstitutions() {
-		return studyInstitutions;
+	public List<String> getInstitutions() {
+		return institutions;
 	}
 
-	public void setStudyInstitutions(List<StudyInstitution> studyInstitutions) {
-		this.studyInstitutions = studyInstitutions;
+	public void setInstitutions(List<String> institutions) {
+		this.institutions = institutions;
 	}
 
-	public List<StudyCountry> getStudyCountries() {
-		return studyCountries;
+	public List<String> getCountries() {
+		return countries;
 	}
 
-	public void setStudyCountries(List<StudyCountry> studyCountries) {
-		this.studyCountries = studyCountries;
+	public void setCountries(List<String> countries) {
+		this.countries = countries;
 	}
 	
-	public void addStudyAuthor(StudyAuthor studyAuthor) {
-		this.studyAuthors.add(studyAuthor);
+	public void addAuthor(String author) {
+		this.authors.add(author);
 	}
 	
-	public void removeStudyAuthor(StudyAuthor studyAuthor) {
-		this.studyAuthors.remove(studyAuthor);
+	public void removeAuthor(String author) {
+		this.authors.remove(author);
 	}
 	
-	public void addStudyInstitution(StudyInstitution studyInstitution) {
-		this.studyInstitutions.add(studyInstitution);
+	public void addInstitution(String institution) {
+		this.institutions.add(institution);
 	}
 	
-	public void removeStudyInstitution(StudyInstitution studyInstitution) {
-		this.studyInstitutions.remove(studyInstitution);
+	public void removeInstitution(String institution) {
+		this.institutions.remove(institution);
 	}
 	
-	public void addStudyCountry(StudyCountry studyCountry) {
-		this.studyCountries.add(studyCountry);
+	public void addCountry(String country) {
+		this.countries.add(country);
 	}
 	
-	public void removeStudyCountry(StudyCountry studyCountry) {
-		this.studyCountries.remove(studyCountry);
+	public void removeCountry(String country) {
+		this.countries.remove(country);
+	}
+	
+	public String toString() {
+		return title;
 	}
 	
 }

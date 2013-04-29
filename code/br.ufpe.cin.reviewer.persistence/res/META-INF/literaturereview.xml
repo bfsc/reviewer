@@ -5,12 +5,21 @@
 		<table name="literature_review" schema="reviewer" />
 		<attributes>
 			<id name="id">
-				<column name="id" />
+				<column name="literature_review_id" />
 				<generated-value strategy="AUTO" />
 			</id>
+			
 			<basic name="title">
 				<column name="title" />
 			</basic>
+			
+			<one-to-many name="studies">
+				<join-table name="literature_review_studies" schema="reviewer">
+					<join-column name="literature_review_id"/>
+					<inverse-join-column name="study_id"/>
+				</join-table>
+				<cascade><cascade-all/></cascade>
+			</one-to-many>
 		</attributes>
-	</entity>  
+	</entity>
 </entity-mappings>
