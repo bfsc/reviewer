@@ -83,12 +83,11 @@ public class SearchView extends ViewPart {
 		
 		searchText = toolkit.createText(searchComposite, "Type your text here...");
 		td = new TableWrapData(TableWrapData.FILL_GRAB);
-
 		td.heightHint = 80;
 		td.colspan = 6;
 		searchText.setLayoutData(td);
-		td = new TableWrapData();
 		
+		td = new TableWrapData();
 		Button search = toolkit.createButton(searchComposite, "Search", SWT.PUSH);
 		td.heightHint = 40;
 		td.colspan = 1;
@@ -151,10 +150,11 @@ public class SearchView extends ViewPart {
 		GridData totalFoundLayout = new GridData();
 		totalFoundLayout.horizontalSpan = 1;
 		labelTotalFound.setLayoutData(totalFoundLayout);
+		
 		labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
 		GridData totalFetchedLayout = new GridData();
 		totalFetchedLayout.horizontalSpan = 1;
-		labelTotalFound.setLayoutData(totalFetchedLayout);
+		labelTotalFetched.setLayoutData(totalFetchedLayout);
 		
 		table = toolkit.createTable(resultCompositeTable, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
