@@ -7,9 +7,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.WorkbenchException;
-
-import br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective;
 
 public class LiteratureReviewAction implements IWorkbenchWindowActionDelegate {
 

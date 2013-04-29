@@ -11,7 +11,6 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.part.ViewPart;
 
 public class LiteratureReviewView extends ViewPart {
@@ -20,7 +19,7 @@ public class LiteratureReviewView extends ViewPart {
 	private Form form;
 	
 	public LiteratureReviewView() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override

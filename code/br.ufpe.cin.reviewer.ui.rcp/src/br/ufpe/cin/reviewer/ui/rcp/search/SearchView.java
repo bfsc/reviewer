@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
@@ -22,10 +23,12 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.core.search.SearchController;
 import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
 import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class SearchView extends ViewPart {
@@ -52,7 +55,9 @@ public class SearchView extends ViewPart {
 	private Button engineeringVillageCheckBox;
 	
 	private int totalFound;
-
+	
+	private SearchResult searchResult;
+	
 	public void createPartControl(Composite parent) {
 		configureView(parent);
 		createSearchWidgets(parent);
@@ -165,6 +170,7 @@ public class SearchView extends ViewPart {
 		Hyperlink studyLink = toolkit.createHyperlink(resultCompositeTable, "Create new study from these results...", SWT.WRAP);
 		GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		studyLink.setLayoutData(studyLinkLayout);
+		studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
 
 		section.setClient(resultCompositeTable);
 	}
@@ -241,8 +247,7 @@ public class SearchView extends ViewPart {
 				searchFilter.addSearchProviderKey("ENGINEERING_VILLAGE");
 			}
 			
-			SearchResult searchResult = searchController.search(searchText.getText(), searchFilter);
-
+			SearchView.this.searchResult = searchController.search(searchText.getText(), searchFilter);
 			addResults(searchResult);
 		}
 
@@ -250,5 +255,31 @@ public class SearchView extends ViewPart {
 			
 		}
 		
+	}
+
+	private class CreateLiteratureReviewLinkHandler implements IHyperlinkListener {
+
+		public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			LiteratureReview literatureReview = new LiteratureReview();
+			literatureReview.setTitle("");
+			for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
+				List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
+				for (Study study : studies) {
+					study.setSource(searchProviderKey);
+					literatureReview.addStudy(study);
+				}
+			}
+			
+			LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+			literatureReviewController.createLiteratureReview(literatureReview);
+		}
 	}
 }
