@@ -3,5 +3,10 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TesteLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.model"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.persistence"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.searchprovider.ieee"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

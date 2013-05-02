@@ -11,6 +11,10 @@ public class LiteratureReviewController implements ITransactionalController {
 
 	private ILiteratureReviewDAO dao = (ILiteratureReviewDAO) DAOFactory.getInstance().getDAO(ILiteratureReviewDAO.class);
 	
+	public LiteratureReviewController(){
+		System.out.println("Chegou aqui!");
+	}
+	
 	public void createLiteratureReview(LiteratureReview literatureReview) {
 		try {
 			this.dao.create(literatureReview);
