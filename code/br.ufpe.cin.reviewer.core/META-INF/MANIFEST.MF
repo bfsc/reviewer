@@ -6,14 +6,14 @@ Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1",
- org.aspectj.runtime,
  br.ufpe.cin.reviewer.persistence;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.acm;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.engineeringvillage;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.ieee;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.sciencedirect;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.scopus;bundle-version="0.0.1",
- br.ufpe.cin.reviewer.searchprovider.springerlink;bundle-version="0.0.1"
+ br.ufpe.cin.reviewer.searchprovider.springerlink;bundle-version="0.0.1",
+ org.aspectj.runtime;bundle-version="1.7.2"
 Export-Package: br.ufpe.cin.reviewer.core,
  br.ufpe.cin.reviewer.core.exceptions,
  br.ufpe.cin.reviewer.core.literaturereview;uses:="br.ufpe.cin.reviewer.core,br.ufpe.cin.reviewer.model.literaturereview",

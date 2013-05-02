@@ -106,16 +106,19 @@ public class StudyAnalysisView extends ViewPart {
 		Button Include = toolkit.createButton(form.getBody(), "Include", SWT.PUSH);
 		td.horizontalSpan = 2;
 		td.grabExcessVerticalSpace = true;
+		td.verticalAlignment = SWT.END;
 		Include.setLayoutData(td);
 		td = new GridData();
 		Button Exclude = toolkit.createButton(form.getBody(), "Exclude", SWT.PUSH);
 		td.horizontalSpan = 1;
 		td.grabExcessVerticalSpace = true;
+		td.verticalAlignment = SWT.END;
 		Exclude.setLayoutData(td);
 		td = new GridData();
 		Button Skip = toolkit.createButton(form.getBody(), "Skip", SWT.PUSH);
 		td.horizontalSpan = 4;
 		td.grabExcessVerticalSpace = true;
+		td.verticalAlignment = SWT.END;
 		Skip.setLayoutData(td);
 	}
 
