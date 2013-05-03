@@ -2,7 +2,10 @@ package br.ufpe.cin.reviewer.searchprovider.ieee;
 
 import java.io.FileWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.omg.CORBA.OBJ_ADAPTER;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
@@ -62,6 +65,45 @@ public class IeeeSearchProvider implements SearchProvider {
 						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("mdurl")) {
 							study.setUrl(domNode.getTextContent());
 						}
+						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("authors")) {
+							//ageitar ainda pois ta pegando como uma string só e tem que pegar como lista
+							study.addAuthor(domNode.getTextContent());
+						}
+						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("py")) {
+							study.setYear(domNode.getTextContent());
+						}
+						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("affiliations")) {
+							//ageitar ainda pois ta pegando como uma string só e tem que pegar como lista
+							String string = domNode.getTextContent();
+							List<String> stringList = new ArrayList<String>();
+							int lastIndex = 0;
+							for(int i = 0;i < string.length();i++){
+								String substring = null;
+								if(string.charAt(i) == ','){
+									substring = string.substring(lastIndex, i);
+									lastIndex = i + 2;
+									System.out.println(substring + "  ->" + i);
+									stringList.add(substring);
+								}
+								if(i+1 == string.length()){
+									substring = string.substring(lastIndex);
+									System.out.println(substring + "<chegou na ultima string>" + i);
+									stringList.add(substring);
+								}
+							}
+							List<String> institutions = new ArrayList<String>();
+							List<String> countries = new ArrayList<String>();
+							if(stringList.size() >= 3){
+								institutions = stringList.subList(0, stringList.size() - 2);
+								countries = stringList.subList(stringList.size() - 2, stringList.size());
+							}
+							else{
+								institutions = stringList.subList(0, stringList.size() - 1);
+								countries = stringList.subList(stringList.size() - 1, stringList.size());
+							}
+							study.setInstitutions(institutions);
+							study.setCountries(countries);
+						}
 					}
 					result.getStudies().add(study);
 				}
@@ -92,19 +134,23 @@ public class IeeeSearchProvider implements SearchProvider {
 	public static void main(String[] args) {
 		try{
 			SearchProvider searchProvider = new IeeeSearchProvider();
-			SearchResult result = searchProvider.search("\"Software engineering testbeds\"");
+			SearchResult result = searchProvider.search("\"systematic literature review\"");
 			int count = 1;
 
 			StringBuilder buffer = new StringBuilder();
 			
 			for (Study study : result.getStudies()) {
 				buffer.append(count + ": " + study.getTitle() + "\r\n");
-        		buffer.append(study.getAbstract() + "\n");
-				buffer.append(study.getUrl() + "\r\n\r\n");
+        		buffer.append(study.getAbstract() + "\r\n");
+				buffer.append(study.getUrl() + "\r\n");
+        		buffer.append(study.getAuthors() + "\r\n");
+				buffer.append(study.getYear() + "\r\n");
+				buffer.append(study.getInstitutions() + "\r\n");
+				buffer.append(study.getCountries() + "\r\n\r\n");
 				count++;
 			}
 			
-			FileWriter writer = new FileWriter("/Users/emanoel/Documents/workspace-rcp/reviewer/resultados/search.result.txt");
+			FileWriter writer = new FileWriter("C:/Arthur/Iniciação cientifica/search.result.txt");
 			writer.write(buffer.toString());
 			writer.flush();
 			writer.close();
