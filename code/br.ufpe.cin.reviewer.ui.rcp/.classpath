@@ -3,10 +3,11 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TesteLibrary"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.model"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.persistence"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/br.ufpe.cin.reviewer.searchprovider.ieee"/>
+	<classpathentry kind="lib" path="/br.ufpe.cin.reviewer.persistence/bin/br/ufpe/cin/reviewer/persistence/exceptions"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/PersistenceLibrary"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
