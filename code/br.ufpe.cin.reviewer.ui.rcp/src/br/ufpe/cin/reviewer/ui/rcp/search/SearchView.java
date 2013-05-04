@@ -345,7 +345,9 @@ public class SearchView extends ViewPart {
 	private class SearchTextHandler implements FocusListener {
 
 		public void focusGained(FocusEvent e) {
-			searchText.setText("");
+			if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
+				searchText.setText("");
+			}
 		}
 		public void focusLost(FocusEvent e) {
 			
