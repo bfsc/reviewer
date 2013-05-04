@@ -2,18 +2,27 @@ package br.ufpe.cin.reviewer.ui.rcp.search;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -32,6 +41,8 @@ import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class SearchView extends ViewPart {
+
+	private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
 	
@@ -66,18 +77,15 @@ public class SearchView extends ViewPart {
 
 	private void configureView(Composite parent) {
 		this.toolkit = new FormToolkit(parent.getDisplay());
-//		this.form = toolkit.createScrolledForm(parent);
 		this.form = toolkit.createForm(parent);
 		this.toolkit.decorateFormHeading(this.form);
-		this.form.setText("Reviewer");
+		this.form.setText("REviewER - Search");
 		this.form.getBody().setLayout(new GridLayout(1, false));
 	}
 
 	private void createSearchWidgets(Composite parent) {
 	    Section section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout());
-//	    GridData sectionLayoutData = new GridData(GridData.FILL_HORIZONTAL);
-//	    sectionLayoutData.horizontalIndent = 20;
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		Composite searchComposite = this.toolkit.createComposite(section);
 		
@@ -86,7 +94,8 @@ public class SearchView extends ViewPart {
 		searchComposite.setLayout(layout);
 		layout.numColumns = 7;
 		
-		searchText = toolkit.createText(searchComposite, "Type your text here...");
+		searchText = toolkit.createText(searchComposite, SEARCH_TEXT_DEFAULT_VALUE);
+		searchText.addFocusListener(new SearchTextHandler());
 		td = new TableWrapData(TableWrapData.FILL_GRAB);
 		td.heightHint = 80;
 		td.colspan = 6;
@@ -135,8 +144,6 @@ public class SearchView extends ViewPart {
 	private void createResultWidgets(){
 	    Section section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout());
-//	    GridData sectionLayoutData = new GridData(GridData.FILL_BOTH);
-//	    sectionLayoutData.horizontalIndent = 20;
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		//Composite for Table and Link
@@ -167,62 +174,29 @@ public class SearchView extends ViewPart {
 		GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
 		table.setLayoutData(tableLayoutData);
 		
-		Hyperlink studyLink = toolkit.createHyperlink(resultCompositeTable, "Create new study from these results...", SWT.WRAP);
+		Hyperlink studyLink = toolkit.createHyperlink(resultCompositeTable, "Create new literature review from these results...", SWT.WRAP);
 		GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
 
 		section.setClient(resultCompositeTable);
 	}
-	
-	public void addResults(SearchResult searchResult){
-
-		table.removeAll();
-		
-		String[] titles = {"N#", "Title", "Source", "Authors", "Year"};
-		for (int i=0; i<titles.length; i++) {
-			TableColumn column = new TableColumn (table, SWT.NONE);
-			column.setText (titles [i]);
-		}
-
-		int currentStudyNumber = 0;
-		for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
-			List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
-			for (Study study : studies) {
-				currentStudyNumber++;
-				
-				TableItem item = new TableItem (table, SWT.NONE);
-				item.setText (0, String.valueOf(currentStudyNumber));
-				item.setText (1, study.getTitle());
-				item.setText (2, searchProviderKey);
-				item.setText (3, "");
-				item.setText (4, "");
-			}
-		}
-		totalFound = currentStudyNumber;
-		labelTotalFound.setText("Total Found: " + totalFound);
-		labelTotalFetched.setText("Total Fetched: " + totalFound);
-		
-		for (int i=0; i<titles.length; i++) {
-			table.getColumn (i).pack ();
-		}
-		
-		WidgetsUtil.refreshComposite(this.form.getBody());
-		resultCompositeLabels.setVisible(true);
-		resultCompositeTable.setVisible(true);
-		
-	}
 
 	public void setFocus() {
 		
 	}
 	
-	private class SearchButtonHandler implements SelectionListener{
+	private class SearchButtonHandler implements SelectionListener {
 
 		public void widgetSelected(SelectionEvent e) {
-			SearchController searchController = new SearchController();
+			if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
+				searchText.setText("");
+			}
 			
+			String searchString = searchText.getText();
+		
 			SearchFilter searchFilter = new SearchFilter();
+			
 			if (acmCheckBox.getSelection()) {
 				searchFilter.addSearchProviderKey("ACM");
 			}
@@ -247,11 +221,96 @@ public class SearchView extends ViewPart {
 				searchFilter.addSearchProviderKey("ENGINEERING_VILLAGE");
 			}
 			
-			SearchView.this.searchResult = searchController.search(searchText.getText(), searchFilter);
-			addResults(searchResult);
+			SearchUIJob searchJob = new SearchUIJob(searchString, searchFilter);
+			searchJob.schedule();
 		}
 
 		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+		private class SearchUIJob extends Job {
+
+			private String searchString;
+			private SearchFilter searchFilter;
+			
+			private IProgressMonitor pm;
+			
+			public SearchUIJob(String searchString, SearchFilter searchFilter) {
+				super("search.job");
+				this.searchString = searchString;
+				this.searchFilter = searchFilter;
+			}
+			
+			protected IStatus run(IProgressMonitor monitor) {
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					public void run() {
+						IActionBars bars = getViewSite().getActionBars();
+						IStatusLineManager statusLine = bars.getStatusLineManager();
+						pm = statusLine.getProgressMonitor();
+						pm.beginTask("Searching... This may take several minutes.", IProgressMonitor.UNKNOWN);
+					}
+				});
+				
+				SearchController searchController = new SearchController();
+				SearchView.this.searchResult = searchController.search(searchString, searchFilter);
+				
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					public void run() {
+						addResults(searchResult);
+						pm.done();
+					}
+				});
+				
+				return Status.OK_STATUS;
+			}
+			
+			private void addResults(SearchResult searchResult){
+
+				table.removeAll();
+				
+				String[] titles = {"N#", "Source", "Title", "Authors", "Year"};
+				for (int i=0; i<titles.length; i++) {
+					TableColumn column = new TableColumn (table, SWT.NONE);
+					column.setText (titles [i]);
+				}
+
+				int currentStudyNumber = 0;
+				for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
+					List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
+					for (Study study : studies) {
+						currentStudyNumber++;
+						
+						TableItem item = new TableItem (table, SWT.NONE);
+						item.setText (0, String.valueOf(currentStudyNumber));
+						item.setText (1, searchProviderKey);
+						item.setText (2, study.getTitle());
+						
+						String authors = "";
+						for (String author : study.getAuthors()) {
+							authors += author + ",";
+						}
+						item.setText (3, authors);
+						item.setText (4, study.getYear());
+					}
+				}
+				
+				totalFound = currentStudyNumber;
+				labelTotalFound.setText("Total Found: " + totalFound);
+				labelTotalFetched.setText("Total Fetched: " + totalFound);
+				
+				WidgetsUtil.refreshComposite(resultCompositeLabels);
+				
+				for (int i=0; i<titles.length; i++) {
+					table.getColumn (i).pack ();
+				}
+				
+				WidgetsUtil.refreshComposite(form.getBody());
+				resultCompositeLabels.setVisible(true);
+				resultCompositeTable.setVisible(true);
+			}
 			
 		}
 		
@@ -282,4 +341,18 @@ public class SearchView extends ViewPart {
 			literatureReviewController.createLiteratureReview(literatureReview);
 		}
 	}
+	
+	private class SearchTextHandler implements FocusListener {
+
+		public void focusGained(FocusEvent e) {
+			if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
+				searchText.setText("");
+			}
+		}
+		public void focusLost(FocusEvent e) {
+			
+		}
+		
+	}
+	
 }
