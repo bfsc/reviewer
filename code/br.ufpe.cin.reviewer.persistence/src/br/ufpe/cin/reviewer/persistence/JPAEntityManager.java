@@ -1,8 +1,12 @@
 package br.ufpe.cin.reviewer.persistence;
 
+import java.util.HashMap;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+import org.eclipse.persistence.jpa.PersistenceProvider;
 
 public class JPAEntityManager {
 	
@@ -10,8 +14,10 @@ public class JPAEntityManager {
 	
 	static {
 		try {
-			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("br.ufpe.cin.reviewer");
-			ENTITY_MANAGER = entityManagerFactory.createEntityManager();
+			HashMap<String, Object> props = new HashMap<String, Object>();
+			props.put(PersistenceUnitProperties.CLASSLOADER, JPAEntityManager.class.getClassLoader());
+			EntityManagerFactory entityManagerFactory = new PersistenceProvider().createEntityManagerFactory("br.ufpe.cin.reviewer",props);
+			ENTITY_MANAGER = entityManagerFactory.createEntityManager(props);
 		} catch (Exception e) {
 			throw new RuntimeException("Error trying to create JPA entity manager", e);
 		}

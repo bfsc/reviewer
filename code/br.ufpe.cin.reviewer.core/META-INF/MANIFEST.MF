@@ -5,18 +5,22 @@ Bundle-SymbolicName: br.ufpe.cin.reviewer.core;singleton:=true
 Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
- br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.persistence;bundle-version="0.0.1",
+ br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.acm;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.engineeringvillage;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.ieee;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.sciencedirect;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.scopus;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.searchprovider.springerlink;bundle-version="0.0.1",
- org.aspectj.runtime;bundle-version="1.7.2"
+ org.aspectj.runtime;bundle-version="1.7.2",
+ javax.persistence;bundle-version="2.0.4",
+ org.eclipse.persistence.asm;bundle-version="3.3.1",
+ org.eclipse.persistence.core;bundle-version="2.4.0",
+ org.eclipse.persistence.jpa;bundle-version="2.4.0"
 Export-Package: br.ufpe.cin.reviewer.core,
  br.ufpe.cin.reviewer.core.exceptions,
  br.ufpe.cin.reviewer.core.literaturereview;uses:="br.ufpe.cin.reviewer.core,br.ufpe.cin.reviewer.model.literaturereview",
  br.ufpe.cin.reviewer.core.search
-Bundle-ClassPath: libs/hibernate-jpa-2.0-api-1.0.1.Final.jar,
- .
+Bundle-ClassPath: .,
+ libs/hibernate-jpa-2.0-api-1.0.1.Final.jar

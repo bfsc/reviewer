@@ -21,7 +21,7 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 	static {
 		try {
 			queries = new Properties();
-			queries.load(ClassLoader.getSystemResourceAsStream(PersistenceConstants.QUERIES_FILE_NAME));
+			queries.load(JPADAO.class.getClassLoader().getResourceAsStream(PersistenceConstants.QUERIES_FILE_NAME));
 		} catch (IOException e) {
 			throw new RuntimeException("Error trying to load queries file.", e);
 		}
