@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<entity class="br.ufpe.cin.reviewer.model.common.Study" name="Study" access="PROPERTY">
+		<table name="study" schema="reviewer" />
+		<attributes>
+			<id name="id">
+				<column name="study_id" />
+				<generated-value strategy="AUTO" />
+			</id>
+			
+			<basic name="code">
+				<column name="code" />
+			</basic>
+			
+			<basic name="title">
+				<column name="title" />
+			</basic>
+			
+			<basic name="source">
+				<column name="source" />
+			</basic>
+			
+			<basic name="abstract">
+				<column name="abstract" />
+			</basic>
+			
+			<basic name="year">
+				<column name="year" />
+			</basic>
+			
+			<basic name="url">
+				<column name="url" />
+			</basic>
+			
+			<element-collection name="authors">
+				<column name="author"/>
+				<collection-table name="study_authors" schema="reviewer">
+					<join-column name="study_id" referenced-column-name="study_id"/>
+				</collection-table>
+			</element-collection>
+			
+			<element-collection name="institutions">
+				<column name="institution"/>
+				<collection-table name="study_institutions" schema="reviewer">
+					<join-column name="study_id" referenced-column-name="study_id"/>
+				</collection-table>
+			</element-collection>
+			
+			<element-collection name="countries">
+				<column name="country"/>
+				<collection-table name="study_countries" schema="reviewer">
+					<join-column name="study_id" referenced-column-name="study_id"/>
+				</collection-table>
+			</element-collection>
+		</attributes>
+	</entity>
+</entity-mappings>

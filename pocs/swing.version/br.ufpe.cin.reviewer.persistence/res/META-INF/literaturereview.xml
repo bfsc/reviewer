@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<entity class="br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview" name="LiteratureReview">
+		<table name="literature_review" schema="reviewer" />
+		<attributes>
+			<id name="id">
+				<column name="literature_review_id" />
+				<generated-value strategy="AUTO" />
+			</id>
+			
+			<basic name="title">
+				<column name="title" />
+			</basic>
+			
+			<one-to-many name="studies">
+				<join-table name="literature_review_studies" schema="reviewer">
+					<join-column name="literature_review_id"/>
+					<inverse-join-column name="study_id"/>
+				</join-table>
+				<cascade><cascade-all/></cascade>
+			</one-to-many>
+		</attributes>
+	</entity>
+</entity-mappings>
