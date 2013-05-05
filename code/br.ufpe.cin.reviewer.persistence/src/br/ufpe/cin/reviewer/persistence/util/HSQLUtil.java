@@ -30,7 +30,7 @@ public class HSQLUtil {
 	private static void createDatabase(Connection connection) {
 		try {
 			ScriptRunner scriptRunner = new ScriptRunner(connection, true, true);
-			scriptRunner.runScript(new InputStreamReader(ClassLoader.getSystemResourceAsStream(PersistenceConstants.DDL_SCRIPT_FILE_NAME)));
+			scriptRunner.runScript(new InputStreamReader(HSQLUtil.class.getClassLoader().getResourceAsStream(PersistenceConstants.DDL_SCRIPT_FILE_NAME)));
 		} catch (Exception e) {
 			throw new RuntimeException("Error trying to create the system database.", e);
 		}
