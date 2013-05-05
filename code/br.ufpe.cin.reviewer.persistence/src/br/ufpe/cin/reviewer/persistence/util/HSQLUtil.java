@@ -43,7 +43,7 @@ public class HSQLUtil {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(QUERY_REVIEWER_SCHEMA);
 			
-			exist = resultSet.next();
+			exist = resultSet.next(); //&& resultSet.getString("schema_name").equals("REVIEWER");
 			
 			resultSet.close();
 			statement.close();

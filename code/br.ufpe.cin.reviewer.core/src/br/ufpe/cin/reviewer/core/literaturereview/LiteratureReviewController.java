@@ -10,9 +10,9 @@ import br.ufpe.cin.reviewer.persistence.exceptions.PersistenceException;
 public class LiteratureReviewController implements ITransactionalController {
 
 	private ILiteratureReviewDAO dao = (ILiteratureReviewDAO) DAOFactory.getInstance().getDAO(ILiteratureReviewDAO.class);
-	
+
 	public LiteratureReviewController(){
-		System.out.println("Chegou aqui!");
+
 	}
 	
 	public void createLiteratureReview(LiteratureReview literatureReview) {

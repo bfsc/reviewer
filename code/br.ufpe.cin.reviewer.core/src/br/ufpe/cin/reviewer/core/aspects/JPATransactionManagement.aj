@@ -7,6 +7,8 @@ import br.ufpe.cin.reviewer.persistence.JPAEntityManager;
 
 public aspect JPATransactionManagement extends TransactionManagement {
 	
+	private static EntityTransaction transaction;
+	
 	public pointcut transactionalMethods() :
 		execution(public * ITransactionalController+.*(..)) &&
 		!execution(public * ITransactionalController+.set*(..)) &&
@@ -14,18 +16,20 @@ public aspect JPATransactionManagement extends TransactionManagement {
 		!execution(static * ITransactionalController+.*(..));
 
 	protected void beginTransaction() {
-		EntityTransaction transaction = JPAEntityManager.ENTITY_MANAGER.getTransaction();
+		transaction = JPAEntityManager.ENTITY_MANAGER.getTransaction();
 		transaction.begin();
 	}
 
 	protected void commit() {
-		EntityTransaction transaction = JPAEntityManager.ENTITY_MANAGER.getTransaction();
-		transaction.commit();
+		if (transaction.isActive()) {
+			transaction.commit();
+		}
 	}
 
 	protected void rollback() {
-		EntityTransaction transaction = JPAEntityManager.ENTITY_MANAGER.getTransaction();
-		transaction.rollback();
+		if (transaction.isActive()) {
+			transaction.rollback();
+		}
 	}
 	
 }

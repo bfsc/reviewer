@@ -139,5 +139,17 @@
          </action>
       </actionSet>
    </extension>
+   <extension
+         id="reviewer"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="br.ufpe.cin.reviewer.ui.rcp.application"
+            name="br.ufpe.cin.reviewer">
+         <property
+               name="appName"
+               value="br.ufpe.cin.reviewer">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
