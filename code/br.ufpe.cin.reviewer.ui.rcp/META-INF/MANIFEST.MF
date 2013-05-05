@@ -7,9 +7,13 @@ Bundle-Activator: br.ufpe.cin.reviewer.ui.rcp.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.forms;bundle-version="3.5.200",
- br.ufpe.cin.reviewer.core;bundle-version="0.0.1",
  br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
- br.ufpe.cin.reviewer.persistence;bundle-version="0.0.1"
+ br.ufpe.cin.reviewer.persistence;bundle-version="0.0.1",
+ br.ufpe.cin.reviewer.core;bundle-version="0.0.1",
+ javax.persistence;bundle-version="2.0.4",
+ org.eclipse.persistence.asm;bundle-version="3.3.1",
+ org.eclipse.persistence.core;bundle-version="2.4.0",
+ org.eclipse.persistence.jpa;bundle-version="2.4.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
