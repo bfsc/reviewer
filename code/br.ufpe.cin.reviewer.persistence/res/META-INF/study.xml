@@ -6,7 +6,7 @@
 		<attributes>
 			<id name="id">
 				<column name="study_id" />
-				<generated-value strategy="AUTO" />
+				<generated-value strategy="IDENTITY" />
 			</id>
 			
 			<basic name="code">
