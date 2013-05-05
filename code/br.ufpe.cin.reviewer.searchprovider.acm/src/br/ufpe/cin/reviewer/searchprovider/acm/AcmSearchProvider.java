@@ -18,6 +18,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
 
 public class AcmSearchProvider implements SearchProvider {
 
+	private static final int YEAR_STRING_LENGTH = 4;
 	private static final String DOMAIN_DL_ACM = "http://dl.acm.org/";
 	private static final String URL_DL_ACM_SEARCH = "http://dl.acm.org/results.cfm?query=";
 
@@ -136,7 +137,7 @@ public class AcmSearchProvider implements SearchProvider {
 					
 					// Removing non-abstract informations from div content.
 					if (divContent.trim().length() >= 0) {
-						study.setYear(divContent);
+						study.setYear(divContent.substring(divContent.length() - YEAR_STRING_LENGTH));
 						
 					} else {
 						study.setYear("");
