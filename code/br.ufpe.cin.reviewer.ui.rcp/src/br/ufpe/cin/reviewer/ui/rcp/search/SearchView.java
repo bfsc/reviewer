@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -18,11 +19,15 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -38,13 +43,15 @@ import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class SearchView extends ViewPart {
 
-	private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
-
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
+	
+	private Shell windowShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 	
 	private FormToolkit toolkit;
 	private Form form;
@@ -68,6 +75,8 @@ public class SearchView extends ViewPart {
 	private int totalFound;
 	
 	private SearchResult searchResult;
+	
+	private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
 	
 	public void createPartControl(Composite parent) {
 		configureView(parent);
@@ -327,18 +336,31 @@ public class SearchView extends ViewPart {
 		}
 
 		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
-			LiteratureReview literatureReview = new LiteratureReview();
-			literatureReview.setTitle("");
-			for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
-				List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
-				for (Study study : studies) {
-					study.setSource(searchProviderKey);
-					literatureReview.addStudy(study);
-				}
-			}
+			InputDialog dialog = new InputDialog(windowShell, "Create literature review", "Literature review title", null, null);
+			dialog.open();
 			
-			LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-			literatureReviewController.createLiteratureReview(literatureReview);
+			if (dialog.getReturnCode() == InputDialog.OK) {
+				LiteratureReview literatureReview = new LiteratureReview();
+				
+				literatureReview.setTitle(dialog.getValue());
+				
+				for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
+					List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
+					for (Study study : studies) {
+						study.setSource(searchProviderKey);
+						literatureReview.addStudy(study);
+					}
+				}
+				
+				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+				literatureReviewController.createLiteratureReview(literatureReview);
+				
+				LiteratureReviewView.literatureReview = literatureReview;
+				
+				IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));
+			}
 		}
 	}
 	

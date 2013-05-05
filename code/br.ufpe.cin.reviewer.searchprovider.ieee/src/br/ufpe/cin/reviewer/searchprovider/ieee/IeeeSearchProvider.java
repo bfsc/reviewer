@@ -36,14 +36,12 @@ public class IeeeSearchProvider implements SearchProvider {
 			
 			String query = URLEncoder.encode(searchString, URL_ENCODE_UTF_8).toString();
 			String searchUrl = mountSearchUrl(query);
-			System.out.print(searchUrl + "\n" );			
 			
 			XmlPage page = browser.getPage(searchUrl);
 			DomElement totalFoundElement = page.getFirstByXPath("/root/totalfound");
 			totalFound = Integer.parseInt(totalFoundElement.getTextContent());
 			
 			while(count < totalFound){
-				System.out.print("O valor de totalFound eh " + totalFound + "\n" );
 				searchUrl = mountSearchUrl(searchString);
 				page = browser.getPage(searchUrl);
 					
@@ -80,12 +78,10 @@ public class IeeeSearchProvider implements SearchProvider {
 								if(string.charAt(i) == ','){
 									substring = string.substring(lastIndex, i);
 									lastIndex = i + 2;
-									System.out.println(substring + "  ->" + i);
 									stringList.add(substring);
 								}
 								if(i+1 == string.length()){
 									substring = string.substring(lastIndex);
-									System.out.println(substring + "<chegou na ultima string>" + i);
 									stringList.add(substring);
 								}
 							}

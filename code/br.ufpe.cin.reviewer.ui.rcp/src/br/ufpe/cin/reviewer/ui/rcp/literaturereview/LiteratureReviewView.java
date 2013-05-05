@@ -13,19 +13,28 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+
 public class LiteratureReviewView extends ViewPart {
 
+	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";
+
+	public static LiteratureReview literatureReview = null;
+	
 	private FormToolkit toolkit;
 	private Form form;
 	
 	public LiteratureReviewView() {
 
 	}
-
-	@Override
+	
 	public void createPartControl(Composite parent) {
 		configureView(parent);
 		createLiteratureWidgets(parent);
+	}
+	
+	public void setFocus() {
+
 	}
 	
 	private void configureView(Composite parent) {
@@ -56,6 +65,10 @@ public class LiteratureReviewView extends ViewPart {
 	    Section sectionInfo = this.toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    sectionInfo.setLayout(new GridLayout(1, false));
 		sectionInfo.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		if (literatureReview == null) {
+			sectionInfo.setVisible(false);
+		}
 
 		Composite reviewInfoComposite = this.toolkit.createComposite(sectionInfo, SWT.BORDER);
 		reviewInfoComposite.setLayout(new GridLayout(2, false));
@@ -75,6 +88,10 @@ public class LiteratureReviewView extends ViewPart {
 		
 		Text searchTitle = toolkit.createText(searchTitleComposite, "");
 		searchTitle.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		if (literatureReview != null) {
+			searchTitle.setText(literatureReview.getTitle());
+		}
 
 		Label totalFoundLabel = this.toolkit.createLabel(reviewInfoComposite, "Total Found: " + "valor");
 		GridData totalFoundLayout = new GridData();
@@ -167,12 +184,6 @@ public class LiteratureReviewView extends ViewPart {
 
 		sectionList.setClient(listComposite);
 		sectionInfo.setClient(reviewInfoComposite);
-	}
-
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -4,7 +4,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
@@ -13,6 +13,6 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
     }
 
 	public String getInitialWindowPerspectiveId() {
-		return StudyAnalysisPerspective.ID;
+		return SearchPerspective.ID;
 	}
 }
