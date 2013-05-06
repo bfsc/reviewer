@@ -1,5 +1,8 @@
 package br.ufpe.cin.reviewer.core.literaturereview;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import br.ufpe.cin.reviewer.core.ITransactionalController;
 import br.ufpe.cin.reviewer.core.exceptions.CoreException;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
@@ -21,6 +24,18 @@ public class LiteratureReviewController implements ITransactionalController {
 		} catch (PersistenceException e) {
 			throw new CoreException("An error occurred trying to create an literature review.", e);
 		}
+	}
+	
+	public List<LiteratureReview> findAllLiteratureReview() {
+		List<LiteratureReview> toReturn = new LinkedList<LiteratureReview>();
+		
+		try {
+			toReturn = this.dao.retrieveAll();
+		} catch (PersistenceException e) {
+			throw new CoreException("An error occurred trying to fin all literature reviews", e);
+		}
+		
+		return toReturn;
 	}
 	
 }

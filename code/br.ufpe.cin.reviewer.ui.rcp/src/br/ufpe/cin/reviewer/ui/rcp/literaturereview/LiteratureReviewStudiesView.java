@@ -1,60 +1,101 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
+
 public class LiteratureReviewStudiesView extends ViewPart {
 
-	private FormToolkit toolkit;
-	private Form form;
+	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
+	
+	private static LiteratureReview literatureReview;
+	
+	private static FormToolkit toolkit;
+	private static Form form;
+	
+	private static Section section;
+	private static Composite studiesComposite;
+	private static Label titleLabel;
+	private static Table table;
 	
 	public LiteratureReviewStudiesView() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
-	@Override
+	public static void setLiteratureReview(LiteratureReview literatureReview) {
+		LiteratureReviewStudiesView.literatureReview = literatureReview;
+
+		titleLabel.setText("Title: " + LiteratureReviewStudiesView.literatureReview.getTitle());
+
+		table.removeAll();
+		for (Study study : LiteratureReviewStudiesView.literatureReview.getStudies()) {
+			TableItem item = new TableItem (table, SWT.NONE);
+			item.setText (0, study.getCode());
+			item.setText (2, study.getTitle());
+			item.setText (3, study.getYear());
+		}
+		
+		for (int i=0; i < 4; i++) {
+			table.getColumn(i).pack ();
+		}
+		
+		LiteratureReviewStudiesView.section.setVisible(true);
+		WidgetsUtil.refreshComposite(form.getBody());
+	}
+	
 	public void createPartControl(Composite parent) {
 		configureView(parent);
 		createLiteratureStudiesWidgets(parent);
 	}
 	
 	private void configureView(Composite parent) {
-		this.toolkit = new FormToolkit(parent.getDisplay());
-		this.form = toolkit.createForm(parent);
-		this.toolkit.decorateFormHeading(this.form);
-		this.form.setText("Reviewer");
-		this.form.getBody().setLayout(new GridLayout(2, false));
+		toolkit = new FormToolkit(parent.getDisplay());
+		form = toolkit.createForm(parent);
+		toolkit.decorateFormHeading(form);
+		form.setText("Literature Review Studies");
+		form.getBody().setLayout(new GridLayout(2, false));
 	}
 
 	private void createLiteratureStudiesWidgets(Composite parent) {
-	    Section section = this.toolkit.createSection(this.form.getBody(), Section.NO_TITLE);
+	    section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
+	    section.setVisible(false);
 	    section.setLayout(new GridLayout(1, false));
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Composite studiesComposite = this.toolkit.createComposite(section);
+		studiesComposite = toolkit.createComposite(section);
 		studiesComposite.setLayout(new GridLayout(1, false));
 		studiesComposite.setLayoutData(new GridData());
 		
-		Label titleLabel = this.toolkit.createLabel(studiesComposite, "Title: NOME");
+		titleLabel = toolkit.createLabel(studiesComposite, "Title: ");
 		titleLabel.setLayoutData(new GridData());
 
-		Table table = toolkit.createTable(studiesComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table = toolkit.createTable(studiesComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
-		GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
-		table.setLayoutData(tableLayoutData);
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		table.addSelectionListener(new StudyClickHandler());
 
-		String[] titles = {"ID", "Status", "Title", "Year"};
-		for (int i=0; i<titles.length; i++) {
+		String[] titles = {"Code", "Status", "Title", "Year"};
+		for (int i=0; i< titles.length; i++) {
 			TableColumn column = new TableColumn (table, SWT.NONE);
 			column.setText (titles [i]);
 		}
@@ -66,10 +107,33 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		section.setClient(studiesComposite);
 	}
 	
-	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 
 	}
 
+	private static class StudyClickHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyAnalysisPerspective.ID));
+			
+			
+			TableItem item = (TableItem)e.item;
+			
+			for (Study study : literatureReview.getStudies()) {
+				if (study.getCode().equals(item.getText())) {
+					StudyAnalysisView.setStudy(study);
+					break;
+				}
+			}
+			
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+	}
+	
 }

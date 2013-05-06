@@ -10,33 +10,50 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
+
 public class StudyAnalysisView extends ViewPart {
 
-	private FormToolkit toolkit;
-	private Form form;
+	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView";
+	
+//	private static Study study;
+	
+	private static FormToolkit toolkit;
+	private static Form form;
+	
+	private static Label label_Id_conteudo;
+	private static Label label_Title_conteudo;
 	
 	public StudyAnalysisView() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
-	@Override
+	public static void setStudy(Study study) {
+//		StudyAnalysisView.study = study;
+		
+		label_Id_conteudo.setText(study.getCode());
+		label_Title_conteudo.setText(study.getTitle());
+		
+		WidgetsUtil.refreshComposite(form.getBody());
+	}
+	
 	public void createPartControl(Composite parent) {
 		configureView(parent);
 		createStudyWidgets(parent);
 	}
 	
 	private void configureView(Composite parent) {
-		this.toolkit = new FormToolkit(parent.getDisplay());
-		this.form = toolkit.createForm(parent);
-		this.toolkit.decorateFormHeading(this.form);
-		this.form.setText("Reviewer");
-		this.form.getBody().setLayout(new GridLayout(7, false));
+		toolkit = new FormToolkit(parent.getDisplay());
+		form = toolkit.createForm(parent);
+		toolkit.decorateFormHeading(form);
+		form.setText("Reviewer");
+		form.getBody().setLayout(new GridLayout(7, false));
 	}
 
 	private void createStudyWidgets(Composite parent) {
 		GridData layout = new GridData(GridData.GRAB_VERTICAL);
 		form.getBody().setLayoutData(layout);
-		
 
 		GridData td;
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
@@ -44,7 +61,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Id.setLayoutData(td);
 		td = new GridData();
-		Label label_Id_conteudo = toolkit.createLabel(form.getBody(), "PS01");
+		label_Id_conteudo = toolkit.createLabel(form.getBody(), "");
 		td.horizontalSpan = 6;
 		label_Id_conteudo.setLayoutData(td);
 		
@@ -53,7 +70,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Title.setLayoutData(td);
 		td = new GridData();
-		Label label_Title_conteudo = toolkit.createLabel(form.getBody(), "Experimentation in Software Engineering");
+		label_Title_conteudo = toolkit.createLabel(form.getBody(), "Experimentation in Software Engineering");
 		td.horizontalSpan = 6;
 		label_Title_conteudo.setLayoutData(td);
 		
@@ -122,9 +139,7 @@ public class StudyAnalysisView extends ViewPart {
 		Skip.setLayoutData(td);
 	}
 
-	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
 
 	}
 

@@ -43,7 +43,8 @@ import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
@@ -88,7 +89,7 @@ public class SearchView extends ViewPart {
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		this.form = toolkit.createForm(parent);
 		this.toolkit.decorateFormHeading(this.form);
-		this.form.setText("REviewER - Search");
+		this.form.setText("Search Studies");
 		this.form.getBody().setLayout(new GridLayout(1, false));
 	}
 
@@ -344,22 +345,27 @@ public class SearchView extends ViewPart {
 				
 				literatureReview.setTitle(dialog.getValue());
 				
+				int studyCounter = 1;
 				for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
 					List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
 					for (Study study : studies) {
+						study.setCode("S" + studyCounter);
 						study.setSource(searchProviderKey);
 						literatureReview.addStudy(study);
+						studyCounter++;
 					}
 				}
 				
 				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
 				literatureReviewController.createLiteratureReview(literatureReview);
 				
-				LiteratureReviewView.literatureReview = literatureReview;
-				
 				IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));
+				activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+				
+				LiteratureReviewStudiesView.setLiteratureReview(literatureReview);
+				
+				LiteratureReviewView.refreshView();
 			}
 		}
 	}

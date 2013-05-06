@@ -1,11 +1,10 @@
 package br.ufpe.cin.reviewer.persistence.dao;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.persistence.Query;
 
@@ -52,8 +51,8 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Set<E> retrieveAll() throws PersistenceException {
-		Set<E> entities = new HashSet<>();
+	public List<E> retrieveAll() throws PersistenceException {
+		List<E> entities = new LinkedList<E>();
 		
 		try {
 			Query query = createQuery("1", null);
@@ -86,8 +85,15 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 		}
 	}
 	
-	protected Query createQuery(String key, Map<String, String> queryParameters) {
-		Query query = JPAEntityManager.ENTITY_MANAGER.createQuery(queries.getProperty(getClass() + "." + key));
+	protected Query createQuery(String key, Map<String, String> queryParameters) throws PersistenceException {
+		String queryStringKey = getClass().getName() + "." + key;
+		String queryString = queries.getProperty(queryStringKey);
+		
+		if (queryString == null) {
+			throw new PersistenceException("Non existent query key: " + queryStringKey);
+		}
+		
+		Query query = JPAEntityManager.ENTITY_MANAGER.createQuery(queryString);
 		
 		if (queryParameters != null) {
 			for (String parameterName : queryParameters.keySet()) {
