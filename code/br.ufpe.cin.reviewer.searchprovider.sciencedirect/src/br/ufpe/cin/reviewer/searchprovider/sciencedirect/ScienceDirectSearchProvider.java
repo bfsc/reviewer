@@ -30,8 +30,10 @@ public class ScienceDirectSearchProvider implements SearchProvider {
    
     private static final String SEARCH_URL_SCIENCE_DIRECT_1 = "http://www.sciencedirect.com/science?_ob=QuickSearchURL&_method=submitForm&_acct=C000228598&_origin=home&_zone=qSearch&md5=61ce8901b141d527683913a240486ac4&qs_all=";
     private static final String SEARCH_URL_SCIENCE_DIRECT_2 = "&qs_author=&qs_title=&qs_vol=&qs_issue=&qs_pages=&sdSearch=Search";
-   
+
     private static final String XPATH_STUDY_TITLE_AND_URL = "//a[@class='cLink']";
+    
+    //private static final String XPATH_EXPORT_BIBTEX = "//input[@id='exportIcon_sci_dir']";
 
     private static final String X_PATH_NEXT_PAGE = "//form[@action='/science' and @style='padding:0px; margin:0px;']";
     
@@ -55,6 +57,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 String searchUrl = assembleSearchUrl(searchString);
                
                 // Extract studies data
+                System.out.println(searchUrl);
+                System.out.println("para aqui!");
                 result.getStudies().addAll(extractStudiesData(browser, searchUrl));
         } catch (Exception e) {
                 throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
@@ -91,10 +95,14 @@ public class ScienceDirectSearchProvider implements SearchProvider {
            
             try {
                     HtmlPage page = browser.getPage(searchUrl);
-           
+
                     // Extracting studies data.
                     List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
+                    String string = extractNextPageUrl(page);
+
+                    System.out.println("tamanho da lista eh" + studyTablesAnchors.size());
                     for (int i = 0; i < studyTablesAnchors.size(); i++) {
+                        System.out.println("passou aqui dentro do for!");
                             Study study = new Study();
                            
                             HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);
@@ -102,6 +110,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                             // Extracting study title and URL
                             study.setTitle(anchor.getTextContent().trim());
                             study.setUrl(anchor.getHrefAttribute().trim());
+                            System.out.println(study.getTitle());
+                            System.out.println("passou aqui!");
                         
                             toReturn.add(study);
                     }
@@ -112,20 +122,22 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                     if (nextPageUrl != null) {
                             toReturn.addAll(extractStudiesData(browser, nextPageUrl));
                     }
-            } catch (Exception e) {
+            } 
+            catch (Exception e) {
                     //TRATAR EXCECAO
                         e.printStackTrace();
-                }
-               
-                return toReturn;
+            }
+            return toReturn;
         }
  
     private String extractNextPageUrl(HtmlPage page) throws IOException {
         String toReturn = null;
-       
+
+        System.out.println(page.getUrl());
         HtmlForm nextPageForm = (HtmlForm) page.getFirstByXPath(X_PATH_NEXT_PAGE);
+        
         if (nextPageForm != null) {
-        		//recolhe todos os parametros para montar a url da proxima pagina
+        	//recolhe todos os parametros para montar a url da proxima pagina
     		//HtmlForm nextPageForm = (HtmlForm)object;
     		
     		HtmlInput _ob = (HtmlInput) nextPageForm.getInputByName("_ob");
@@ -215,8 +227,9 @@ public class ScienceDirectSearchProvider implements SearchProvider {
     		//monta a url da proxima pagina de busca
     		
     		NEXT_PAGE_link = DOMAIN_DL_SCIENCE_DIRECT + "science?" + value__ob + value__method + value_searchtype + value_refSource + value__st + value_count + value_sort + value__chunk + value_NEXT_LIST + value_view + value_md5 + value__ArticleListID + value_sisr_search + value_TOTAL_PAGES + value_topPaginationBoxChanged + value_pageNumberTop + value_topNext + value_sisrterm + value_bottomPaginationBoxChanged + value_pageNumberBottom + value_displayPerPageFlag + "resultsPerPage=25";
-    		
-    		//System.out.println(NEXT_PAGE_link);
+
+    		System.out.println("este eh o link para a proxima pagina");
+    		System.out.println(NEXT_PAGE_link);
         		
         		toReturn = NEXT_PAGE_link;
         }
@@ -239,7 +252,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
     				count++;
     			}
     			
-    			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
+    			FileWriter writer = new FileWriter("C:/Arthur/Iniciação cientifica/search.result.txt");
+    			System.out.println(buffer.toString());
     			writer.write(buffer.toString());
     			writer.flush();
     			writer.close();

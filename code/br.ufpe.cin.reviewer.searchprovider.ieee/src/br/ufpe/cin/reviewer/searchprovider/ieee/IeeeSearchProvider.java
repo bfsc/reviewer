@@ -69,7 +69,7 @@ public class IeeeSearchProvider implements SearchProvider {
 							study.setYear(domNode.getTextContent());
 						}
 						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("affiliations")) {
-							//ageitar ainda pois ta pegando como uma string só e tem que pegar como lista
+							//ajeitar ainda pois ta pegando como uma string só e tem que pegar como lista
 							String string = domNode.getTextContent();
 							List<String> stringList = new ArrayList<String>();
 							int lastIndex = 0;
@@ -87,9 +87,13 @@ public class IeeeSearchProvider implements SearchProvider {
 							}
 							List<String> institutions = new ArrayList<String>();
 							List<String> countries = new ArrayList<String>();
-							if(stringList.size() >= 3){
-								institutions = stringList.subList(0, stringList.size() - 2);
-								countries = stringList.subList(stringList.size() - 2, stringList.size());
+							if(stringList.size() >= 3 && stringList.size() != 1){
+								institutions = stringList.subList(0, stringList.size() - 1);
+								countries = stringList.subList(stringList.size() - 1, stringList.size());
+							}
+							else if(stringList.size() == 1){
+								institutions = stringList.subList(0, stringList.size());
+								countries = null;
 							}
 							else{
 								institutions = stringList.subList(0, stringList.size() - 1);
