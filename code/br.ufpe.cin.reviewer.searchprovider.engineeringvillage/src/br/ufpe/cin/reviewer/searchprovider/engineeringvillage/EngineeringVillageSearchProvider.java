@@ -1,6 +1,5 @@
 package br.ufpe.cin.reviewer.searchprovider.engineeringvillage;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,8 +18,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 
 public class EngineeringVillageSearchProvider implements SearchProvider {
-
-	private static final String SEARCH_PROVIDER_KEY_ENGINEERING_VILLAGE = "ENGINEERING_VILLAGE";
 
     private static final String EXPERT_SEARCH_LINK = "http://www.engineeringvillage.com/controller/servlet/Controller?CID=expertSearch";
 
@@ -165,37 +162,4 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
         return toReturn;
     }
 
-	public String getKey() {
-		return SEARCH_PROVIDER_KEY_ENGINEERING_VILLAGE;
-	}
-    
-	 public static void main(String[] args) {
-	         try{	
-	                 SearchProvider searchProvider = new EngineeringVillageSearchProvider();
-	                 SearchResult result = searchProvider.search("systematic mapping studies");
-	                 
-	                 int count = 1;
-	                 
-	                 StringBuilder buffer = new StringBuilder();
-	     			
-	     			for (Study study : result.getStudies()) {
-	     				buffer.append(count + ": " + study.getTitle() + "\r\n");
-	             		buffer.append(study.getAbstract() + "\r\n");
-	     				buffer.append(study.getUrl() + "\r\n\r\n");
-	     				count++;
-	     			}
-	     			
-	     			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
-	     			writer.write(buffer.toString());
-	     			writer.flush();
-	     			writer.close();
-	     			
-	         }
-	         catch (Exception e) {
-	                 e.printStackTrace();
-	         }
-	     }
-
 }
-//\"software engineering\" compute
-//software \"engineering abstract\"

@@ -11,6 +11,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class StudyAnalysisView extends ViewPart {
@@ -26,7 +27,7 @@ public class StudyAnalysisView extends ViewPart {
 	private static Label label_Title_conteudo;
 	
 	public StudyAnalysisView() {
-		
+		ReviewerViewRegister.putView(ID, this);
 	}
 
 	public static void setStudy(Study study) {

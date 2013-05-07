@@ -21,34 +21,35 @@ import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 
 public class LiteratureReviewView extends ViewPart {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";
 
-	private static java.util.List<LiteratureReview> literatureReviews;
-	private static LiteratureReview selectedLiteratureReview;
+	private java.util.List<LiteratureReview> literatureReviews;
+	private LiteratureReview selectedLiteratureReview;
 	
-	private static FormToolkit toolkit;
-	private static Form form;
+	private FormToolkit toolkit;
+	private Form form;
 	
-	private static Section sectionList;
-	private static Composite listComposite;
-	private static List list;
+	private Section sectionList;
+	private Composite listComposite;
+	private List list;
 	
-	private static Section sectionInfo;
-	private static Composite reviewInfoComposite;
-	private static Composite searchTitleComposite;
-	private static Label titleLabel;
-	private static Text titleText;
-	private static Label totalFoundLabel;
-	private static Label totalFetchedLabel;
+	private Section sectionInfo;
+	private Composite reviewInfoComposite;
+	private Composite searchTitleComposite;
+	private Label titleLabel;
+	private Text titleText;
+	private Label totalFoundLabel;
+	private Label totalFetchedLabel;
 	
 	public LiteratureReviewView() {
-
+		ReviewerViewRegister.putView(ID, this);
 	}
 	
-	public static void refreshView() {
+	public void refreshView() {
 		LiteratureReviewController literatureReviewController = new LiteratureReviewController();
 		literatureReviews = literatureReviewController.findAllLiteratureReview();
 		
@@ -85,11 +86,11 @@ public class LiteratureReviewView extends ViewPart {
 	    sectionList.setLayout(new GridLayout(1, false));
 		sectionList.setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		
-		listComposite = toolkit.createComposite(sectionList);
+		listComposite = toolkit.createComposite(sectionList, SWT.BORDER);
 		listComposite.setLayout(new GridLayout(2, false));
 		listComposite.setLayoutData(new GridData());
 		
-		list = new List (listComposite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		list = new List (listComposite, SWT.MULTI | SWT.V_SCROLL);
 		GridData listLayoutData = new GridData(GridData.FILL_VERTICAL);
 		listLayoutData.horizontalSpan = 1;
 		list.setLayoutData(listLayoutData);
@@ -247,7 +248,8 @@ public class LiteratureReviewView extends ViewPart {
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
 			
-			LiteratureReviewStudiesView.setLiteratureReview(selectedLiteratureReview);
+			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			literatureReviewStudiesView.setLiteratureReview(selectedLiteratureReview);
 		}
 		
 	}

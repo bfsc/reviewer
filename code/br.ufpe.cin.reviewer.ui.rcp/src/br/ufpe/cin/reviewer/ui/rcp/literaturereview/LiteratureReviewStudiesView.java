@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -21,33 +20,34 @@ import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class LiteratureReviewStudiesView extends ViewPart {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
 	
-	private static LiteratureReview literatureReview;
+	private LiteratureReview literatureReview;
 	
-	private static FormToolkit toolkit;
-	private static Form form;
+	private FormToolkit toolkit;
+	private Form form;
 	
-	private static Section section;
-	private static Composite studiesComposite;
-	private static Label titleLabel;
-	private static Table table;
+	private Section section;
+	private Composite studiesComposite;
+	private Label titleLabel;
+	private Table table;
 	
 	public LiteratureReviewStudiesView() {
-		
+		ReviewerViewRegister.putView(ID, this);
 	}
 
-	public static void setLiteratureReview(LiteratureReview literatureReview) {
-		LiteratureReviewStudiesView.literatureReview = literatureReview;
+	public void setLiteratureReview(LiteratureReview literatureReview) {
+		this.literatureReview = literatureReview;
 
-		titleLabel.setText("Title: " + LiteratureReviewStudiesView.literatureReview.getTitle());
+		titleLabel.setText("Title: " + this.literatureReview.getTitle());
 
 		table.removeAll();
-		for (Study study : LiteratureReviewStudiesView.literatureReview.getStudies()) {
+		for (Study study : this.literatureReview.getStudies()) {
 			TableItem item = new TableItem (table, SWT.NONE);
 			item.setText (0, study.getCode());
 			item.setText (2, study.getTitle());
@@ -58,7 +58,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 			table.getColumn(i).pack ();
 		}
 		
-		LiteratureReviewStudiesView.section.setVisible(true);
+		this.section.setVisible(true);
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
 	
@@ -111,7 +111,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 
 	}
 
-	private static class StudyClickHandler implements SelectionListener {
+	private class StudyClickHandler implements SelectionListener {
 
 		public void widgetSelected(SelectionEvent e) {
 			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();

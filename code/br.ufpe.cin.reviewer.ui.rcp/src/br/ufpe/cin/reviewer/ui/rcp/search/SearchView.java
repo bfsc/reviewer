@@ -43,6 +43,7 @@ import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesPerspective;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
@@ -52,32 +53,21 @@ public class SearchView extends ViewPart {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
 	
-	private Shell windowShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-	
 	private FormToolkit toolkit;
 	private Form form;
 	
-	//Results Widgets
-	private Table table;
-	private Composite resultCompositeLabels;
-	private Composite resultCompositeTable;
-	private Label labelTotalFound;
-	private Label labelTotalFetched;
-
-	//Search Widgets
-	private Text searchText;
-	private Button acmCheckBox;
-	private Button ieeeCheckBox;
-	private Button scienceDirectCheckBox;
-	private Button scopusCheckBox;
-	private Button springerLinkCheckBox;
-	private Button engineeringVillageCheckBox;
+	private SearchComposite searchComposite;
+	private ResultComposite resultComposite;
 	
 	private int totalFound;
 	
-	private SearchResult searchResult;
+	// CONSTRUCTORS ============================================================
 	
-	private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
+	public SearchView() {
+		ReviewerViewRegister.putView(ID, this);
+	}
+	
+	// PUBLIC METHODS ==========================================================	
 	
 	public void createPartControl(Composite parent) {
 		configureView(parent);
@@ -85,6 +75,12 @@ public class SearchView extends ViewPart {
 		createResultWidgets();
 	}
 
+	public void setFocus() {
+		
+	}
+	
+	// PRIVATE METHODS =========================================================
+	
 	private void configureView(Composite parent) {
 		this.toolkit = new FormToolkit(parent.getDisplay());
 		this.form = toolkit.createForm(parent);
@@ -97,56 +93,11 @@ public class SearchView extends ViewPart {
 	    Section section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout());
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Composite searchComposite = this.toolkit.createComposite(section);
 		
 		TableWrapLayout layout = new TableWrapLayout();
-		TableWrapData td = new TableWrapData();
-		searchComposite.setLayout(layout);
 		layout.numColumns = 7;
-		
-		searchText = toolkit.createText(searchComposite, SEARCH_TEXT_DEFAULT_VALUE);
-		searchText.addFocusListener(new SearchTextHandler());
-		td = new TableWrapData(TableWrapData.FILL_GRAB);
-		td.heightHint = 80;
-		td.colspan = 6;
-		searchText.setLayoutData(td);
-		
-		td = new TableWrapData();
-		Button search = toolkit.createButton(searchComposite, "Search", SWT.PUSH);
-		td.heightHint = 40;
-		td.colspan = 1;
-		search.setLayoutData(td);
-		search.addSelectionListener(new SearchButtonHandler());
-		
-		acmCheckBox = toolkit.createButton(searchComposite,"ACM", SWT.CHECK);
-		td = new TableWrapData();
-		td.colspan = 1;
-		acmCheckBox.setLayoutData(td);
-		
-		ieeeCheckBox = toolkit.createButton(searchComposite,"IEEE", SWT.CHECK);
-		td = new TableWrapData();
-		td.colspan = 1;
-		ieeeCheckBox.setLayoutData(td);
-		
-		scienceDirectCheckBox = toolkit.createButton(searchComposite,"Science Direct", SWT.CHECK);
-		td = new TableWrapData();
-		td.colspan = 1;
-		scienceDirectCheckBox.setLayoutData(td);
-		
-		scopusCheckBox = toolkit.createButton(searchComposite,"Scopus", SWT.CHECK);
-		td = new TableWrapData();
-		td.colspan = 1;
-		scopusCheckBox.setLayoutData(td);
-		
-		springerLinkCheckBox = toolkit.createButton(searchComposite,"Springer Link", SWT.CHECK);
-		td = new TableWrapData();
-		td.colspan = 1;
-		springerLinkCheckBox.setLayoutData(td);
-		
-		engineeringVillageCheckBox = toolkit.createButton(searchComposite,"Engineering Village", SWT.CHECK);
-		td = new TableWrapData();
-		td.colspan = 2;
-		engineeringVillageCheckBox.setLayoutData(td);
+		searchComposite = new SearchComposite(section, SWT.NONE);
+		searchComposite.setLayout(layout);
 		
 		section.setClient(searchComposite);
 	}
@@ -156,229 +107,312 @@ public class SearchView extends ViewPart {
 	    section.setLayout(new GridLayout());
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		//Composite for Table and Link
-		resultCompositeTable = toolkit.createComposite(section);
-		resultCompositeTable.setLayout(new GridLayout(1, true));
-		resultCompositeTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-		resultCompositeTable.setVisible(false);
-		
-		//Composite for labels
-		resultCompositeLabels = toolkit.createComposite(resultCompositeTable);
-		resultCompositeLabels.setLayout(new GridLayout(2, true));
-		resultCompositeLabels.setLayoutData(new GridData());
-		resultCompositeLabels.setVisible(false);
+		resultComposite = new ResultComposite(section, SWT.NONE);
+		resultComposite.setLayout(new GridLayout(1, true));
+		resultComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		resultComposite.setVisible(false);
 
-		labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
-		GridData totalFoundLayout = new GridData();
-		totalFoundLayout.horizontalSpan = 1;
-		labelTotalFound.setLayoutData(totalFoundLayout);
-		
-		labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
-		GridData totalFetchedLayout = new GridData();
-		totalFetchedLayout.horizontalSpan = 1;
-		labelTotalFetched.setLayoutData(totalFetchedLayout);
-		
-		table = toolkit.createTable(resultCompositeTable, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
-		table.setLinesVisible (true);
-		table.setHeaderVisible (true);
-		GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
-		table.setLayoutData(tableLayoutData);
-		
-		Hyperlink studyLink = toolkit.createHyperlink(resultCompositeTable, "Create new literature review from these results...", SWT.WRAP);
-		GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		studyLink.setLayoutData(studyLinkLayout);
-		studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
-
-		section.setClient(resultCompositeTable);
+		section.setClient(resultComposite);
 	}
 
-	public void setFocus() {
-		
-	}
+	// PRIVATE CLASSES =========================================================
 	
-	private class SearchButtonHandler implements SelectionListener {
-
-		public void widgetSelected(SelectionEvent e) {
-			if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
-				searchText.setText("");
-			}
-			
-			String searchString = searchText.getText();
+	private class SearchComposite extends Composite {
 		
-			SearchFilter searchFilter = new SearchFilter();
+		private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
+		
+		private Text searchText;
+		private Button acmCheckBox;
+		private Button ieeeCheckBox;
+		private Button scienceDirectCheckBox;
+		private Button scopusCheckBox;
+		private Button springerLinkCheckBox;
+		private Button engineeringVillageCheckBox;
+	
+		public SearchComposite(Composite parent, int style) {
+			super(parent, style);
 			
-			if (acmCheckBox.getSelection()) {
-				searchFilter.addSearchProviderKey("ACM");
-			}
+			TableWrapData td = new TableWrapData();
 			
-			if (ieeeCheckBox.getSelection()) {
-				searchFilter.addSearchProviderKey("IEEE");
-			}
+			searchText = toolkit.createText(this, SEARCH_TEXT_DEFAULT_VALUE);
+			searchText.addFocusListener(new SearchTextHandler());
+			td = new TableWrapData(TableWrapData.FILL_GRAB);
+			td.heightHint = 80;
+			td.colspan = 6;
+			searchText.setLayoutData(td);
 			
-			if (scienceDirectCheckBox.getSelection()) {
-				searchFilter.addSearchProviderKey("SCIENCE_DIRECT");
-			}
+			td = new TableWrapData();
+			Button search = toolkit.createButton(this, "Search", SWT.PUSH);
+			td.heightHint = 40;
+			td.colspan = 1;
+			search.setLayoutData(td);
+			search.addSelectionListener(new SearchButtonHandler());
 			
-			if (springerLinkCheckBox.getSelection()) {
-				searchFilter.addSearchProviderKey("SPRINGER_LINK");
-			}
+			acmCheckBox = toolkit.createButton(this,"ACM", SWT.CHECK);
+			td = new TableWrapData();
+			td.colspan = 1;
+			acmCheckBox.setLayoutData(td);
 			
-			if (scopusCheckBox.getSelection()) {
-				searchFilter.addSearchProviderKey("SCOPUS");
-			}
-
-			if (engineeringVillageCheckBox.getSelection()) {
-				searchFilter.addSearchProviderKey("ENGINEERING_VILLAGE");
-			}
+			ieeeCheckBox = toolkit.createButton(this,"IEEE", SWT.CHECK);
+			td = new TableWrapData();
+			td.colspan = 1;
+			ieeeCheckBox.setLayoutData(td);
 			
-			SearchUIJob searchJob = new SearchUIJob(searchString, searchFilter);
-			searchJob.schedule();
-		}
-
-		public void widgetDefaultSelected(SelectionEvent e) {
+			scienceDirectCheckBox = toolkit.createButton(this,"Science Direct", SWT.CHECK);
+			td = new TableWrapData();
+			td.colspan = 1;
+			scienceDirectCheckBox.setLayoutData(td);
 			
+			scopusCheckBox = toolkit.createButton(this,"Scopus", SWT.CHECK);
+			td = new TableWrapData();
+			td.colspan = 1;
+			scopusCheckBox.setLayoutData(td);
+			
+			springerLinkCheckBox = toolkit.createButton(this,"Springer Link", SWT.CHECK);
+			td = new TableWrapData();
+			td.colspan = 1;
+			springerLinkCheckBox.setLayoutData(td);
+			
+			engineeringVillageCheckBox = toolkit.createButton(this,"Engineering Village", SWT.CHECK);
+			td = new TableWrapData();
+			td.colspan = 2;
+			engineeringVillageCheckBox.setLayoutData(td);
 		}
 		
-		private class SearchUIJob extends Job {
+		private class SearchButtonHandler implements SelectionListener {
 
-			private String searchString;
-			private SearchFilter searchFilter;
-			
-			private IProgressMonitor pm;
-			
-			public SearchUIJob(String searchString, SearchFilter searchFilter) {
-				super("search.job");
-				this.searchString = searchString;
-				this.searchFilter = searchFilter;
-			}
-			
-			protected IStatus run(IProgressMonitor monitor) {
-				Display.getDefault().asyncExec(new Runnable() {
-					
-					public void run() {
-						IActionBars bars = getViewSite().getActionBars();
-						IStatusLineManager statusLine = bars.getStatusLineManager();
-						pm = statusLine.getProgressMonitor();
-						pm.beginTask("Searching... This may take several minutes.", IProgressMonitor.UNKNOWN);
-					}
-				});
+			public void widgetSelected(SelectionEvent e) {
+				if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
+					searchText.setText("");
+				}
 				
-				SearchController searchController = new SearchController();
-				SearchView.this.searchResult = searchController.search(searchString, searchFilter);
-				
-				Display.getDefault().asyncExec(new Runnable() {
-					
-					public void run() {
-						addResults(searchResult);
-						pm.done();
-					}
-				});
-				
-				return Status.OK_STATUS;
-			}
+				String searchString = searchText.getText();
 			
-			private void addResults(SearchResult searchResult){
-
-				table.removeAll();
+				SearchFilter searchFilter = new SearchFilter();
 				
-				String[] titles = {"N#", "Source", "Title", "Authors", "Year"};
-				for (int i=0; i<titles.length; i++) {
-					TableColumn column = new TableColumn (table, SWT.NONE);
-					column.setText (titles [i]);
+				if (acmCheckBox.getSelection()) {
+					searchFilter.addSearchProviderKey("ACM");
+				}
+				
+				if (ieeeCheckBox.getSelection()) {
+					searchFilter.addSearchProviderKey("IEEE");
+				}
+				
+				if (scienceDirectCheckBox.getSelection()) {
+					searchFilter.addSearchProviderKey("SCIENCE_DIRECT");
+				}
+				
+				if (springerLinkCheckBox.getSelection()) {
+					searchFilter.addSearchProviderKey("SPRINGER_LINK");
+				}
+				
+				if (scopusCheckBox.getSelection()) {
+					searchFilter.addSearchProviderKey("SCOPUS");
 				}
 
-				int currentStudyNumber = 0;
-				for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
-					List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
-					for (Study study : studies) {
-						currentStudyNumber++;
+				if (engineeringVillageCheckBox.getSelection()) {
+					searchFilter.addSearchProviderKey("ENGINEERING_VILLAGE");
+				}
+				
+				new AsyncSearchJob(searchString, searchFilter).schedule();
+			}
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+			
+			private class AsyncSearchJob extends Job {
+
+				private String searchString;
+				private SearchFilter searchFilter;
+				
+				private SearchResult searchResult;
+				
+				private IProgressMonitor progressMonitor;
+				
+				public AsyncSearchJob(String searchString, SearchFilter searchFilter) {
+					super("AsyncSearchJob");
+					this.searchString = searchString;
+					this.searchFilter = searchFilter;
+				}
+
+				protected IStatus run(IProgressMonitor monitor) {
+					Display.getDefault().asyncExec(new Runnable() {
 						
-						TableItem item = new TableItem (table, SWT.NONE);
-						item.setText (0, String.valueOf(currentStudyNumber));
-						item.setText (1, searchProviderKey);
-						item.setText (2, study.getTitle());
-						
-						String authors = "";
-						for (String author : study.getAuthors()) {
-							authors += author + ",";
+						public void run() {
+							IActionBars bars = SearchView.this.getViewSite().getActionBars();
+							IStatusLineManager statusLine = bars.getStatusLineManager();
+							AsyncSearchJob.this.progressMonitor = statusLine.getProgressMonitor();
+							
+							AsyncSearchJob.this.progressMonitor.beginTask("Searching... This may take several minutes.", IProgressMonitor.UNKNOWN);
 						}
-						item.setText (3, authors);
-						item.setText (4, study.getYear());
-					}
+					});
+					
+					SearchController searchController = new SearchController();
+					AsyncSearchJob.this.searchResult = searchController.search(searchString, searchFilter);
+					
+					Display.getDefault().asyncExec(new Runnable() {
+						
+						public void run() {
+							SearchView.this.resultComposite.setSearchResult(AsyncSearchJob.this.searchResult);
+							progressMonitor.done();
+						}
+					});
+					
+					return Status.OK_STATUS;
 				}
 				
-				totalFound = currentStudyNumber;
-				labelTotalFound.setText("Total Found: " + totalFound);
-				labelTotalFetched.setText("Total Fetched: " + totalFound);
-				
-				WidgetsUtil.refreshComposite(resultCompositeLabels);
-				
-				for (int i=0; i<titles.length; i++) {
-					table.getColumn (i).pack ();
+			}
+			
+		}
+		
+		private class SearchTextHandler implements FocusListener {
+
+			public void focusGained(FocusEvent e) {
+				if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
+					searchText.setText("");
 				}
+			}
+			public void focusLost(FocusEvent e) {
 				
-				WidgetsUtil.refreshComposite(form.getBody());
-				resultCompositeLabels.setVisible(true);
-				resultCompositeTable.setVisible(true);
 			}
 			
 		}
 		
 	}
 
-	private class CreateLiteratureReviewLinkHandler implements IHyperlinkListener {
+	private class ResultComposite extends Composite {
 
-		public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+		private SearchResult searchResult;
+		
+		private Table table;
+		private Composite resultCompositeLabels;
+		private Label labelTotalFound;
+		private Label labelTotalFetched;
+		
+		public ResultComposite(Composite parent, int style) {
+			super(parent, style);
 			
+			//Composite for labels
+			resultCompositeLabels = toolkit.createComposite(this);
+			resultCompositeLabels.setLayout(new GridLayout(2, true));
+			resultCompositeLabels.setLayoutData(new GridData());
+
+			labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
+			GridData totalFoundLayout = new GridData();
+			totalFoundLayout.horizontalSpan = 1;
+			labelTotalFound.setLayoutData(totalFoundLayout);
+			
+			labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
+			GridData totalFetchedLayout = new GridData();
+			totalFetchedLayout.horizontalSpan = 1;
+			labelTotalFetched.setLayoutData(totalFetchedLayout);
+			
+			table = toolkit.createTable(this, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+			table.setLinesVisible (true);
+			table.setHeaderVisible (true);
+			GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
+			table.setLayoutData(tableLayoutData);
+			
+			Hyperlink studyLink = toolkit.createHyperlink(this, "Create new literature review from these results...", SWT.WRAP);
+			GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
+			studyLink.setLayoutData(studyLinkLayout);
+			studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
 		}
-
-		public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+		
+		public void setSearchResult(SearchResult searchResult) {
+			this.searchResult = searchResult;
 			
+			table.removeAll();
+			
+			String[] titles = {"N#", "Source", "Title", "Authors", "Year"};
+			for (int i=0; i<titles.length; i++) {
+				TableColumn column = new TableColumn (table, SWT.NONE);
+				column.setText (titles [i]);
+			}
+
+			int currentStudyNumber = 0;
+			for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
+				List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
+				for (Study study : studies) {
+					currentStudyNumber++;
+					
+					TableItem item = new TableItem (table, SWT.NONE);
+					item.setText (0, String.valueOf(currentStudyNumber));
+					item.setText (1, searchProviderKey);
+					item.setText (2, study.getTitle());
+					
+					String authors = "";
+					for (String author : study.getAuthors()) {
+						authors += author + ",";
+					}
+					item.setText (3, authors);
+					item.setText (4, study.getYear());
+				}
+			}
+			
+			totalFound = currentStudyNumber;
+			labelTotalFound.setText("Total Found: " + totalFound);
+			labelTotalFetched.setText("Total Fetched: " + totalFound);
+			
+			WidgetsUtil.refreshComposite(resultCompositeLabels);
+			
+			for (int i=0; i<titles.length; i++) {
+				table.getColumn (i).pack ();
+			}
+			
+			WidgetsUtil.refreshComposite(form.getBody());
+			
+			resultComposite.setVisible(true);
 		}
+		
+		private class CreateLiteratureReviewLinkHandler implements IHyperlinkListener {
 
-		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
-			InputDialog dialog = new InputDialog(windowShell, "Create literature review", "Literature review title", null, null);
-			dialog.open();
-			
-			if (dialog.getReturnCode() == InputDialog.OK) {
-				LiteratureReview literatureReview = new LiteratureReview();
+			public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
 				
-				literatureReview.setTitle(dialog.getValue());
+			}
+
+			public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
 				
-				int studyCounter = 1;
-				for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
-					List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
-					for (Study study : studies) {
-						study.setCode("S" + studyCounter);
-						study.setSource(searchProviderKey);
-						literatureReview.addStudy(study);
-						studyCounter++;
+			}
+
+			public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+				InputDialog dialog = new InputDialog(shell, "Create literature review", "Literature review title", null, null);
+				dialog.open();
+				
+				if (dialog.getReturnCode() == InputDialog.OK) {
+					LiteratureReview literatureReview = new LiteratureReview();
+					
+					literatureReview.setTitle(dialog.getValue());
+					
+					int studyCounter = 1;
+					for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
+						List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
+						for (Study study : studies) {
+							study.setCode("S" + studyCounter);
+							study.setSource(searchProviderKey);
+							literatureReview.addStudy(study);
+							studyCounter++;
+						}
+					}
+					
+					LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+					literatureReviewController.createLiteratureReview(literatureReview);
+					
+					IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+					
+					LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+					literatureReviewStudiesView.setLiteratureReview(literatureReview);
+					
+					LiteratureReviewView literatureReviewView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
+					if (literatureReviewView != null) {
+						literatureReviewView.refreshView();
 					}
 				}
-				
-				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-				literatureReviewController.createLiteratureReview(literatureReview);
-				
-				IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
-				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
-				
-				LiteratureReviewStudiesView.setLiteratureReview(literatureReview);
-				
-				LiteratureReviewView.refreshView();
 			}
-		}
-	}
-	
-	private class SearchTextHandler implements FocusListener {
-
-		public void focusGained(FocusEvent e) {
-			if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
-				searchText.setText("");
-			}
-		}
-		public void focusLost(FocusEvent e) {
-			
 		}
 		
 	}

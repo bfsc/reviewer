@@ -1,6 +1,5 @@
 package br.ufpe.cin.reviewer.searchprovider.springerlink;
 
-import java.io.FileWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
@@ -17,11 +16,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 
-
 public class SpringerLinkSearchProvider implements SearchProvider {
 	
-	private static final String SEARCH_PROVIDER_KEY_SPRINGER_LINK = "SPRINGER_LINK";
-
 	private static final String DOMAIN_DL_SPRINGER_LINK = "http://link.springer.com";
 	private static final String URL_DL_SPRINGER_LINK_SEARCH = "http://link.springer.com/search?query=";
 	private static final String URL_DL_SPRINGER_LINK_ARTICLE_SEARCH = "&facet-content-type=%22Article%22";
@@ -160,36 +156,5 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		}
 		return toReturn;
 	}
-	public String getKey() {
-		return SEARCH_PROVIDER_KEY_SPRINGER_LINK;
-	}
 
-	
-	// TODO METODO DE TESTE
-	public static void main(String[] args) {
-		try {
-			SearchProvider searchProvider = new SpringerLinkSearchProvider();
-			
-//			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-			SearchResult result = searchProvider.search("\"Software cloud\"");
-			
-			int count = 1;
-            
-            StringBuilder buffer = new StringBuilder();
-			
-			for (Study study : result.getStudies()) {
-				buffer.append(count + ": " + study.getTitle() + "\r\n");
-        		buffer.append(study.getAbstract() + "\n");
-				buffer.append(study.getUrl() + "\r\n\r\n");
-				count++;
-			}
-			
-			FileWriter writer = new FileWriter("C:/Users/Arthur/Desktop/search.result.txt");
-			writer.write(buffer.toString());
-			writer.flush();
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

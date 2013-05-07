@@ -1,7 +1,6 @@
 package br.ufpe.cin.reviewer.searchprovider.scopus;
 
 import java.io.BufferedReader;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
@@ -24,8 +23,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 public class ScopusSearchProvider implements SearchProvider {
 
-	private static final String SEARCH_PROVIDER_KEY_SCOPUS = "SCOPUS";
-	
 	private static final String EXPORT_FORMAT_BIBTEX = "BIB";
 	private static final String OUTPUT_FORMAT_WITH_ABSTRACT = "CiteAbsKeyws";
 	
@@ -100,10 +97,6 @@ public class ScopusSearchProvider implements SearchProvider {
 		return  result;
 	}
 	
-	public String getKey() {
-		return SEARCH_PROVIDER_KEY_SCOPUS;
-	}
-	
 	private List<Study> extractStudiesData(InputStream inputStream) {
 		List<Study> toReturn = new LinkedList<Study>();
 		
@@ -150,31 +143,4 @@ public class ScopusSearchProvider implements SearchProvider {
 		return toReturn;
 	}
 
-	// TODO METODO DE TESTE
-	public static void main(String[] args) {
-		try {
-			SearchProvider searchProvider = new ScopusSearchProvider();
-			
-//			List<Study> studies = searchProvider.search("\"systematic mapping study\" AND \"software engineering\"");
-//			List<Study> studies = searchProvider.search("security AND \"cloud computing\"");
-//			SearchResult result = searchProvider.search("\"systematic mapping study\"");
-			SearchResult result = searchProvider.search("\"software engineering\"");
-			
-			StringBuilder buffer = new StringBuilder();
-			
-			for (Study study : result.getStudies()) {
-				buffer.append(study.getTitle() + "\n");
-//				buffer.append(study.getAbstract() + "\n");
-//				buffer.append(study.getUrl() + "\n\n");
-			}
-			
-			FileWriter writer = new FileWriter("C:/Documents and Settings/Bruno Cartaxo/Desktop/search.result.txt");
-			writer.write(buffer.toString());
-			writer.flush();
-			writer.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 }
