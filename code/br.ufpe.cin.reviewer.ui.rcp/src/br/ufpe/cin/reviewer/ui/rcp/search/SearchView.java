@@ -332,8 +332,10 @@ public class SearchView extends ViewPart {
 				column.setText (titles [i]);
 			}
 
-			int currentStudyNumber = 1;
+			int currentStudyNumber = 0;
 			for (Study study : searchResult.getAllStudies()) {
+				currentStudyNumber++;
+				
 				TableItem item = new TableItem (table, SWT.NONE);
 				item.setText (0, String.valueOf(currentStudyNumber));
 				item.setText (1, study.getSource());
@@ -345,8 +347,6 @@ public class SearchView extends ViewPart {
 				}
 				item.setText (3, authors);
 				item.setText (4, study.getYear());
-				
-				currentStudyNumber++;
 			}
 			
 			totalFound = currentStudyNumber;

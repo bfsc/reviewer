@@ -1,11 +1,14 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
@@ -205,9 +208,14 @@ public class LiteratureReviewView extends ViewPart {
 //		springerTotalFetchedLayout.horizontalSpan = 1;
 //		springerTotalFetchedLabel.setLayoutData(springerTotalFetchedLayout);
 		
+		Hyperlink exportLink = toolkit.createHyperlink(reviewInfoComposite, "Export literature review", SWT.WRAP);
+		GridData exportLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
+		exportLinkLayout.grabExcessVerticalSpace = true;
+		exportLink.setLayoutData(exportLinkLayout);
+		exportLink.addHyperlinkListener(new ExportLiteratureReviewLinkHandler());
+		
 		Hyperlink studyLink = toolkit.createHyperlink(reviewInfoComposite, "View studies", SWT.WRAP);
 		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
-		studyLinkLayout.horizontalSpan = 2;
 		studyLinkLayout.grabExcessVerticalSpace = true;
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
@@ -229,6 +237,31 @@ public class LiteratureReviewView extends ViewPart {
 
 		public void widgetDefaultSelected(SelectionEvent e) {
 			
+		}
+		
+	}
+	
+	private class ExportLiteratureReviewLinkHandler implements IHyperlinkListener {
+
+		public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+			fileDialog.setFilterExtensions(new String[] {"*.xml"});
+			fileDialog.setOverwrite(true);
+			fileDialog.open();
+			
+			String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName() + ".xml";
+			if (filePath != null && !filePath.trim().isEmpty()) {
+				LiteratureReviewController controller = new LiteratureReviewController();
+				controller.exportLiteratureReview(selectedLiteratureReview,filePath, true);
+			}
 		}
 		
 	}
