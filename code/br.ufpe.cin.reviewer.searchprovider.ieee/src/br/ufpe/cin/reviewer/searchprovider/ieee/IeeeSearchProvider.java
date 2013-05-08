@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.spi.SearchResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -17,6 +17,8 @@ import com.gargoylesoftware.htmlunit.xml.XmlPage;
 
 public class IeeeSearchProvider implements SearchProvider {
 
+	public static final String SEARCH_PROVIDER_NAME = "IEEE";
+
 	private static final String URL_ENCODE_UTF_8 = "UTF-8";
 	
 	private static final String URL_DL_IEEE_SEARCH = "http://ieeexplore.ieee.org/gateway/ipsSearch.jsp?";
@@ -24,8 +26,8 @@ public class IeeeSearchProvider implements SearchProvider {
 	private int count = 1;
 	private int numeroDeEstudos = 1000;
 	
-	public SearchResult search(String searchString) throws SearchProviderException {
-		SearchResult result = new SearchResult();
+	public SearchProviderResult search(String searchString) throws SearchProviderException {
+		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		int totalFound;
 		
 		try {
@@ -45,6 +47,7 @@ public class IeeeSearchProvider implements SearchProvider {
 				List<?> documents = page.getByXPath("//document");
 				for (Object object : documents) {
 					Study study = new Study();
+					study.setSource(SEARCH_PROVIDER_NAME);
 					
 					DomElement element = (DomElement) object;
 					DomNodeList<DomNode> childNodes = element.getChildNodes();

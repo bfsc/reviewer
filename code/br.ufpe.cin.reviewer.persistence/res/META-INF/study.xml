@@ -2,7 +2,7 @@
 
 <entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
 	<entity class="br.ufpe.cin.reviewer.model.common.Study" name="Study" access="PROPERTY">
-		<table name="study" schema="reviewer" />
+		<table name="studies" schema="reviewer" />
 		<attributes>
 			<id name="id">
 				<column name="study_id" />
@@ -35,21 +35,21 @@
 			
 			<element-collection name="authors">
 				<column name="author"/>
-				<collection-table name="study_authors" schema="reviewer">
+				<collection-table name="studies_authors" schema="reviewer">
 					<join-column name="study_id" referenced-column-name="study_id"/>
 				</collection-table>
 			</element-collection>
 			
 			<element-collection name="institutions">
 				<column name="institution"/>
-				<collection-table name="study_institutions" schema="reviewer">
+				<collection-table name="studies_institutions" schema="reviewer">
 					<join-column name="study_id" referenced-column-name="study_id"/>
 				</collection-table>
 			</element-collection>
 			
 			<element-collection name="countries">
 				<column name="country"/>
-				<collection-table name="study_countries" schema="reviewer">
+				<collection-table name="studies_countries" schema="reviewer">
 					<join-column name="study_id" referenced-column-name="study_id"/>
 				</collection-table>
 			</element-collection>

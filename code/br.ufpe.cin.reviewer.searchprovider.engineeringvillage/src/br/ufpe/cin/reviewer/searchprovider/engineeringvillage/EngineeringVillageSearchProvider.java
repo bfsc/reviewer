@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.spi.SearchResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -19,26 +19,23 @@ import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 
 public class EngineeringVillageSearchProvider implements SearchProvider {
 
-    private static final String EXPERT_SEARCH_LINK = "http://www.engineeringvillage.com/controller/servlet/Controller?CID=expertSearch";
+    public static final String SEARCH_PROVIDER_NAME = "ENGINEERING_VILLAGE";
+
+	private static final String EXPERT_SEARCH_LINK = "http://www.engineeringvillage.com/controller/servlet/Controller?CID=expertSearch";
 
     private static final String X_PATH_TEXT_AREA = "//textarea[@name='searchWord1' and @id='srchWrd1']";
-
     private static final String X_PATH_SEARCH_INPUT = "//input[@type='submit' and @value='Search']";
-
-    private static final String X_PATH_STUDY_TITLE = "/*/p[@class='resulttitle']";
-
-    private static final String X_PATH_STUDY_ABSTRACT = "/*/*/a[@class='externallink' and @title='Abstract']";
-
-    private static final String X_PATH_STUDY_LINK = "/*/*/a[@title='Full-text']";
-
     private static final String X_PATH_NEXT_PAGE = "//a[@title='Go to next page']";
     
+    private static final String X_PATH_STUDY_TITLE = "/*/p[@class='resulttitle']";
+    private static final String X_PATH_STUDY_ABSTRACT = "/*/*/a[@class='externallink' and @title='Abstract']";
+    private static final String X_PATH_STUDY_LINK = "/*/*/a[@title='Full-text']";
     private static final String X_PATH_STUDY_ABSTRACT_TEXT = "//td[@style='*padding-top:3px']//p";
-    
     private static final String X_PATH_STUDY_LIST = "//div[@class='result' or @class='result odd']";
+    
 
-	public SearchResult search(String searchString) throws SearchProviderException {
-    	SearchResult result = new SearchResult();
+	public SearchProviderResult search(String searchString) throws SearchProviderException {
+    	SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
         
         try {
 	            // Create the web browser
@@ -83,6 +80,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                     //taking the studys from the tags
                     for (int i = 0; i < studyTables .size(); i++) {
                             Study study = new Study();
+                            study.setSource(SEARCH_PROVIDER_NAME);
                             String AbstractUrl = null;
                             HtmlPage AbstractPage = null;
                             boolean sair = false;

@@ -7,7 +7,7 @@ import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.spi.SearchResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -18,6 +18,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlTableDataCell;
 
 public class AcmSearchProvider implements SearchProvider {
 
+	public static final String SEARCH_PROVIDER_NAME = "ACM";
+	
 	private static final int YEAR_STRING_LENGTH = 4;
 	private static final String DOMAIN_DL_ACM = "http://dl.acm.org/";
 	private static final String URL_DL_ACM_SEARCH = "http://dl.acm.org/results.cfm?query=";
@@ -35,8 +37,8 @@ public class AcmSearchProvider implements SearchProvider {
 	private static final String XPATH_STUDY_YEAR = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//td[@class='small-text' and @nowrap and (not(@colspan='3'))]";
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
 	
-	public SearchResult search(String searchString) throws SearchProviderException {
-		SearchResult result = new SearchResult();
+	public SearchProviderResult search(String searchString) throws SearchProviderException {
+		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		
 		try {
 			// Create the web browser
@@ -85,6 +87,7 @@ public class AcmSearchProvider implements SearchProvider {
 			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
 			for (int i = 0; i < studyTablesAnchors.size(); i++) {
 				Study study = new Study();
+				study.setSource(SEARCH_PROVIDER_NAME);
 				
 				HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);
 				

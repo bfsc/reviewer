@@ -1,7 +1,5 @@
 package br.ufpe.cin.reviewer.ui.rcp.search;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,6 +41,9 @@ import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.SourceType;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesPerspective;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView;
@@ -331,24 +332,21 @@ public class SearchView extends ViewPart {
 				column.setText (titles [i]);
 			}
 
-			int currentStudyNumber = 0;
-			for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
-				List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
-				for (Study study : studies) {
-					currentStudyNumber++;
-					
-					TableItem item = new TableItem (table, SWT.NONE);
-					item.setText (0, String.valueOf(currentStudyNumber));
-					item.setText (1, searchProviderKey);
-					item.setText (2, study.getTitle());
-					
-					String authors = "";
-					for (String author : study.getAuthors()) {
-						authors += author + ",";
-					}
-					item.setText (3, authors);
-					item.setText (4, study.getYear());
+			int currentStudyNumber = 1;
+			for (Study study : searchResult.getAllStudies()) {
+				TableItem item = new TableItem (table, SWT.NONE);
+				item.setText (0, String.valueOf(currentStudyNumber));
+				item.setText (1, study.getSource());
+				item.setText (2, study.getTitle());
+				
+				String authors = "";
+				for (String author : study.getAuthors()) {
+					authors += author + ",";
 				}
+				item.setText (3, authors);
+				item.setText (4, study.getYear());
+				
+				currentStudyNumber++;
 			}
 			
 			totalFound = currentStudyNumber;
@@ -386,15 +384,22 @@ public class SearchView extends ViewPart {
 					
 					literatureReview.setTitle(dialog.getValue());
 					
+					// Adding studies to the literature review
 					int studyCounter = 1;
-					for (String searchProviderKey : searchResult.getAllStudies().keySet()) {
-						List<Study> studies = searchResult.getAllStudies().get(searchProviderKey);
-						for (Study study : studies) {
-							study.setCode("S" + studyCounter);
-							study.setSource(searchProviderKey);
-							literatureReview.addStudy(study);
-							studyCounter++;
-						}
+					for (Study study : searchResult.getAllStudies()) {
+						study.setCode("S" + studyCounter);
+						literatureReview.addStudy(study);
+						studyCounter++;
+					}
+					
+					// Adding soruces to the literature review
+					for (SearchProviderResult result : searchResult.getSearchProviderResults()) {
+						LiteratureReviewSource source = new LiteratureReviewSource();
+						source.setName(result.getSearchProviderName());
+						source.setTotalFound(result.getTotalFound());
+						source.setTotalFetched(result.getTotalFetched());
+						source.setType(SourceType.AUTOMATIC);
+						literatureReview.addSource(source);
 					}
 					
 					LiteratureReviewController literatureReviewController = new LiteratureReviewController();

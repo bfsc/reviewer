@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
-	<entity class="br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview" name="LiteratureReview">
-		<table name="literature_review" schema="reviewer" />
+	<entity class="br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview" name="LiteratureReview" access="PROPERTY">
+		<table name="literature_reviews" schema="reviewer" />
 		<attributes>
 			<id name="id">
 				<column name="literature_review_id" />
@@ -20,6 +20,33 @@
 				</join-table>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
+			
+			<element-collection name="sources">
+				<collection-table name="literature_reviews_sources" schema="reviewer">
+					<join-column name="literature_review_id" referenced-column-name="literature_review_id"/>
+				</collection-table>
+			</element-collection>
 		</attributes>
 	</entity>
+	
+	<embeddable class="br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource" access="PROPERTY">
+		<attributes>
+			<basic name="name">
+				<column name="name" />
+			</basic>
+			
+			<basic name="totalFound">
+				<column name="total_found" />
+			</basic>
+			
+			<basic name="totalFetched">
+				<column name="total_fetched" />
+			</basic>
+			
+			<basic name="type">
+				<column name="type" />
+				<enumerated>STRING</enumerated>
+			</basic>	
+		</attributes>
+	</embeddable>
 </entity-mappings>

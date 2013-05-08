@@ -8,7 +8,7 @@ import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.spi.SearchResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.Page;
@@ -23,6 +23,8 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 public class ScopusSearchProvider implements SearchProvider {
 
+	public static final String SEARCH_PROVIDER_NAME = "SCOPUS";
+	
 	private static final String EXPORT_FORMAT_BIBTEX = "BIB";
 	private static final String OUTPUT_FORMAT_WITH_ABSTRACT = "CiteAbsKeyws";
 	
@@ -36,8 +38,8 @@ public class ScopusSearchProvider implements SearchProvider {
 	
 	private static final String URL_SCOPUS_ADVANCED_SEARCH = "http://www.scopus.com/search/form.url?display=advanced";
 
-	public SearchResult search(String searchString) throws SearchProviderException {
-		SearchResult result = new SearchResult();
+	public SearchProviderResult search(String searchString) throws SearchProviderException {
+		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		
 		try {
 			// Create the web browser
@@ -113,6 +115,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			while ((line = reader.readLine()) != null){
 				if (study == null) {
 					study = new Study();
+					study.setSource(SEARCH_PROVIDER_NAME);
 				}
 				
 				if (line.startsWith("title={")) {

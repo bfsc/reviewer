@@ -4,6 +4,6 @@ import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderExceptio
 
 public interface SearchProvider {
 
-	public SearchResult search(String searchString) throws SearchProviderException;
+	public SearchProviderResult search(String searchString) throws SearchProviderException;
 	
 }

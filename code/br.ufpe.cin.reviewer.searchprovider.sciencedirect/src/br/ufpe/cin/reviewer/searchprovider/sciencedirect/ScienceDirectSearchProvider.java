@@ -1,6 +1,5 @@
 package br.ufpe.cin.reviewer.searchprovider.sciencedirect;
  
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -9,7 +8,7 @@ import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.spi.SearchResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
@@ -21,7 +20,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
  
 public class ScienceDirectSearchProvider implements SearchProvider {
        
-    private static final String SEARCH_PROVIDER_KEY_SCIENCE_DIRECT = "SCIENCE_DIRECT";
+    public static final String SEARCH_PROVIDER_NAME = "SCIENCE_DIRECT";
 
 	private static final String DOMAIN_DL_SCIENCE_DIRECT = "http://www.sciencedirect.com/";
    
@@ -41,8 +40,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
    
     //private static final String NEXT_PAGE_ANCHOR_TEXT = "Next &gt;";
        
-    public SearchResult search(String searchString) throws SearchProviderException {
-    	SearchResult result = new SearchResult();
+    public SearchProviderResult search(String searchString) throws SearchProviderException {
+    	SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
            
             try {
                     // Create the web browser
@@ -70,10 +69,6 @@ public class ScienceDirectSearchProvider implements SearchProvider {
  
         }
        
-	public String getKey() {
-		return SEARCH_PROVIDER_KEY_SCIENCE_DIRECT;
-	}
-	
     private String assembleSearchUrl(String searchString) {
             String query = "";
            
@@ -104,6 +99,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                     for (int i = 0; i < studyTablesAnchors.size(); i++) {
                         System.out.println("passou aqui dentro do for!");
                             Study study = new Study();
+                            study.setSource(SEARCH_PROVIDER_NAME);
                            
                             HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);
                            
@@ -237,32 +233,4 @@ public class ScienceDirectSearchProvider implements SearchProvider {
         return toReturn;
     }
        
-    public static void main(String[] args) {
-            try{
-                    SearchProvider searchProvider = new ScienceDirectSearchProvider();
-                    SearchResult result = searchProvider.search("Software AND cloud OR computing");
-                int count = 1;
-                
-                StringBuilder buffer = new StringBuilder();
-    			
-    			for (Study study : result.getStudies()) {
-    				buffer.append(count + ": " + study.getTitle() + "\r\n");
-            		buffer.append(study.getAbstract() + "\r\n");
-    				buffer.append(study.getUrl() + "\r\n\r\n");
-    				count++;
-    			}
-    			
-    			FileWriter writer = new FileWriter("C:/Arthur/Iniciação cientifica/search.result.txt");
-    			System.out.println(buffer.toString());
-    			writer.write(buffer.toString());
-    			writer.flush();
-    			writer.close();
-            
-    			
-        }
-        catch (Exception e) {
-                e.printStackTrace();
-        }
-    }
-
 }

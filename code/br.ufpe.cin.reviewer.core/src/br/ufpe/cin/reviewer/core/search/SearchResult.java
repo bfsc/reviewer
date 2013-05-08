@@ -1,38 +1,51 @@
 package br.ufpe.cin.reviewer.core.search;
 
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 
 public class SearchResult {
-
-	private String searchString;
-	private Map<String, List<Study>> allStudies = new HashMap<String, List<Study>>();
 	
-	public SearchResult() {
+	private List<SearchProviderResult> searchProviderResults = new LinkedList<SearchProviderResult>();
+
+	public int getTotalFound() {
+		int totalfound = 0;
 		
+		for (SearchProviderResult result : searchProviderResults) {
+			totalfound += result.getTotalFound();
+		}
+		
+		return totalfound;
 	}
 
-	public Map<String, List<Study>> getAllStudies() {
-		return allStudies;
+	public int getTotalFetched() {
+		int totalFetched = 0;
+		
+		for (SearchProviderResult result : searchProviderResults) {
+			totalFetched += result.getTotalFetched();
+		}
+		
+		return totalFetched;
+	}
+
+	public List<SearchProviderResult> getSearchProviderResults() {
+		return searchProviderResults;
+	}
+
+	public void addSearchProviderResult(SearchProviderResult searchProviderResult) {
+		this.searchProviderResults.add(searchProviderResult);
 	}
 	
-	public void addStudies(String searchProviderKey, List<Study> studies) {
-		this.allStudies.put(searchProviderKey, studies);
+	public List<Study> getAllStudies() {
+		List<Study> studies = new LinkedList<Study>();
+		
+		for (SearchProviderResult searchProviderResult : searchProviderResults) {
+			studies.addAll(searchProviderResult.getStudies());
+		}
+		
+		return studies;
 	}
 	
-	public void removeStudies(String searchProviderKey) {
-		this.allStudies.remove(searchProviderKey);
-	}
-
-	public String getSearchString() {
-		return searchString;
-	}
-
-	public void setSearchString(String searchString) {
-		this.searchString = searchString;
-	}
-
 }

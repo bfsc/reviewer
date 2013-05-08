@@ -21,13 +21,13 @@ public aspect JPATransactionManagement extends TransactionManagement {
 	}
 
 	protected void commit() {
-		if (transaction.isActive()) {
+		if (transaction!= null && transaction.isActive()) {
 			transaction.commit();
 		}
 	}
 
 	protected void rollback() {
-		if (transaction.isActive()) {
+		if (transaction!= null && transaction.isActive()) {
 			transaction.rollback();
 		}
 	}

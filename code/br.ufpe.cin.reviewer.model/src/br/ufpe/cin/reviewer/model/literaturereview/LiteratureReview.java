@@ -8,7 +8,9 @@ import br.ufpe.cin.reviewer.model.common.Study;
 public class LiteratureReview {
 
 	private int id;
+	
 	private String title;
+	private List<LiteratureReviewSource> sources = new LinkedList<LiteratureReviewSource>();
 	private List<Study> studies = new LinkedList<Study>();
 	
 	public int getId() {
@@ -26,6 +28,14 @@ public class LiteratureReview {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public List<LiteratureReviewSource> getSources() {
+		return sources;
+	}
+
+	public void setSources(List<LiteratureReviewSource> sources) {
+		this.sources = sources;
+	}
 
 	public List<Study> getStudies() {
 		return studies;
@@ -33,6 +43,14 @@ public class LiteratureReview {
 
 	public void setStudies(List<Study> studies) {
 		this.studies = studies;
+	}
+	
+	public void addSource(LiteratureReviewSource source) {
+		this.sources.add(source);
+	}
+	
+	public void removeSource(LiteratureReviewSource source) {
+		this.sources.remove(source);
 	}
 	
 	public void addStudy(Study study) {
