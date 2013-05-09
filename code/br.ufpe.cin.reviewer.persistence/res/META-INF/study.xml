@@ -17,6 +17,11 @@
 				<column name="title" />
 			</basic>
 			
+			<basic name="status">
+				<column name="status" />
+				<enumerated>STRING</enumerated>
+			</basic>
+			
 			<basic name="source">
 				<column name="source" />
 			</basic>

@@ -81,6 +81,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                     //taking the studys from the tags
                     for (int i = 0; i < studyTables .size(); i++) {
                             Study study = new Study();
+    						study.setStatus(Study.StudyStatus.NOT_EVALUATED);
                             study.setSource(SEARCH_PROVIDER_NAME);
                             String AbstractUrl = null;
                             HtmlPage AbstractPage = null;

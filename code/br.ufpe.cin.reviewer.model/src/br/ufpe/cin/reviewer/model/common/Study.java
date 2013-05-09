@@ -5,10 +5,12 @@ import java.util.List;
 
 public class Study {
 
+	public enum StudyStatus{INCLUDED,EXCLUDED,NOT_EVALUATED};
 	private int id;
 	
 	private String code;
 	private String title;
+	private StudyStatus status;
 	private String source;
 	private String studyAbstract;
 	private String year;
@@ -97,6 +99,14 @@ public class Study {
 		this.countries = countries;
 	}
 	
+	public StudyStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(StudyStatus status) {
+		this.status = status;
+	}
+
 	public void addAuthor(String author) {
 		this.authors.add(author);
 	}

@@ -11,6 +11,7 @@ Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
  javax.persistence;bundle-version="2.0.4"
 Export-Package: br.ufpe.cin.reviewer.persistence;uses:="javax.persistence",
  br.ufpe.cin.reviewer.persistence.dao;uses:="javax.persistence",
+ br.ufpe.cin.reviewer.persistence.dao.common,
  br.ufpe.cin.reviewer.persistence.dao.literaturereview;uses:="br.ufpe.cin.reviewer.persistence.dao",
  br.ufpe.cin.reviewer.persistence.exceptions,
  br.ufpe.cin.reviewer.persistence.util

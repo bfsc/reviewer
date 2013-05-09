@@ -1,6 +1,8 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -10,6 +12,7 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
+import br.ufpe.cin.reviewer.core.common.StudyController;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
@@ -18,25 +21,25 @@ public class StudyAnalysisView extends ViewPart {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView";
 	
-//	private static Study study;
+	private Study study;
 	
-	private static FormToolkit toolkit;
-	private static Form form;
+	private FormToolkit toolkit;
+	private Form form;
 	
-	private static Label label_Id_conteudo;
-	private static Label label_Title_conteudo;
-	private static Label label_Authors_conteudo;
-	private static Label label_Institution_conteudo;
-	private static Label label_Country_conteudo;
-	private static Label label_Link_conteudo;
-	private static Label label_Abstract_conteudo;
+	private Label label_Id_conteudo;
+	private Label label_Title_conteudo;
+	private Label label_Authors_conteudo;
+	private Label label_Institution_conteudo;
+	private Label label_Country_conteudo;
+	private Label label_Link_conteudo;
+	private Label label_Abstract_conteudo;
 	
 	public StudyAnalysisView() {
 		ReviewerViewRegister.putView(ID, this);
 	}
 
-	public static void setStudy(Study study) {
-//		StudyAnalysisView.study = study;
+	public void setStudy(Study study) {
+		this.study = study;
 		
 		label_Id_conteudo.setText(study.getCode());
 		label_Title_conteudo.setText(study.getTitle());
@@ -138,32 +141,64 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Abstract.setLayoutData(td);
 		td = new GridData();
-		label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA\n BLA BLA BLA BLA BLA BLA\n BLA BLA BLA BLA BLA BLA");
+		label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "");
 		td.horizontalSpan = 6;
 		label_Abstract_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Button Include = toolkit.createButton(form.getBody(), "Include", SWT.PUSH);
+		Button include = toolkit.createButton(form.getBody(), "Include", SWT.PUSH);
 		td.horizontalSpan = 2;
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
-		Include.setLayoutData(td);
+		include.setLayoutData(td);
 		td = new GridData();
-		Button Exclude = toolkit.createButton(form.getBody(), "Exclude", SWT.PUSH);
+		include.addSelectionListener(new IncludeButtonHandler());
+		
+		Button exclude = toolkit.createButton(form.getBody(), "Exclude", SWT.PUSH);
 		td.horizontalSpan = 1;
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
-		Exclude.setLayoutData(td);
+		exclude.setLayoutData(td);
 		td = new GridData();
-		Button Skip = toolkit.createButton(form.getBody(), "Skip", SWT.PUSH);
+		exclude.addSelectionListener(new ExcludeButtonHandler());
+		
+		Button skip = toolkit.createButton(form.getBody(), "Skip", SWT.PUSH);
 		td.horizontalSpan = 4;
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
-		Skip.setLayoutData(td);
+		skip.setLayoutData(td);
 	}
 
 	public void setFocus() {
 
+	}
+	
+	private class IncludeButtonHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			study.setStatus(Study.StudyStatus.INCLUDED);
+			StudyController studyController = new StudyController();
+			studyController.updateStudy(study);
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+	}
+	
+	public class ExcludeButtonHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			study.setStatus(Study.StudyStatus.EXCLUDED);
+			StudyController studyController = new StudyController();
+			studyController.updateStudy(study);
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
 	}
 
 }

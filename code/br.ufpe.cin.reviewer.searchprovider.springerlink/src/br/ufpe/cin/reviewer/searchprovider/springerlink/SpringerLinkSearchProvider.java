@@ -98,6 +98,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
 			for (int i = 0; i < studyTablesAnchors.size(); i++) {
 				Study study = new Study();
+				study.setStatus(Study.StudyStatus.NOT_EVALUATED);
 				study.setSource(SEARCH_PROVIDER_NAME);
 				
 				HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);

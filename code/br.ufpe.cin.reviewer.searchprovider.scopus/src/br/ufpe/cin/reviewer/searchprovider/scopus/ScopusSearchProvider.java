@@ -116,6 +116,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			while ((line = reader.readLine()) != null){
 				if (study == null) {
 					study = new Study();
+					study.setStatus(Study.StudyStatus.NOT_EVALUATED);
 					study.setSource(SEARCH_PROVIDER_NAME);
 				}
 				
