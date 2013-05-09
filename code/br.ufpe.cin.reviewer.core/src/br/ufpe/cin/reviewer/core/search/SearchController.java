@@ -1,18 +1,16 @@
 package br.ufpe.cin.reviewer.core.search;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+
 import br.ufpe.cin.reviewer.core.exceptions.CoreException;
-import br.ufpe.cin.reviewer.searchprovider.acm.AcmSearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.engineeringvillage.EngineeringVillageSearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.ieee.IeeeSearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.sciencedirect.ScienceDirectSearchProvider;
-import br.ufpe.cin.reviewer.searchprovider.scopus.ScopusSearchProvider;
+import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
-import br.ufpe.cin.reviewer.searchprovider.springerlink.SpringerLinkSearchProvider;
 
 public class SearchController {
 
@@ -25,39 +23,18 @@ public class SearchController {
 		Map<String, SearchProviderThread> searchProviderThreads = new HashMap<String, SearchController.SearchProviderThread>();
 		
 		try {
+			// Performing the search
 			for (String searchProviderKey : filter.getSearchProvidersKeys()) {
-				switch (searchProviderKey) {
-				case "ACM":
-					SearchProviderThread acmThread = new SearchProviderThread(new AcmSearchProvider(), searchString);
-					searchProviderThreads.put(searchProviderKey, acmThread);
-					acmThread.run();
-					break;
-				case "IEEE":
-					SearchProviderThread ieeeThread = new SearchProviderThread(new IeeeSearchProvider(), searchString);
-					searchProviderThreads.put(searchProviderKey, ieeeThread);
-					ieeeThread.run();
-					break;
-				case "SCOPUS":
-					SearchProviderThread scopusThread = new SearchProviderThread(new ScopusSearchProvider(), searchString);
-					searchProviderThreads.put(searchProviderKey, scopusThread);
-					scopusThread.run();
-					break;
-				case "SPRINGER_LINK":
-					SearchProviderThread springerLinkThread = new SearchProviderThread(new SpringerLinkSearchProvider(), searchString);
-					searchProviderThreads.put(searchProviderKey, springerLinkThread);
-					springerLinkThread.run();
-					break;	
-				case "SCIENCE_DIRECT":
-					SearchProviderThread scienceDirectThread = new SearchProviderThread(new ScienceDirectSearchProvider(), searchString);
-					searchProviderThreads.put(searchProviderKey, scienceDirectThread);
-					scienceDirectThread.run();
-					break;
-				case "ENGINEERING_VILLAGE":
-					SearchProviderThread engineeringVillageThread = new SearchProviderThread(new EngineeringVillageSearchProvider(), searchString);
-					searchProviderThreads.put(searchProviderKey, engineeringVillageThread);
-					engineeringVillageThread.run();
-				default:
-					throw new CoreException("Invalid search provider key: " + searchProviderKey);
+				List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
+				
+				for (IConfigurationElement config : configs) {
+					if (config.getAttribute("key").equals(searchProviderKey)) {
+						SearchProvider searchProvider = (SearchProvider) config.createExecutableExtension("class");
+						SearchProviderThread thread = new SearchProviderThread(searchProvider, searchString);
+						searchProviderThreads.put(searchProviderKey, thread);
+						thread.run();
+						break;
+					}
 				}
 			}
 			

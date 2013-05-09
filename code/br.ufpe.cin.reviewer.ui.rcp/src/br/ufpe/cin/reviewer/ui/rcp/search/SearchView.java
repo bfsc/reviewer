@@ -1,5 +1,11 @@
 package br.ufpe.cin.reviewer.ui.rcp.search;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,6 +49,7 @@ import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.SourceType;
+import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesPerspective;
@@ -97,7 +104,8 @@ public class SearchView extends ViewPart {
 		section.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		TableWrapLayout layout = new TableWrapLayout();
-		layout.numColumns = 7;
+		layout.numColumns = 2;
+//		layout.numColumns = 7;
 		searchComposite = new SearchComposite(section, SWT.NONE);
 		searchComposite.setLayout(layout);
 		
@@ -124,13 +132,10 @@ public class SearchView extends ViewPart {
 		private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
 		
 		private Text searchText;
-		private Button acmCheckBox;
-		private Button ieeeCheckBox;
-		private Button scienceDirectCheckBox;
-		private Button scopusCheckBox;
-		private Button springerLinkCheckBox;
-		private Button engineeringVillageCheckBox;
-	
+		private Composite checkBoxesComposite;
+		
+		private List<Button> searchProvidersCheckBoxes = new ArrayList<Button>();
+		
 		public SearchComposite(Composite parent, int style) {
 			super(parent, style);
 			
@@ -140,45 +145,26 @@ public class SearchView extends ViewPart {
 			searchText.addFocusListener(new SearchTextHandler());
 			td = new TableWrapData(TableWrapData.FILL_GRAB);
 			td.heightHint = 80;
-			td.colspan = 6;
 			searchText.setLayoutData(td);
 			
 			td = new TableWrapData();
 			Button search = toolkit.createButton(this, "Search", SWT.PUSH);
 			td.heightHint = 40;
-			td.colspan = 1;
 			search.setLayoutData(td);
 			search.addSelectionListener(new SearchButtonHandler());
 			
-			acmCheckBox = toolkit.createButton(this,"ACM", SWT.CHECK);
+			List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
+			Collections.sort(configs, new SearchProviderConfiguratorElementComparator());
+			checkBoxesComposite = toolkit.createComposite(this);
+			checkBoxesComposite.setLayout(new GridLayout(configs.size(), false));
 			td = new TableWrapData();
-			td.colspan = 1;
-			acmCheckBox.setLayoutData(td);
+			checkBoxesComposite.setLayoutData(td);
 			
-			ieeeCheckBox = toolkit.createButton(this,"IEEE", SWT.CHECK);
-			td = new TableWrapData();
-			td.colspan = 1;
-			ieeeCheckBox.setLayoutData(td);
-			
-			scienceDirectCheckBox = toolkit.createButton(this,"Science Direct", SWT.CHECK);
-			td = new TableWrapData();
-			td.colspan = 1;
-			scienceDirectCheckBox.setLayoutData(td);
-			
-			scopusCheckBox = toolkit.createButton(this,"Scopus", SWT.CHECK);
-			td = new TableWrapData();
-			td.colspan = 1;
-			scopusCheckBox.setLayoutData(td);
-			
-			springerLinkCheckBox = toolkit.createButton(this,"Springer Link", SWT.CHECK);
-			td = new TableWrapData();
-			td.colspan = 1;
-			springerLinkCheckBox.setLayoutData(td);
-			
-			engineeringVillageCheckBox = toolkit.createButton(this,"Engineering Village", SWT.CHECK);
-			td = new TableWrapData();
-			td.colspan = 2;
-			engineeringVillageCheckBox.setLayoutData(td);
+			for (IConfigurationElement config : configs) {
+				Button checkBox = toolkit.createButton(checkBoxesComposite, config.getAttribute("friendly.name"), SWT.CHECK);
+				checkBox.setData(config.getAttribute("key"));
+				searchProvidersCheckBoxes.add(checkBox);
+			}
 		}
 		
 		private class SearchButtonHandler implements SelectionListener {
@@ -192,28 +178,10 @@ public class SearchView extends ViewPart {
 			
 				SearchFilter searchFilter = new SearchFilter();
 				
-				if (acmCheckBox.getSelection()) {
-					searchFilter.addSearchProviderKey("ACM");
-				}
-				
-				if (ieeeCheckBox.getSelection()) {
-					searchFilter.addSearchProviderKey("IEEE");
-				}
-				
-				if (scienceDirectCheckBox.getSelection()) {
-					searchFilter.addSearchProviderKey("SCIENCE_DIRECT");
-				}
-				
-				if (springerLinkCheckBox.getSelection()) {
-					searchFilter.addSearchProviderKey("SPRINGER_LINK");
-				}
-				
-				if (scopusCheckBox.getSelection()) {
-					searchFilter.addSearchProviderKey("SCOPUS");
-				}
-
-				if (engineeringVillageCheckBox.getSelection()) {
-					searchFilter.addSearchProviderKey("ENGINEERING_VILLAGE");
+				for (Button checkBox : searchProvidersCheckBoxes) {
+					if (checkBox.getSelection()) {
+						searchFilter.addSearchProviderKey((String) checkBox.getData());
+					}
 				}
 				
 				new AsyncSearchJob(searchString, searchFilter).schedule();
@@ -277,6 +245,14 @@ public class SearchView extends ViewPart {
 			}
 			public void focusLost(FocusEvent e) {
 				
+			}
+			
+		}
+		
+		private class SearchProviderConfiguratorElementComparator implements Comparator<IConfigurationElement> {
+
+			public int compare(IConfigurationElement config1, IConfigurationElement config2) {
+				return config1.getAttribute("friendly.name").compareTo(config2.getAttribute("friendly.name"));
 			}
 			
 		}
