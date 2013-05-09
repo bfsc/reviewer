@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="br.ufpe.cin.reviewer.searchprovider">
+      <search.provider
+            class="br.ufpe.cin.reviewer.searchprovider.ieee.IeeeSearchProvider"
+            friendly.name="IEEE"
+            key="IEEE">
+      </search.provider>
+   </extension>
+
+</plugin>

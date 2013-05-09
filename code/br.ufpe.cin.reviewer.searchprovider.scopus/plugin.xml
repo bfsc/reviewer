@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="br.ufpe.cin.reviewer.searchprovider">
+      <search.provider
+            class="br.ufpe.cin.reviewer.searchprovider.scopus.ScopusSearchProvider"
+            friendly.name="Scopus"
+            key="SCOPUS">
+      </search.provider>
+   </extension>
+
+</plugin>

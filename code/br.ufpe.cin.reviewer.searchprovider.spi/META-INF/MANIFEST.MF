@@ -1,9 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: br.ufpe.cin.reviewer.searchprovider.spi
-Bundle-SymbolicName: br.ufpe.cin.reviewer.searchprovider.spi
+Bundle-SymbolicName: br.ufpe.cin.reviewer.searchprovider.spi;singleton:=true
 Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1"
-Export-Package: br.ufpe.cin.reviewer.searchprovider.spi,
+Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
+ org.eclipse.core.runtime;bundle-version="3.8.0"
+Export-Package: br.ufpe.cin.reviewer.searchprovider.extensions,
+ br.ufpe.cin.reviewer.searchprovider.spi,
  br.ufpe.cin.reviewer.searchprovider.spi.exceptions
