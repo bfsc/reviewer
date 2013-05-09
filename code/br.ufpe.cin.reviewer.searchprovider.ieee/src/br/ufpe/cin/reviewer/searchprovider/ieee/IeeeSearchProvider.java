@@ -120,7 +120,7 @@ public class IeeeSearchProvider implements SearchProvider {
 	
 	private String mountSearchUrl(String searchString) {
 		String query = "";
-		query = "querytext=" + searchString + "&hc="+ numeroDeEstudos + "&rs=" + count;
+		query = "md=" + searchString + "&hc="+ numeroDeEstudos + "&rs=" + count;
 		
 		return URL_DL_IEEE_SEARCH + query;
 	}
