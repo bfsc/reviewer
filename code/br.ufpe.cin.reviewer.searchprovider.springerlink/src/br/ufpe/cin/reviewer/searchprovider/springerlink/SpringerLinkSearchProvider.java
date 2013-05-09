@@ -53,6 +53,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(browser, searchUrl));
+			result.setTotalFetched(result.getStudies().size());
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}

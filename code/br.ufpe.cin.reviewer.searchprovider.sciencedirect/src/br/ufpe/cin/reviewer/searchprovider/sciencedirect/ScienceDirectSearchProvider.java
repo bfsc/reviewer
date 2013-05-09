@@ -59,6 +59,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
                 System.out.println(searchUrl);
                 System.out.println("para aqui!");
                 result.getStudies().addAll(extractStudiesData(browser, searchUrl));
+    			result.setTotalFetched(result.getStudies().size());
         } catch (Exception e) {
                 throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
                 }

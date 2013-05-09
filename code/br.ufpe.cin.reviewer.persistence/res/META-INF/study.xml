@@ -33,21 +33,21 @@
 				<column name="url" />
 			</basic>
 			
-			<element-collection name="authors">
+			<element-collection name="authors" fetch="EAGER">
 				<column name="author"/>
 				<collection-table name="studies_authors" schema="reviewer">
 					<join-column name="study_id" referenced-column-name="study_id"/>
 				</collection-table>
 			</element-collection>
 			
-			<element-collection name="institutions">
+			<element-collection name="institutions" fetch="EAGER">
 				<column name="institution"/>
 				<collection-table name="studies_institutions" schema="reviewer">
 					<join-column name="study_id" referenced-column-name="study_id"/>
 				</collection-table>
 			</element-collection>
 			
-			<element-collection name="countries">
+			<element-collection name="countries" fetch="EAGER">
 				<column name="country"/>
 				<collection-table name="studies_countries" schema="reviewer">
 					<join-column name="study_id" referenced-column-name="study_id"/>

@@ -13,7 +13,7 @@
 				<column name="title" />
 			</basic>
 			
-			<one-to-many name="studies">
+			<one-to-many name="studies" fetch="EAGER">
 				<join-table name="literature_review_studies" schema="reviewer">
 					<join-column name="literature_review_id"/>
 					<inverse-join-column name="study_id"/>

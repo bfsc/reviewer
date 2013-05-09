@@ -62,6 +62,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
                 HtmlPage search_result_page = input_search.click(); 
                     
 	            result.getStudies().addAll(extractStudiesData(browser, search_result_page));
+				result.setTotalFetched(result.getStudies().size());
         	} catch (Exception e) {
         		throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
             }

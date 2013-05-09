@@ -45,6 +45,22 @@ public class LiteratureReview {
 		this.studies = studies;
 	}
 	
+	public int getTotalFound(){
+		int totalFound = 0;
+		for (LiteratureReviewSource literatureReviewSource : this.sources) {
+			totalFound += literatureReviewSource.getTotalFound();
+		}
+		return totalFound;
+	}
+	
+	public int getTotalFetched(){
+		int totalFetched = 0;
+		for (LiteratureReviewSource literatureReviewSource : this.sources) {
+			totalFetched += literatureReviewSource.getTotalFetched();
+		}
+		return totalFetched;
+	}
+	
 	public void addSource(LiteratureReviewSource source) {
 		this.sources.add(source);
 	}

@@ -25,6 +25,11 @@ public class StudyAnalysisView extends ViewPart {
 	
 	private static Label label_Id_conteudo;
 	private static Label label_Title_conteudo;
+	private static Label label_Authors_conteudo;
+	private static Label label_Institution_conteudo;
+	private static Label label_Country_conteudo;
+	private static Label label_Link_conteudo;
+	private static Label label_Abstract_conteudo;
 	
 	public StudyAnalysisView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -35,6 +40,23 @@ public class StudyAnalysisView extends ViewPart {
 		
 		label_Id_conteudo.setText(study.getCode());
 		label_Title_conteudo.setText(study.getTitle());
+		String authors = "";
+		for (String author : study.getAuthors()) {
+			authors += author + ",";
+		}
+		label_Authors_conteudo.setText(authors);
+		String institutions = "";
+		for (String institution : study.getInstitutions()) {
+			institutions += institution + ",";
+		}
+		label_Institution_conteudo.setText(institutions);
+		String countries = "";
+		for (String country : study.getCountries()) {
+			countries += country + ",";
+		}
+		label_Country_conteudo.setText(countries);
+		label_Link_conteudo.setText(study.getUrl());
+		label_Abstract_conteudo.setText(study.getAbstract());
 		
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
@@ -71,7 +93,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Title.setLayoutData(td);
 		td = new GridData();
-		label_Title_conteudo = toolkit.createLabel(form.getBody(), "Experimentation in Software Engineering");
+		label_Title_conteudo = toolkit.createLabel(form.getBody(), "");
 		td.horizontalSpan = 6;
 		label_Title_conteudo.setLayoutData(td);
 		
@@ -80,7 +102,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Authors.setLayoutData(td);
 		td = new GridData();
-		Label label_Authors_conteudo = toolkit.createLabel(form.getBody(), "Victor Basili");
+		label_Authors_conteudo = toolkit.createLabel(form.getBody(), "Victor Basili");
 		td.horizontalSpan = 6;
 		label_Authors_conteudo.setLayoutData(td);
 		
@@ -89,7 +111,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Institution.setLayoutData(td);
 		td = new GridData();
-		Label label_Institution_conteudo = toolkit.createLabel(form.getBody(), "Universidade Federal de Pernambuco");
+		label_Institution_conteudo = toolkit.createLabel(form.getBody(), "Universidade Federal de Pernambuco");
 		td.horizontalSpan = 6;
 		label_Institution_conteudo.setLayoutData(td);
 		
@@ -98,7 +120,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Country.setLayoutData(td);
 		td = new GridData();
-		Label label_Country_conteudo = toolkit.createLabel(form.getBody(), "BRA");
+		label_Country_conteudo = toolkit.createLabel(form.getBody(), "BRA");
 		td.horizontalSpan = 6;
 		label_Country_conteudo.setLayoutData(td);
 		
@@ -107,7 +129,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Link.setLayoutData(td);
 		td = new GridData();
-		Label label_Link_conteudo = toolkit.createLabel(form.getBody(), "http://aehbdfi.com");
+		label_Link_conteudo = toolkit.createLabel(form.getBody(), "http://aehbdfi.com");
 		td.horizontalSpan = 6;
 		label_Link_conteudo.setLayoutData(td);
 		
@@ -116,7 +138,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Abstract.setLayoutData(td);
 		td = new GridData();
-		Label label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA\n BLA BLA BLA BLA BLA BLA\n BLA BLA BLA BLA BLA BLA");
+		label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA BLA\n BLA BLA BLA BLA BLA BLA\n BLA BLA BLA BLA BLA BLA");
 		td.horizontalSpan = 6;
 		label_Abstract_conteudo.setLayoutData(td);
 		

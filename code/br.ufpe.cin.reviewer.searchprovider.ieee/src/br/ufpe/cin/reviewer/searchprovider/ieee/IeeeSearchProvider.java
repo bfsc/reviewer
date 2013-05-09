@@ -111,6 +111,9 @@ public class IeeeSearchProvider implements SearchProvider {
 				}
 			}
 			
+			result.setTotalFetched(result.getStudies().size());
+			result.setTotalFound(totalFound);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

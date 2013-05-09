@@ -25,6 +25,7 @@ import org.eclipse.ui.part.ViewPart;
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class LiteratureReviewView extends ViewPart {
 
@@ -62,8 +63,10 @@ public class LiteratureReviewView extends ViewPart {
 		}
 	}
 	
-	public static void setSelecredLiteratureReview() {
-		
+	public void setSelectedLiteratureReview(LiteratureReview literatureReview) {
+		selectedLiteratureReview = literatureReview;
+		titleText.setText(selectedLiteratureReview.getTitle());
+		sectionInfo.setVisible(true);
 	}
 	
 	public void createPartControl(Composite parent) {
@@ -125,12 +128,12 @@ public class LiteratureReviewView extends ViewPart {
 		titleText = toolkit.createText(searchTitleComposite, "");
 		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		totalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Total Found: " + "valor");
+		totalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Total Found: ");
 		GridData totalFoundLayout = new GridData();
 		totalFoundLayout.horizontalSpan = 1;
 		totalFoundLabel.setLayoutData(totalFoundLayout);
 		
-		totalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched: " + "valor");
+		totalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched: ");
 		GridData totalFetchedLayout = new GridData();
 		totalFetchedLayout.horizontalIndent = 30;
 		totalFetchedLayout.horizontalSpan = 1;
@@ -231,6 +234,9 @@ public class LiteratureReviewView extends ViewPart {
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
 				titleText.setText(selectedLiteratureReview.getTitle());
+				totalFoundLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
+				totalFetchedLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
+				WidgetsUtil.refreshComposite(reviewInfoComposite);
 				sectionInfo.setVisible(true);
 			}
 		}
