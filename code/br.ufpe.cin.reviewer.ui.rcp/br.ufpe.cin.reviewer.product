@@ -22,6 +22,7 @@
 
    <plugins>
       <plugin id="br.ufpe.cin.reviewer.core"/>
+      <plugin id="br.ufpe.cin.reviewer.logger"/>
       <plugin id="br.ufpe.cin.reviewer.model"/>
       <plugin id="br.ufpe.cin.reviewer.persistence"/>
       <plugin id="br.ufpe.cin.reviewer.searchprovider.acm"/>
@@ -89,7 +90,7 @@
       <plugin id="org.eclipse.persistence.core"/>
       <plugin id="org.eclipse.persistence.jpa"/>
       <plugin id="org.eclipse.swt"/>
-      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.workbench"/>
