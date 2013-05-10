@@ -39,4 +39,8 @@ public class ReviewerLogger {
 		log.debug(message);
 	}
 	
+	public static void info(String message) {
+		log.info(message);
+	}
+	
 }
