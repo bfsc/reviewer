@@ -38,6 +38,8 @@ public class ScopusSearchProvider implements SearchProvider {
 	private static final String XPATH_DIV_SEARCH_FIELD = "//div[@id='searchfield']";
 	
 	private static final String URL_SCOPUS_ADVANCED_SEARCH = "http://www.scopus.com/search/form.url?display=advanced";
+	
+	private static final String XPATH_TOTAL_FOUND = "//span[@class='Bold txtLarge1']";
 
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
@@ -61,7 +63,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			HtmlPage resultsPage = searchButton.click();
 			
 			// Extraction total found studies
-			HtmlSpan totalFoundSspan = resultsPage.getFirstByXPath("//span[@class='Bold txtLarge1']");
+			HtmlSpan totalFoundSspan = resultsPage.getFirstByXPath(XPATH_TOTAL_FOUND);
 			result.setTotalFound(Integer.parseInt(totalFoundSspan.getTextContent().replaceAll(",", "").trim()));
 			
 			// Selecting all results in order export then
@@ -118,7 +120,19 @@ public class ScopusSearchProvider implements SearchProvider {
 			while ((line = reader.readLine()) != null && (line.startsWith("[@\\s]") || line.equals(""))){
 				// Consuming the initial white spaces from the input stream and the first bibtex entry
 			}
+
+			// Removing initial garbage from input stream
+			boolean fisrtStudyFound = false;
+			while (!fisrtStudyFound && (line = reader.readLine()) != null) {
+				if (line.trim().startsWith("@")) {
+					fisrtStudyFound = true;
+					line = reader.readLine();
+				} else {
+					continue;
+				}
+			}
 			
+			// Parsing studies from input stream
 			Study study = null;
 			while ((line = reader.readLine()) != null){
 				if (study == null) {
