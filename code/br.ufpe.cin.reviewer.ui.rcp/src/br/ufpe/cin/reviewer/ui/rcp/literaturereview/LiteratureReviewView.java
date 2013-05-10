@@ -44,11 +44,26 @@ public class LiteratureReviewView extends ViewPart {
 	
 	private Section sectionInfo;
 	private Composite reviewInfoComposite;
+	private Composite reviewInfoBodyComposite;
+	private Composite reviewInfoFooterComposite;
 	private Composite searchTitleComposite;
 	private Label titleLabel;
 	private Text titleText;
-	private Label totalFoundIeeeLabel;
-	private Label totalFetchedIeeeLabel;
+	private Label totalFoundLabel;
+	private Label totalFetchedLabel;
+	
+	private Label ieeeTotalFoundLabel;
+	private Label ieeeTotalFetchedLabel;
+	private Label acmTotalFoundLabel;
+	private Label acmTotalFetchedLabel;
+	private Label engineeringTotalFoundLabel;
+	private Label engineeringtotalFetchedLabel;
+	private Label scienceTotalFoundLabel;
+	private Label scienceTotalFetchedLabel;
+	private Label scopusTotalFoundLabel;
+	private Label scopusTotalFetchedLabel;
+	private Label springerTotalFoundLabel;
+	private Label springerTotalFetchedLabel;
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -109,9 +124,9 @@ public class LiteratureReviewView extends ViewPart {
 	    sectionInfo.setLayout(new GridLayout(1, false));
 		sectionInfo.setLayoutData(new GridData(GridData.FILL_BOTH));
 		sectionInfo.setVisible(false);
-		
+
 		reviewInfoComposite = toolkit.createComposite(sectionInfo, SWT.BORDER);
-		reviewInfoComposite.setLayout(new GridLayout(2, false));
+		reviewInfoComposite.setLayout(new GridLayout(1, false));
 		GridData reviewCompositeData = new GridData(GridData.FILL_BOTH);
 		reviewCompositeData.horizontalSpan = 1;
 		reviewInfoComposite.setLayoutData(reviewCompositeData);
@@ -129,109 +144,38 @@ public class LiteratureReviewView extends ViewPart {
 		titleText = toolkit.createText(searchTitleComposite, "");
 		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		totalFoundIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Found: ");
+		//composite for labels
+		reviewInfoBodyComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
+		reviewInfoBodyComposite.setLayout(new GridLayout(2, false));
+		GridData reviewBodyCompositeData = new GridData(GridData.FILL_HORIZONTAL);
+		reviewBodyCompositeData.horizontalSpan = 2;
+		reviewInfoComposite.setLayoutData(reviewBodyCompositeData);
+		
+		totalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Total Found: ");
 		GridData totalFoundLayout = new GridData();
 		totalFoundLayout.horizontalSpan = 1;
-		totalFoundIeeeLabel.setLayoutData(totalFoundLayout);
+		totalFoundLabel.setLayoutData(totalFoundLayout);
 		
-		totalFetchedIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched: ");
+		totalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Total Fetched: ");
 		GridData totalFetchedLayout = new GridData();
 		totalFetchedLayout.horizontalIndent = 30;
 		totalFetchedLayout.horizontalSpan = 1;
-		totalFetchedIeeeLabel.setLayoutData(totalFetchedLayout);
+		totalFetchedLabel.setLayoutData(totalFetchedLayout);
+
+		//composite for links
+		reviewInfoFooterComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
+		reviewInfoFooterComposite.setLayout(new GridLayout(2, false));
+		GridData reviewFooterCompositeData = new GridData(GridData.FILL_BOTH);
+		reviewFooterCompositeData.horizontalSpan = 1;
+		reviewInfoFooterComposite.setLayoutData(reviewFooterCompositeData);
 		
-		totalFoundIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Found Ieee: ");
-		GridData totalFoundIeeeLayout = new GridData();
-		totalFoundIeeeLayout.horizontalSpan = 1;
-		totalFoundIeeeLabel.setLayoutData(totalFoundIeeeLayout);
-		totalFoundIeeeLabel.setVisible(false);
-		
-		totalFetchedIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched Ieee: ");
-		GridData totalFetchedIeeeLayout = new GridData();
-		totalFetchedIeeeLayout.horizontalIndent = 30;
-		totalFetchedIeeeLayout.horizontalSpan = 1;
-		totalFetchedIeeeLabel.setLayoutData(totalFetchedIeeeLayout);
-		totalFetchedIeeeLabel.setVisible(false);
-		
-//		//IEEE
-//		Label ieeeTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Ieee total Found: " + "valor");
-//		GridData ieeetotalFoundLayout = new GridData();
-//		ieeetotalFoundLayout.horizontalSpan = 1;
-//		ieeeTotalFoundLabel.setLayoutData(ieeetotalFoundLayout);
-//		
-//		Label ieeetotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Ieee total Fetched: " + "valor");
-//		GridData ieeetotalFetchedLayout = new GridData();
-//		ieeetotalFetchedLayout.horizontalIndent = 30;
-//		ieeetotalFetchedLayout.horizontalSpan = 1;
-//		ieeetotalFetchedLabel.setLayoutData(ieeetotalFetchedLayout);
-//		
-//		//ACM
-//		Label acmTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "ACM total Found: " + "valor");
-//		GridData acmtotalFoundLayout = new GridData();
-//		acmtotalFoundLayout.horizontalSpan = 1;
-//		acmTotalFoundLabel.setLayoutData(acmtotalFoundLayout);
-//		
-//		Label acmtotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "ACM total Fetched: " + "valor");
-//		GridData acmtotalFetchedLayout = new GridData();
-//		acmtotalFetchedLayout.horizontalIndent = 30;
-//		acmtotalFetchedLayout.horizontalSpan = 1;
-//		acmtotalFetchedLabel.setLayoutData(acmtotalFetchedLayout);
-//		
-//		//Engineering village
-//		Label engineeringTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Engineering village total Found: " + "valor");
-//		GridData engineeringtotalFoundLayout = new GridData();
-//		engineeringtotalFoundLayout.horizontalSpan = 1;
-//		engineeringTotalFoundLabel.setLayoutData(engineeringtotalFoundLayout);
-//		
-//		Label engineeringtotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Engineering village total Fetched: " + "valor");
-//		GridData engineeringtotalFetchedLayout = new GridData();
-//		engineeringtotalFetchedLayout.horizontalIndent = 30;
-//		engineeringtotalFetchedLayout.horizontalSpan = 1;
-//		engineeringtotalFetchedLabel.setLayoutData(engineeringtotalFetchedLayout);
-//		
-//		//Science Direct
-//		Label scienceTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Science direct total Found: " + "valor");
-//		GridData scienceTotalFoundLayout = new GridData();
-//		scienceTotalFoundLayout.horizontalSpan = 1;
-//		scienceTotalFoundLabel.setLayoutData(scienceTotalFoundLayout);
-//		
-//		Label scienceTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Science direct total Fetched: " + "valor");
-//		GridData scienceTotalFetchedLayout = new GridData();
-//		scienceTotalFetchedLayout.horizontalIndent = 30;
-//		scienceTotalFetchedLayout.horizontalSpan = 1;
-//		scienceTotalFetchedLabel.setLayoutData(scienceTotalFetchedLayout);
-//		
-//		//Scopus
-//		Label scopusTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Scopus total Found: " + "valor");
-//		GridData scopusTotalFoundLayout = new GridData();
-//		scopusTotalFoundLayout.horizontalSpan = 1;
-//		scopusTotalFoundLabel.setLayoutData(scopusTotalFoundLayout);
-//		
-//		Label scopusTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Scopus total Fetched: " + "valor");
-//		GridData scopusTotalFetchedLayout = new GridData();
-//		scopusTotalFetchedLayout.horizontalIndent = 30;
-//		scopusTotalFetchedLayout.horizontalSpan = 1;
-//		scopusTotalFetchedLabel.setLayoutData(scopusTotalFetchedLayout);
-//		
-//		//Springer link
-//		Label springerTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Springer link total Found: " + "valor");
-//		GridData springerTotalFoundLayout = new GridData();
-//		springerTotalFoundLayout.horizontalSpan = 1;
-//		springerTotalFoundLabel.setLayoutData(springerTotalFoundLayout);
-//		
-//		Label springerTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Springer link total Fetched: " + "valor");
-//		GridData springerTotalFetchedLayout = new GridData();
-//		springerTotalFetchedLayout.horizontalIndent = 30;
-//		springerTotalFetchedLayout.horizontalSpan = 1;
-//		springerTotalFetchedLabel.setLayoutData(springerTotalFetchedLayout);
-		
-		Hyperlink exportLink = toolkit.createHyperlink(reviewInfoComposite, "Export literature review", SWT.WRAP);
+		Hyperlink exportLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Export literature review", SWT.WRAP);
 		GridData exportLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
 		exportLinkLayout.grabExcessVerticalSpace = true;
 		exportLink.setLayoutData(exportLinkLayout);
 		exportLink.addHyperlinkListener(new ExportLiteratureReviewLinkHandler());
 		
-		Hyperlink studyLink = toolkit.createHyperlink(reviewInfoComposite, "View studies", SWT.WRAP);
+		Hyperlink studyLink = toolkit.createHyperlink(reviewInfoFooterComposite, "View studies", SWT.WRAP);
 		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
 		studyLinkLayout.grabExcessVerticalSpace = true;
 		studyLink.setLayoutData(studyLinkLayout);
@@ -245,17 +189,114 @@ public class LiteratureReviewView extends ViewPart {
 
 		public void widgetSelected(SelectionEvent e) {
 			int selectionIndex = list.getSelectionIndex();
+			
+			if(ieeeTotalFoundLabel != null)
+				ieeeTotalFoundLabel.dispose();
+			if(ieeeTotalFetchedLabel != null)
+				ieeeTotalFetchedLabel.dispose();
+			
+			if(acmTotalFoundLabel != null)
+				acmTotalFoundLabel.dispose();
+			if(acmTotalFetchedLabel != null)
+				acmTotalFetchedLabel.dispose();
+			
+			if(engineeringTotalFoundLabel != null)
+				engineeringTotalFoundLabel.dispose();
+			if(engineeringtotalFetchedLabel != null)
+				engineeringtotalFetchedLabel.dispose();
+			
+			if(scienceTotalFoundLabel != null)
+				scienceTotalFoundLabel.dispose();
+			if(scienceTotalFetchedLabel != null)
+				scienceTotalFetchedLabel.dispose();
+			
+			if(scopusTotalFoundLabel != null)
+				scopusTotalFoundLabel.dispose();
+			if(scopusTotalFetchedLabel != null)
+				scopusTotalFetchedLabel.dispose();
+			
+			if(springerTotalFoundLabel != null)
+				springerTotalFoundLabel.dispose();
+			if(springerTotalFetchedLabel != null)
+				springerTotalFetchedLabel.dispose();
+			
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
 				titleText.setText(selectedLiteratureReview.getTitle());
-				totalFoundIeeeLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
-				totalFetchedIeeeLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
+				totalFoundLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
+				totalFetchedLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
 				for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
-					if(source.getName() == "IEEE"){
-						totalFoundIeeeLabel.setText("Total Found Ieee: " + source.getTotalFound());
-						totalFetchedIeeeLabel.setText("Total Fetched Ieee: " + source.getTotalFetched());
-						totalFoundIeeeLabel.setVisible(true);
-						totalFetchedIeeeLabel.setVisible(true);
+					if(source.getName().equals("IEEE")){
+						ieeeTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Ieee total Found: " + source.getTotalFound());
+						GridData ieeeTotalFoundLayout = new GridData();
+						ieeeTotalFoundLayout.horizontalSpan = 1;
+						ieeeTotalFoundLabel.setLayoutData(ieeeTotalFoundLayout);
+						
+						ieeeTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Ieee total Fetched: " + source.getTotalFetched());
+						GridData ieeeTotalFetchedLayout = new GridData();
+						ieeeTotalFetchedLayout.horizontalIndent = 30;
+						ieeeTotalFetchedLayout.horizontalSpan = 1;
+						ieeeTotalFetchedLabel.setLayoutData(ieeeTotalFetchedLayout);
+					}
+					if(source.getName().equals("ACM")){
+						acmTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "ACM total Found: " + source.getTotalFound());
+						GridData acmTotalFoundLayout = new GridData();
+						acmTotalFoundLayout.horizontalSpan = 1;
+						acmTotalFoundLabel.setLayoutData(acmTotalFoundLayout);
+						
+						acmTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "ACM total Fetched: " + source.getTotalFetched());
+						GridData acmTotalFetchedLayout = new GridData();
+						acmTotalFetchedLayout.horizontalIndent = 30;
+						acmTotalFetchedLayout.horizontalSpan = 1;
+						acmTotalFetchedLabel.setLayoutData(acmTotalFetchedLayout);
+					}
+					if(source.getName().equals("ENGINEERING_VILLAGE")){
+						engineeringTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Engineering village total Found: " + source.getTotalFound());
+						GridData engineeringtotalFoundLayout = new GridData();
+						engineeringtotalFoundLayout.horizontalSpan = 1;
+						engineeringTotalFoundLabel.setLayoutData(engineeringtotalFoundLayout);
+						
+						engineeringtotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Engineering village total Fetched: " + source.getTotalFetched());
+						GridData engineeringtotalFetchedLayout = new GridData();
+						engineeringtotalFetchedLayout.horizontalIndent = 30;
+						engineeringtotalFetchedLayout.horizontalSpan = 1;
+						engineeringtotalFetchedLabel.setLayoutData(engineeringtotalFetchedLayout);
+					}
+					if(source.getName().equals("SCIENCE_DIRECT")){
+						scienceTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Science direct total Found: " + source.getTotalFound());
+						GridData scienceTotalFoundLayout = new GridData();
+						scienceTotalFoundLayout.horizontalSpan = 1;
+						scienceTotalFoundLabel.setLayoutData(scienceTotalFoundLayout);
+						
+						scienceTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Science direct total Fetched: " + source.getTotalFetched());
+						GridData scienceTotalFetchedLayout = new GridData();
+						scienceTotalFetchedLayout.horizontalIndent = 30;
+						scienceTotalFetchedLayout.horizontalSpan = 1;
+						scienceTotalFetchedLabel.setLayoutData(scienceTotalFetchedLayout);
+					}
+					if(source.getName().equals("SCOPUS")){
+						scopusTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Scopus total Found: " + source.getTotalFound());
+						GridData scopusTotalFoundLayout = new GridData();
+						scopusTotalFoundLayout.horizontalSpan = 1;
+						scopusTotalFoundLabel.setLayoutData(scopusTotalFoundLayout);
+						
+						scopusTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Scopus total Fetched: " + source.getTotalFetched());
+						GridData scopusTotalFetchedLayout = new GridData();
+						scopusTotalFetchedLayout.horizontalIndent = 30;
+						scopusTotalFetchedLayout.horizontalSpan = 1;
+						scopusTotalFetchedLabel.setLayoutData(scopusTotalFetchedLayout);
+					}
+					if(source.getName().equals("SPRINGER_LINK")){
+						springerTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Springer link total Found: " + source.getTotalFound());
+						GridData springerTotalFoundLayout = new GridData();
+						springerTotalFoundLayout.horizontalSpan = 1;
+						springerTotalFoundLabel.setLayoutData(springerTotalFoundLayout);
+						
+						springerTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Springer link total Fetched: " + source.getTotalFetched());
+						GridData springerTotalFetchedLayout = new GridData();
+						springerTotalFetchedLayout.horizontalIndent = 30;
+						springerTotalFetchedLayout.horizontalSpan = 1;
+						springerTotalFetchedLabel.setLayoutData(springerTotalFetchedLayout);
 					}
 				}
 				WidgetsUtil.refreshComposite(reviewInfoComposite);
@@ -280,13 +321,13 @@ public class LiteratureReviewView extends ViewPart {
 		}
 
 		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
-			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.SAVE);
 			fileDialog.setFilterExtensions(new String[] {"*.xml"});
 			fileDialog.setOverwrite(true);
 			fileDialog.open();
 			
-			String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName() + ".xml";
-			if (filePath != null && !filePath.trim().isEmpty()) {
+			String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName();
+			if (filePath != null && !filePath.trim().isEmpty() && !filePath.equals("\\")) {
 				LiteratureReviewController controller = new LiteratureReviewController();
 				controller.exportLiteratureReview(selectedLiteratureReview,filePath, true);
 			}

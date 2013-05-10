@@ -134,6 +134,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 			for (Study study : literatureReview.getStudies()) {
 				if (study.getCode().equals(item.getText())) {
 					StudyAnalysisView view = (StudyAnalysisView) ReviewerViewRegister.getView(StudyAnalysisView.ID);
+					view.setLiteratureReview(literatureReview);
 					view.setStudy(study);
 					break;
 				}

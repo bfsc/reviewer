@@ -8,12 +8,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.common.StudyController;
 import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
@@ -22,6 +26,7 @@ public class StudyAnalysisView extends ViewPart {
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView";
 	
 	private Study study;
+	private LiteratureReview literatureReview;
 	
 	private FormToolkit toolkit;
 	private Form form;
@@ -62,6 +67,10 @@ public class StudyAnalysisView extends ViewPart {
 		label_Abstract_conteudo.setText(study.getAbstract());
 		
 		WidgetsUtil.refreshComposite(form.getBody());
+	}
+	
+	public void setLiteratureReview(LiteratureReview literatureReview){
+		this.literatureReview = literatureReview;
 	}
 	
 	public void createPartControl(Composite parent) {
@@ -167,6 +176,33 @@ public class StudyAnalysisView extends ViewPart {
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
 		skip.setLayoutData(td);
+		skip.addSelectionListener(new SkipButtonHandler());
+	}
+	
+	public void skip(){
+		
+		int index = 0;
+		Study nextStudy;
+		
+		for (Study study : literatureReview.getStudies()) {
+			if(study.getId() == StudyAnalysisView.this.study.getId()){
+				index = literatureReview.getStudies().indexOf(study);
+				break;
+			}
+		}
+		
+		if(literatureReview.getStudies().size() > (index + 1)){
+			nextStudy = literatureReview.getStudies().get(index + 1);
+			this.setStudy(nextStudy);
+		}
+		else{
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+			
+			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			literatureReviewStudiesView.setLiteratureReview(literatureReview);
+		}
 	}
 
 	public void setFocus() {
@@ -179,6 +215,7 @@ public class StudyAnalysisView extends ViewPart {
 			study.setStatus(Study.StudyStatus.INCLUDED);
 			StudyController studyController = new StudyController();
 			studyController.updateStudy(study);
+			StudyAnalysisView.this.skip();
 		}
 
 		public void widgetDefaultSelected(SelectionEvent e) {
@@ -193,6 +230,20 @@ public class StudyAnalysisView extends ViewPart {
 			study.setStatus(Study.StudyStatus.EXCLUDED);
 			StudyController studyController = new StudyController();
 			studyController.updateStudy(study);
+			StudyAnalysisView.this.skip();
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+	}
+	
+	public class SkipButtonHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			
+			StudyAnalysisView.this.skip();
 		}
 
 		public void widgetDefaultSelected(SelectionEvent e) {
