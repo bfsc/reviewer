@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
-import br.ufpe.cin.reviewer.model.common.Study.StudyStatus;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
