@@ -73,7 +73,7 @@ public class SearchController {
 			try {
 				this.result = this.provider.search(this.searchString);
 			} catch (SearchProviderException e) {
-				throw new RuntimeException("Error trying to execute a search to search provider " + provider.getClass().getSimpleName());
+				throw new RuntimeException("Error trying to execute a search with search provider " + provider.getClass().getSimpleName(), e);
 			}
 		}
 

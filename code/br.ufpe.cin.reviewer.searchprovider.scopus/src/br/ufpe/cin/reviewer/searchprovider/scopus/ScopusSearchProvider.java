@@ -19,6 +19,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
+import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 
 public class ScopusSearchProvider implements SearchProvider {
@@ -28,7 +29,7 @@ public class ScopusSearchProvider implements SearchProvider {
 	private static final String EXPORT_FORMAT_BIBTEX = "BIB";
 	private static final String OUTPUT_FORMAT_WITH_ABSTRACT = "CiteAbsKeyws";
 	
-	private static final String XPATH_EXPORT_BUTTON = "//input[@type='submit' and @value='Export' and @class='jsEnabled Bold']";
+	private static final String XPATH_EXPORT_BUTTON = "//input[@type='submit' and @value='Export']";
 	private static final String XPATH_SELECT_OUTPUT_FORMAT = "//select[@name='view' and @onchange='javascript:changeHelpSection(this);']";
 	private static final String XPATH_SELECT_EXPORT_FORMAT = "//select[@name='exportFormat' and @id='exportFormat']";
 	private static final String XPATH_ANCHOR_EXPORT_RESULTS = "//a[@class='jsEnabled icon export']";
@@ -45,6 +46,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Create the web browser
 			WebClient browser = new WebClient();
 			browser.getOptions().setThrowExceptionOnScriptError(false);
+			browser.getOptions().setUseInsecureSSL(true);
 			
 			// Throwing an exception if the search string is invalid.
 			if (searchString == null || searchString.trim().equalsIgnoreCase("")) {
@@ -54,9 +56,13 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Performing the search in the advanced search page
 			HtmlPage advancedSearchPage = browser.getPage(URL_SCOPUS_ADVANCED_SEARCH);
 			HtmlDivision searchDiv = advancedSearchPage.getFirstByXPath(XPATH_DIV_SEARCH_FIELD);
-			searchDiv.setTextContent(searchString);
+			searchDiv.setTextContent("TITLE-ABS-KEY(" + searchString + ")");
 			HtmlSubmitInput searchButton = advancedSearchPage.getFirstByXPath(XPATH_SEARCH_BUTTON);
 			HtmlPage resultsPage = searchButton.click();
+			
+			// Extraction total found studies
+			HtmlSpan totalFoundSspan = resultsPage.getFirstByXPath("//span[@class='Bold txtLarge1']");
+			result.setTotalFound(Integer.parseInt(totalFoundSspan.getTextContent().replaceAll(",", "").trim()));
 			
 			// Selecting all results in order export then
 			HtmlCheckBoxInput checkboxInput = resultsPage.getFirstByXPath(XPATH_SELECT_ALL_CHECKBOX);
@@ -86,8 +92,9 @@ public class ScopusSearchProvider implements SearchProvider {
 				}
 			}
 			
-			// Exporting the results according to the selecionts above
+			// Exporting the results according to the selections above
 			HtmlSubmitInput exportButton = exportPage.getFirstByXPath(XPATH_EXPORT_BUTTON);
+			exportButton.setAttribute("onclick", "");
 			Page exportedStudiesPage = exportButton.click();
 			
 			// Extract studies data
@@ -130,6 +137,27 @@ public class ScopusSearchProvider implements SearchProvider {
 				
 				if (line.startsWith("url={")) {
 					study.setUrl(line.substring(5).replaceAll("},", ""));
+				}
+				
+				if (line.startsWith("year={")) {
+					study.setYear(line.substring(6).replaceAll("},", ""));
+				}
+				
+				if (line.startsWith("author={")) {
+					for (String author : line.substring(8).replaceAll("},", "").split(" and ")) {
+						study.addAuthor(author);
+					}
+				}
+				
+				if (line.startsWith("affiliation={")) {
+					for (String institutionCountry : line.substring(13).replaceAll("},", "").split("; ")) {
+						String country = institutionCountry.substring(institutionCountry.lastIndexOf(",") + 1).trim();
+						study.addCountry(country);
+						
+						String institution = institutionCountry.substring(0, institutionCountry.lastIndexOf(",") + 1).trim();
+						study.addInstitution(institution);
+						
+					}
 				}
 				
 				if (line.indexOf("@") == 0) {

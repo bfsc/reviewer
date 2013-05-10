@@ -66,8 +66,6 @@ public class SearchView extends ViewPart {
 	private SearchComposite searchComposite;
 	private ResultComposite resultComposite;
 	
-	private int totalFound;
-	
 	// CONSTRUCTORS ============================================================
 	
 	public SearchView() {
@@ -274,12 +272,12 @@ public class SearchView extends ViewPart {
 			resultCompositeLabels.setLayout(new GridLayout(2, true));
 			resultCompositeLabels.setLayoutData(new GridData());
 
-			labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
+			labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:");
 			GridData totalFoundLayout = new GridData();
 			totalFoundLayout.horizontalSpan = 1;
 			labelTotalFound.setLayoutData(totalFoundLayout);
 			
-			labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:" + totalFound);
+			labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:");
 			GridData totalFetchedLayout = new GridData();
 			totalFetchedLayout.horizontalSpan = 1;
 			labelTotalFetched.setLayoutData(totalFetchedLayout);
@@ -313,20 +311,29 @@ public class SearchView extends ViewPart {
 				
 				TableItem item = new TableItem (table, SWT.NONE);
 				item.setText (0, String.valueOf(currentStudyNumber));
-				item.setText (1, study.getSource());
-				item.setText (2, study.getTitle());
+				
+				if (study.getSource() != null) {
+					item.setText(1, study.getSource());
+				}
+				
+				if (study.getTitle() != null) {
+					item.setText(2, study.getTitle());
+				}
 				
 				String authors = "";
 				for (String author : study.getAuthors()) {
 					authors += author + ",";
 				}
-				item.setText (3, authors);
-				item.setText (4, study.getYear());
+				
+				item.setText(3, authors);
+
+				if (study.getYear() != null) {
+					item.setText(4, study.getYear());
+				}
 			}
 			
-			totalFound = currentStudyNumber;
-			labelTotalFound.setText("Total Found: " + totalFound);
-			labelTotalFetched.setText("Total Fetched: " + totalFound);
+			labelTotalFound.setText("Total Found: " + searchResult.getTotalFound());
+			labelTotalFetched.setText("Total Fetched: " + searchResult.getTotalFetched());
 			
 			WidgetsUtil.refreshComposite(resultCompositeLabels);
 			

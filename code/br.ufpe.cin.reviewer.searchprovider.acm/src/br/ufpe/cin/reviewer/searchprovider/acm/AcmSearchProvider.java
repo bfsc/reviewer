@@ -35,6 +35,8 @@ public class AcmSearchProvider implements SearchProvider {
 	private static final String XPATH_STUDY_ABSTRACT = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//div[@class='abstract2']";
 	private static final String XPATH_STUDY_AUTHORS = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//div[@class='authors']";
 	private static final String XPATH_STUDY_YEAR = "//table[@style='padding: 5px; 5px; 5px; 5px;' and @border='0']//td[@class='small-text' and @nowrap and (not(@colspan='3'))]";
+
+	private static final String XPATH_TOTAL_FOUND = "//table[@border='0' and @width='100%' and @align='left' and @class='small-text']//tr[@valign='top']//td";
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
 	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
@@ -85,7 +87,7 @@ public class AcmSearchProvider implements SearchProvider {
 			HtmlPage page = browser.getPage(searchUrl);
 		
 			// Extracting total found studies
-			List<?> totalFoundElements = page.getByXPath("//table[@border='0' and @width='100%' and @align='left' and @class='small-text']//tr[@valign='top']//td");
+			List<?> totalFoundElements = page.getByXPath(XPATH_TOTAL_FOUND);
 			for (Object object : totalFoundElements) {
 				HtmlTableDataCell cell = (HtmlTableDataCell) object;
 				String cellContent = cell.getTextContent();
