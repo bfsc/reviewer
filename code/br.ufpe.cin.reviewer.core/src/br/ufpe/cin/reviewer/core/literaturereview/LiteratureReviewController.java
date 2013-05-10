@@ -126,6 +126,10 @@ public class LiteratureReviewController implements ITransactionalController {
 					literatureReviewStudyTitleElement.addContent(study.getTitle());
 					literatureReviewStudyElement.addContent(literatureReviewStudyTitleElement);
 					
+					Element literatureReviewStudyStatusElement = new Element("status");
+					literatureReviewStudyStatusElement.addContent(study.getStatus().toString());
+					literatureReviewStudyElement.addContent(literatureReviewStudyStatusElement);
+					
 					Element literatureReviewStudySourceElement = new Element("source");
 					literatureReviewStudySourceElement.addContent(study.getSource());
 					literatureReviewStudyElement.addContent(literatureReviewStudySourceElement);
