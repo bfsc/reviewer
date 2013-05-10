@@ -166,6 +166,8 @@ public class SearchView extends ViewPart {
 		private class SearchButtonHandler implements SelectionListener {
 
 			public void widgetSelected(SelectionEvent e) {
+				SearchView.this.resultComposite.getTable().removeAll();
+				
 				if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
 					searchText.setText("");
 				}
@@ -292,6 +294,10 @@ public class SearchView extends ViewPart {
 			GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
 			studyLink.setLayoutData(studyLinkLayout);
 			studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
+		}
+		
+		public Table getTable(){
+			return this.table;
 		}
 		
 		public void setSearchResult(SearchResult searchResult) {
