@@ -53,7 +53,7 @@ public class AcmSearchProvider implements SearchProvider {
 			String searchUrl = assembleSearchUrl(searchString);
 			
 			// Extract studies data
-			result.getStudies().addAll(extractStudiesData(browser, searchUrl));
+			result.getStudies().addAll(extractStudiesData(browser, searchUrl, result));
 			result.setTotalFetched(result.getStudies().size());
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
@@ -78,12 +78,23 @@ public class AcmSearchProvider implements SearchProvider {
 		return URL_DL_ACM_SEARCH + query;
 	}
 	
-	private List<Study> extractStudiesData(WebClient browser, String searchUrl) {
+	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		try {
 			HtmlPage page = browser.getPage(searchUrl);
 		
+			// Extracting total found studies
+			List<?> totalFoundElements = page.getByXPath("//table[@border='0' and @width='100%' and @align='left' and @class='small-text']//tr[@valign='top']//td");
+			for (Object object : totalFoundElements) {
+				HtmlTableDataCell cell = (HtmlTableDataCell) object;
+				String cellContent = cell.getTextContent();
+				if (cellContent.trim().startsWith("Results 1")) {
+					String totalFoundString = cellContent.substring(cellContent.indexOf("of") + 2);
+					result.setTotalFound(Integer.parseInt(totalFoundString.trim()));
+				}
+			}
+			
 			// Extracting studies data.
 			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
 			for (int i = 0; i < studyTablesAnchors.size(); i++) {
@@ -156,7 +167,7 @@ public class AcmSearchProvider implements SearchProvider {
 			String nextPageUrl = extractNextPageUrl(page);
 			
 			if (nextPageUrl != null) {
-				toReturn.addAll(extractStudiesData(browser, nextPageUrl));
+				toReturn.addAll(extractStudiesData(browser, nextPageUrl, result));
 			}
 		} catch (Exception e) {
 			//TRATAR EXCECAO

@@ -52,9 +52,7 @@ import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.Source
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesPerspective;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
@@ -385,9 +383,6 @@ public class SearchView extends ViewPart {
 					IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 					activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));
-					
-//					LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
-//					literatureReviewStudiesView.setLiteratureReview(literatureReview);
 					
 					LiteratureReviewView literatureReviewView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
 					literatureReviewView.setSelectedLiteratureReview(literatureReview);
