@@ -53,15 +53,26 @@ public class LiteratureReviewStudiesView extends ViewPart {
 			Color green = form.getDisplay().getSystemColor(SWT.COLOR_GREEN);
 			Color yellow = form.getDisplay().getSystemColor(SWT.COLOR_YELLOW);
 			TableItem item = new TableItem (table, SWT.NONE);
+			
 			item.setText (0, study.getCode());
-			if(study.getStatus() == Study.StudyStatus.NOT_EVALUATED)
+			
+			if(study.getStatus() == Study.StudyStatus.NOT_EVALUATED){
 				item.setBackground(1,yellow);
-			else if(study.getStatus() == Study.StudyStatus.INCLUDED)
+			}
+			else if(study.getStatus() == Study.StudyStatus.INCLUDED){
 				item.setBackground(1,green);
-			else if(study.getStatus() == Study.StudyStatus.EXCLUDED)
+			}
+			else if(study.getStatus() == Study.StudyStatus.EXCLUDED){
 				item.setBackground(1,red);
-			item.setText (2, study.getTitle());
-			item.setText (3, study.getYear());
+			}
+			
+			if (study.getTitle() != null) {
+				item.setText(2, study.getTitle());
+			}
+
+			if (study.getYear() != null) {
+				item.setText (3, study.getYear());
+			}
 		}
 		
 		for (int i=0; i < 4; i++) {

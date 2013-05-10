@@ -33,6 +33,8 @@ public class StudyAnalysisView extends ViewPart {
 	
 	private Label label_Id_conteudo;
 	private Label label_Title_conteudo;
+	private Label label_Status_conteudo;
+	private Label label_Source_conteudo;
 	private Label label_Authors_conteudo;
 	private Label label_Institution_conteudo;
 	private Label label_Country_conteudo;
@@ -48,6 +50,8 @@ public class StudyAnalysisView extends ViewPart {
 		
 		label_Id_conteudo.setText(study.getCode());
 		label_Title_conteudo.setText(study.getTitle());
+		label_Status_conteudo.setText(study.getStatus().toString());
+		label_Source_conteudo.setText(study.getSource());
 		String authors = "";
 		for (String author : study.getAuthors()) {
 			authors += author + ",";
@@ -83,11 +87,11 @@ public class StudyAnalysisView extends ViewPart {
 		form = toolkit.createForm(parent);
 		toolkit.decorateFormHeading(form);
 		form.setText("Reviewer");
-		form.getBody().setLayout(new GridLayout(7, false));
+		form.getBody().setLayout(new GridLayout(4, false));
 	}
 
 	private void createStudyWidgets(Composite parent) {
-		GridData layout = new GridData(GridData.GRAB_VERTICAL);
+		GridData layout = new GridData(GridData.GRAB_VERTICAL, GridData.GRAB_HORIZONTAL);
 		form.getBody().setLayoutData(layout);
 
 		GridData td;
@@ -95,68 +99,86 @@ public class StudyAnalysisView extends ViewPart {
 		Label label_Id = toolkit.createLabel(form.getBody(), "Id:");
 		td.horizontalSpan = 1;
 		label_Id.setLayoutData(td);
-		td = new GridData();
-		label_Id_conteudo = toolkit.createLabel(form.getBody(), "");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Id_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Id_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Title = toolkit.createLabel(form.getBody(), "Title:");
 		td.horizontalSpan = 1;
 		label_Title.setLayoutData(td);
-		td = new GridData();
-		label_Title_conteudo = toolkit.createLabel(form.getBody(), "");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Title_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Title_conteudo.setLayoutData(td);
+		
+		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		Label label_Status = toolkit.createLabel(form.getBody(), "Status:");
+		td.horizontalSpan = 1;
+		label_Status.setLayoutData(td);
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Status_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		td.horizontalSpan = 3;
+		label_Status_conteudo.setLayoutData(td);
+		
+		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		Label label_Source = toolkit.createLabel(form.getBody(), "Source:");
+		td.horizontalSpan = 1;
+		label_Source.setLayoutData(td);
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Source_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		td.horizontalSpan = 3;
+		label_Source_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Authors = toolkit.createLabel(form.getBody(), "Authors:");
 		td.horizontalSpan = 1;
 		label_Authors.setLayoutData(td);
-		td = new GridData();
-		label_Authors_conteudo = toolkit.createLabel(form.getBody(), "Victor Basili");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Authors_conteudo = toolkit.createLabel(form.getBody(), "Victor Basili", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Authors_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Institution = toolkit.createLabel(form.getBody(), "Institution(s):");
 		td.horizontalSpan = 1;
 		label_Institution.setLayoutData(td);
-		td = new GridData();
-		label_Institution_conteudo = toolkit.createLabel(form.getBody(), "Universidade Federal de Pernambuco");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Institution_conteudo = toolkit.createLabel(form.getBody(), "Universidade Federal de Pernambuco", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Institution_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Country = toolkit.createLabel(form.getBody(), "Country:");
 		td.horizontalSpan = 1;
 		label_Country.setLayoutData(td);
-		td = new GridData();
-		label_Country_conteudo = toolkit.createLabel(form.getBody(), "BRA");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Country_conteudo = toolkit.createLabel(form.getBody(), "BRA", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Country_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Link = toolkit.createLabel(form.getBody(), "Link:");
 		td.horizontalSpan = 1;
 		label_Link.setLayoutData(td);
-		td = new GridData();
-		label_Link_conteudo = toolkit.createLabel(form.getBody(), "http://aehbdfi.com");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Link_conteudo = toolkit.createLabel(form.getBody(), "http://aehbdfi.com", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Link_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Abstract = toolkit.createLabel(form.getBody(), "Abstract:");
 		td.horizontalSpan = 1;
 		label_Abstract.setLayoutData(td);
-		td = new GridData();
-		label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "");
-		td.horizontalSpan = 6;
+		td = new GridData(GridData.GRAB_HORIZONTAL);
+		label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		td.horizontalSpan = 3;
 		label_Abstract_conteudo.setLayoutData(td);
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Button include = toolkit.createButton(form.getBody(), "Include", SWT.PUSH);
-		td.horizontalSpan = 2;
+		td.horizontalSpan = 1;
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
 		include.setLayoutData(td);
@@ -172,7 +194,7 @@ public class StudyAnalysisView extends ViewPart {
 		exclude.addSelectionListener(new ExcludeButtonHandler());
 		
 		Button skip = toolkit.createButton(form.getBody(), "Skip", SWT.PUSH);
-		td.horizontalSpan = 4;
+		td.horizontalSpan = 2;
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
 		skip.setLayoutData(td);

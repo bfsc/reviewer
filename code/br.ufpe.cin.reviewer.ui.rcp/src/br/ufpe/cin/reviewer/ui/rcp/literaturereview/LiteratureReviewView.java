@@ -263,36 +263,36 @@ public class LiteratureReviewView extends ViewPart {
 						engineeringtotalFetchedLabel.setLayoutData(engineeringtotalFetchedLayout);
 					}
 					if(source.getName().equals("SCIENCE_DIRECT")){
-						scienceTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Science direct total Found: " + source.getTotalFound());
+						scienceTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Science direct total Found: " + source.getTotalFound());
 						GridData scienceTotalFoundLayout = new GridData();
 						scienceTotalFoundLayout.horizontalSpan = 1;
 						scienceTotalFoundLabel.setLayoutData(scienceTotalFoundLayout);
 						
-						scienceTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Science direct total Fetched: " + source.getTotalFetched());
+						scienceTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Science direct total Fetched: " + source.getTotalFetched());
 						GridData scienceTotalFetchedLayout = new GridData();
 						scienceTotalFetchedLayout.horizontalIndent = 30;
 						scienceTotalFetchedLayout.horizontalSpan = 1;
 						scienceTotalFetchedLabel.setLayoutData(scienceTotalFetchedLayout);
 					}
 					if(source.getName().equals("SCOPUS")){
-						scopusTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Scopus total Found: " + source.getTotalFound());
+						scopusTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Scopus total Found: " + source.getTotalFound());
 						GridData scopusTotalFoundLayout = new GridData();
 						scopusTotalFoundLayout.horizontalSpan = 1;
 						scopusTotalFoundLabel.setLayoutData(scopusTotalFoundLayout);
 						
-						scopusTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Scopus total Fetched: " + source.getTotalFetched());
+						scopusTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Scopus total Fetched: " + source.getTotalFetched());
 						GridData scopusTotalFetchedLayout = new GridData();
 						scopusTotalFetchedLayout.horizontalIndent = 30;
 						scopusTotalFetchedLayout.horizontalSpan = 1;
 						scopusTotalFetchedLabel.setLayoutData(scopusTotalFetchedLayout);
 					}
 					if(source.getName().equals("SPRINGER_LINK")){
-						springerTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Springer link total Found: " + source.getTotalFound());
+						springerTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Springer link total Found: " + source.getTotalFound());
 						GridData springerTotalFoundLayout = new GridData();
 						springerTotalFoundLayout.horizontalSpan = 1;
 						springerTotalFoundLabel.setLayoutData(springerTotalFoundLayout);
 						
-						springerTotalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Springer link total Fetched: " + source.getTotalFetched());
+						springerTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Springer link total Fetched: " + source.getTotalFetched());
 						GridData springerTotalFetchedLayout = new GridData();
 						springerTotalFetchedLayout.horizontalIndent = 30;
 						springerTotalFetchedLayout.horizontalSpan = 1;
