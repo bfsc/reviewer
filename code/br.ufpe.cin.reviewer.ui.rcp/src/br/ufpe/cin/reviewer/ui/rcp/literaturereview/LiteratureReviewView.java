@@ -24,6 +24,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
@@ -46,8 +47,8 @@ public class LiteratureReviewView extends ViewPart {
 	private Composite searchTitleComposite;
 	private Label titleLabel;
 	private Text titleText;
-	private Label totalFoundLabel;
-	private Label totalFetchedLabel;
+	private Label totalFoundIeeeLabel;
+	private Label totalFetchedIeeeLabel;
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -128,16 +129,29 @@ public class LiteratureReviewView extends ViewPart {
 		titleText = toolkit.createText(searchTitleComposite, "");
 		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		totalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Total Found: ");
+		totalFoundIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Found: ");
 		GridData totalFoundLayout = new GridData();
 		totalFoundLayout.horizontalSpan = 1;
-		totalFoundLabel.setLayoutData(totalFoundLayout);
+		totalFoundIeeeLabel.setLayoutData(totalFoundLayout);
 		
-		totalFetchedLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched: ");
+		totalFetchedIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched: ");
 		GridData totalFetchedLayout = new GridData();
 		totalFetchedLayout.horizontalIndent = 30;
 		totalFetchedLayout.horizontalSpan = 1;
-		totalFetchedLabel.setLayoutData(totalFetchedLayout);
+		totalFetchedIeeeLabel.setLayoutData(totalFetchedLayout);
+		
+		totalFoundIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Found Ieee: ");
+		GridData totalFoundIeeeLayout = new GridData();
+		totalFoundIeeeLayout.horizontalSpan = 1;
+		totalFoundIeeeLabel.setLayoutData(totalFoundIeeeLayout);
+		totalFoundIeeeLabel.setVisible(false);
+		
+		totalFetchedIeeeLabel = toolkit.createLabel(reviewInfoComposite, "Total Fetched Ieee: ");
+		GridData totalFetchedIeeeLayout = new GridData();
+		totalFetchedIeeeLayout.horizontalIndent = 30;
+		totalFetchedIeeeLayout.horizontalSpan = 1;
+		totalFetchedIeeeLabel.setLayoutData(totalFetchedIeeeLayout);
+		totalFetchedIeeeLabel.setVisible(false);
 		
 //		//IEEE
 //		Label ieeeTotalFoundLabel = toolkit.createLabel(reviewInfoComposite, "Ieee total Found: " + "valor");
@@ -234,8 +248,16 @@ public class LiteratureReviewView extends ViewPart {
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
 				titleText.setText(selectedLiteratureReview.getTitle());
-				totalFoundLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
-				totalFetchedLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
+				totalFoundIeeeLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
+				totalFetchedIeeeLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
+				for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
+					if(source.getName() == "IEEE"){
+						totalFoundIeeeLabel.setText("Total Found Ieee: " + source.getTotalFound());
+						totalFetchedIeeeLabel.setText("Total Fetched Ieee: " + source.getTotalFetched());
+						totalFoundIeeeLabel.setVisible(true);
+						totalFetchedIeeeLabel.setVisible(true);
+					}
+				}
 				WidgetsUtil.refreshComposite(reviewInfoComposite);
 				sectionInfo.setVisible(true);
 			}

@@ -3,6 +3,7 @@ package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -48,8 +49,17 @@ public class LiteratureReviewStudiesView extends ViewPart {
 
 		table.removeAll();
 		for (Study study : this.literatureReview.getStudies()) {
+			Color red = form.getDisplay().getSystemColor(SWT.COLOR_RED);
+			Color green = form.getDisplay().getSystemColor(SWT.COLOR_GREEN);
+			Color yellow = form.getDisplay().getSystemColor(SWT.COLOR_YELLOW);
 			TableItem item = new TableItem (table, SWT.NONE);
 			item.setText (0, study.getCode());
+			if(study.getStatus() == Study.StudyStatus.NOT_EVALUATED)
+				item.setBackground(1,yellow);
+			else if(study.getStatus() == Study.StudyStatus.INCLUDED)
+				item.setBackground(1,green);
+			else if(study.getStatus() == Study.StudyStatus.EXCLUDED)
+				item.setBackground(1,red);
 			item.setText (2, study.getTitle());
 			item.setText (3, study.getYear());
 		}
