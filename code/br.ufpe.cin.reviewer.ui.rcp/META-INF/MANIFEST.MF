@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.persistence.core;bundle-version="2.4.0",
  org.eclipse.persistence.jpa;bundle-version="2.4.0",
  br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1",
- br.ufpe.cin.reviewer.logger;bundle-version="0.0.1"
+ br.ufpe.cin.reviewer.logger;bundle-version="0.0.1",
+ org.eclipse.persistence.jpa.jpql;bundle-version="2.0.1"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
