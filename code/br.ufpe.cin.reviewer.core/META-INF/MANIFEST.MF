@@ -12,7 +12,8 @@ Require-Bundle: br.ufpe.cin.reviewer.persistence;bundle-version="0.0.1",
  org.eclipse.persistence.asm;bundle-version="3.3.1",
  org.eclipse.persistence.core;bundle-version="2.4.0",
  org.eclipse.persistence.jpa;bundle-version="2.4.0",
- org.eclipse.core.runtime;bundle-version="3.8.0"
+ org.eclipse.core.runtime;bundle-version="3.8.0",
+ br.ufpe.cin.reviewer.logger;bundle-version="0.0.1"
 Export-Package: br.ufpe.cin.reviewer.core,
  br.ufpe.cin.reviewer.core.common,
  br.ufpe.cin.reviewer.core.exceptions,

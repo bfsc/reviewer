@@ -8,7 +8,8 @@ Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
  org.eclipse.persistence.jpa;bundle-version="2.4.0",
  org.eclipse.persistence.core;bundle-version="2.4.0",
  org.eclipse.persistence.asm;bundle-version="3.3.1",
- javax.persistence;bundle-version="2.0.4"
+ javax.persistence;bundle-version="2.0.4",
+ br.ufpe.cin.reviewer.logger;bundle-version="0.0.1"
 Export-Package: br.ufpe.cin.reviewer.persistence;uses:="javax.persistence",
  br.ufpe.cin.reviewer.persistence.dao;uses:="javax.persistence",
  br.ufpe.cin.reviewer.persistence.dao.common,
