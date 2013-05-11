@@ -22,7 +22,7 @@ CREATE TABLE reviewer.studies(
 	status VARCHAR(100),
 	source VARCHAR(1000),
 	abstract VARCHAR(50000),
-	year VARCHAR(4),
+	year VARCHAR(100),
 	url VARCHAR(10000),
 );
 

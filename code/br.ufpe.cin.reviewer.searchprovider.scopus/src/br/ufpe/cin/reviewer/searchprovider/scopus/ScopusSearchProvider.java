@@ -109,7 +109,7 @@ public class ScopusSearchProvider implements SearchProvider {
 		return  result;
 	}
 	
-	private List<Study> extractStudiesData(InputStream inputStream) {
+	private List<Study> extractStudiesData(InputStream inputStream) throws SearchProviderException {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		try {
@@ -183,8 +183,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			//Adding the last study
 			toReturn.add(study);
 		} catch (Exception e) {
-			//TRATAR EXCECAO
-			e.printStackTrace();
+			throw new SearchProviderException("Error trying to parse bibtex input stream.", e);
 		}
 		
 		return toReturn;
