@@ -93,7 +93,7 @@ public class AcmSearchProvider implements SearchProvider {
 				String cellContent = cell.getTextContent();
 				if (cellContent.trim().startsWith("Results 1")) {
 					String totalFoundString = cellContent.substring(cellContent.indexOf("of") + 2);
-					result.setTotalFound(Integer.parseInt(totalFoundString.trim()));
+					result.setTotalFound(Integer.parseInt(totalFoundString.replaceAll(",", "").trim()));
 				}
 			}
 			

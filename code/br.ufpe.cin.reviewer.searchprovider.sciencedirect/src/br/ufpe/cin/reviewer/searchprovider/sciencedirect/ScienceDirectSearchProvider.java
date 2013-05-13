@@ -21,8 +21,20 @@ import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
  
 public class ScienceDirectSearchProvider implements SearchProvider {
-       
+
 	public static final String SEARCH_PROVIDER_NAME = "SCIENCE_DIRECT";
+	
+	private static final String URL_MAIN_SITE = "http://www.sciencedirect.com";
+	
+	private static final String XPATH_BUTTON_EXPORT = "//input[@type='submit' and @value='Export' and @name='Export' and @alt='Export' and @class='button']";
+	private static final String XPATH_INPUT_EXPORT_FORMAT = "//input[@type='radio' and @id='BIBTEX' and @name='citation-type' and @value='BIBTEX' and @class='artRadio expRadio']";
+	private static final String XPATH_INPUT_CONTENT_FORMAT = "//input[@type='radio' and @id='cite-abs' and @name='format' and @value='cite-abs' and @class='artRadio expRadio']";
+	private static final String XPATH_INPUT_EXPORT = "//input[@id='exportIcon_sci_dir' and @value='Export citations' and @name='export' and @class='listAction' and @type='submit']";
+	private static final String XPATH_STRONG_TOTAL_FOUND = "//div[@class='iconLinks']//strong";
+	private static final String XPATH_BUTTON_SEARCH = "//input[@type='submit' and @class='button' and @value='Search' and @name='RegularSearch' and @alt='Search']";
+	private static final String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='SearchText' and @wrap='virtual' and @rows='5' and @cols='60']";
+	private static final String XPATH_ANCHOR_EXPERT_SEARCH = "//div[@class='advExpertLink' and @style='float:right;']//a";
+	private static final String XPATH_ANCHOR_ADVANCED_SEARCH = "//a[@style='vertical-align:bottom;font-size:0.92em;']";
 	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
@@ -40,36 +52,36 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			}
 
 			// Accessing the main site page
-			HtmlPage mainSitePage = browser.getPage("http://www.sciencedirect.com");
-			HtmlAnchor advancedSearchAnchor = mainSitePage.getFirstByXPath("//a[@style='vertical-align:bottom;font-size:0.92em;']");
+			HtmlPage mainSitePage = browser.getPage(URL_MAIN_SITE);
+			HtmlAnchor advancedSearchAnchor = mainSitePage.getFirstByXPath(XPATH_ANCHOR_ADVANCED_SEARCH);
 			
 			// Accessing the advanced search page
 			HtmlPage advancedSearchPage = advancedSearchAnchor.click();
-			HtmlAnchor expertSearchAnchor = advancedSearchPage.getFirstByXPath("//div[@class='advExpertLink' and @style='float:right;']//a");
+			HtmlAnchor expertSearchAnchor = advancedSearchPage.getFirstByXPath(XPATH_ANCHOR_EXPERT_SEARCH);
 
 			// Performing the search in the expert search page
 			HtmlPage expertSearchPage = expertSearchAnchor.click();
-			HtmlTextArea searchStringTextArea = expertSearchPage.getFirstByXPath("//textarea[@name='SearchText' and @wrap='virtual' and @rows='5' and @cols='60']");
+			HtmlTextArea searchStringTextArea = expertSearchPage.getFirstByXPath(XPATH_TEXTAREA_SEARCH_STRING);
 			searchStringTextArea.setTextContent(searchString);
-			HtmlInput searchButton = expertSearchPage.getFirstByXPath("//input[@type='submit' and @class='button' and @value='Search' and @name='RegularSearch' and @alt='Search']");
+			HtmlInput searchButton = expertSearchPage.getFirstByXPath(XPATH_BUTTON_SEARCH);
 			HtmlPage resultsPage = searchButton.click();
 			
 			// Extraction total found studies
-			HtmlStrong totalFoundStrong = resultsPage.getFirstByXPath("//div[@class='iconLinks']//strong");
+			HtmlStrong totalFoundStrong = resultsPage.getFirstByXPath(XPATH_STRONG_TOTAL_FOUND);
 			result.setTotalFound(Integer.parseInt(totalFoundStrong.getTextContent().replaceAll(",", "").trim()));
 			
 			// Calling the export page
-			HtmlInput exportInput = resultsPage.getFirstByXPath("//input[@id='exportIcon_sci_dir' and @value='Export citations' and @name='export' and @class='listAction' and @type='submit']");
+			HtmlInput exportInput = resultsPage.getFirstByXPath(XPATH_INPUT_EXPORT);
 			HtmlPage exportPage = exportInput.click();
 			
 			// Selecting the export format (BIB) as well as the content format (with abstract)
-			HtmlInput contentFormatInput = exportPage.getFirstByXPath("//input[@type='radio' and @id='cite-abs' and @name='format' and @value='cite-abs' and @class='artRadio expRadio']");
+			HtmlInput contentFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_CONTENT_FORMAT);
 			contentFormatInput.setChecked(true);
-			HtmlInput expoertFormatInput = exportPage.getFirstByXPath("//input[@type='radio' and @id='BIBTEX' and @name='citation-type' and @value='BIBTEX' and @class='artRadio expRadio']");
-			expoertFormatInput.setChecked(true);
+			HtmlInput exportFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_EXPORT_FORMAT);
+			exportFormatInput.setChecked(true);
 			
 			// Exporting the results according to the selections above
-			HtmlSubmitInput exportButton = exportPage.getFirstByXPath("//input[@type='submit' and @value='Export' and @name='Export' and @alt='Export' and @class='button']");
+			HtmlSubmitInput exportButton = exportPage.getFirstByXPath(XPATH_BUTTON_EXPORT);
 			Page exportedStudiesPage = exportButton.click();
 			
 			// Extract studies data
@@ -140,16 +152,4 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 		return toReturn;
 	}
     
-	public static void main(String[] args) {
-		ScienceDirectSearchProvider provider = new ScienceDirectSearchProvider();
-		try {
-			SearchProviderResult search = provider.search("\"systematic mapping study\"");
-			for (Study study : search.getStudies()) {
-				System.out.println(study.getTitle());
-			}
-		} catch (SearchProviderException e) {
-			e.printStackTrace();
-		}
-	}
-	
 }
