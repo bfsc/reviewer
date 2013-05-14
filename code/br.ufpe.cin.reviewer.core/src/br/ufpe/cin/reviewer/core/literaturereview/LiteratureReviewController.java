@@ -40,7 +40,7 @@ public class LiteratureReviewController implements ITransactionalController {
 		try {
 			this.dao.delete(literatureReview);
 		} catch (PersistenceException e) {
-			throw new CoreException("An error occurred trying to destroy an literature review.", e);
+			throw new CoreException("An error occurred trying to delete an literature review.", e);
 		}
 	}
 	

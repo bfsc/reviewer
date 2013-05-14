@@ -13,7 +13,7 @@
 				<column name="title" />
 			</basic>
 			
-			<one-to-many name="studies" fetch="EAGER">
+			<one-to-many name="studies" fetch="EAGER" orphan-removal="true">
 				<join-table name="literature_review_studies" schema="reviewer">
 					<join-column name="literature_review_id"/>
 					<inverse-join-column name="study_id"/>
@@ -21,7 +21,7 @@
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
 			
-			<element-collection name="sources">
+			<element-collection name="sources" fetch="EAGER">
 				<collection-table name="literature_reviews_sources" schema="reviewer">
 					<join-column name="literature_review_id" referenced-column-name="literature_review_id"/>
 				</collection-table>

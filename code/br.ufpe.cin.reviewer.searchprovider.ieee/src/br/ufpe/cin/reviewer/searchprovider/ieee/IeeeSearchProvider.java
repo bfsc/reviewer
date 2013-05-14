@@ -42,6 +42,7 @@ public class IeeeSearchProvider implements SearchProvider {
 			
 			while(count < totalFound){
 				searchUrl = mountSearchUrl(searchString);
+				System.out.println(searchUrl);
 				page = browser.getPage(searchUrl);
 					
 				List<?> documents = page.getByXPath("//document");
@@ -109,7 +110,7 @@ public class IeeeSearchProvider implements SearchProvider {
 				}
 				count = count + 1000;
 				if(count - 1 + numeroDeEstudos > totalFound){
-					numeroDeEstudos = totalFound - count - 1;
+					numeroDeEstudos = totalFound - (count - 1);
 				}
 			}
 			
