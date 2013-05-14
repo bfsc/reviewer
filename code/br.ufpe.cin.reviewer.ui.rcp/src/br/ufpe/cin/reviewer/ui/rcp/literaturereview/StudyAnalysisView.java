@@ -1,6 +1,12 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -11,8 +17,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.common.StudyController;
@@ -166,6 +174,31 @@ public class StudyAnalysisView extends ViewPart {
 		label_Link_conteudo = toolkit.createLabel(form.getBody(), "http://aehbdfi.com", SWT.WRAP);
 		td.horizontalSpan = 3;
 		label_Link_conteudo.setLayoutData(td);
+	
+		
+		//DRAG AND DROP SOLUTION
+		DragSource source = new DragSource(label_Link_conteudo, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
+		source.setTransfer(new Transfer[] { TextTransfer.getInstance() });
+
+	    source.addDragListener(new DragSourceListener() {
+	      public void dragStart(DragSourceEvent event) {
+	    	  label_Link_conteudo.setBackground(form.getDisplay().getSystemColor(SWT.COLOR_BLUE));
+	    	  label_Link_conteudo.setForeground(form.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+	    	  event.doit = (label_Link_conteudo.getText().length() != 0);
+	      }
+
+	      public void dragSetData(DragSourceEvent event) {
+	    	  event.data = label_Link_conteudo.getText();
+	      }
+
+	      public void dragFinished(DragSourceEvent event) {
+		    	label_Link_conteudo.setForeground(form.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+	        	label_Link_conteudo.setBackground(form.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		    	WidgetsUtil.refreshComposite(form.getBody());
+	      }
+	    });
+		
+		
 		
 		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Label label_Abstract = toolkit.createLabel(form.getBody(), "Abstract:");
@@ -194,11 +227,19 @@ public class StudyAnalysisView extends ViewPart {
 		exclude.addSelectionListener(new ExcludeButtonHandler());
 		
 		Button skip = toolkit.createButton(form.getBody(), "Skip", SWT.PUSH);
-		td.horizontalSpan = 2;
+		td.horizontalSpan = 1;
 		td.grabExcessVerticalSpace = true;
 		td.verticalAlignment = SWT.END;
 		skip.setLayoutData(td);
 		skip.addSelectionListener(new SkipButtonHandler());
+		
+		Hyperlink studyLink = toolkit.createHyperlink(form.getBody(), "View all studies", SWT.WRAP);
+		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
+		td.horizontalSpan = 1;
+		studyLinkLayout.grabExcessVerticalSpace = true;
+		studyLinkLayout.horizontalAlignment = SWT.END;
+		studyLink.setLayoutData(studyLinkLayout);
+		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
 	}
 	
 	public void skip(){
@@ -270,6 +311,27 @@ public class StudyAnalysisView extends ViewPart {
 
 		public void widgetDefaultSelected(SelectionEvent e) {
 			
+		}
+		
+	}
+	
+	private class LiteratureReviewStudiesLinkHandler implements IHyperlinkListener {
+
+		public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+			
+			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 		
 	}
