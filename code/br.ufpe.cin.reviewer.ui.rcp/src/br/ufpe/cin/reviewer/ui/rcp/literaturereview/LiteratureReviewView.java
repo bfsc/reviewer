@@ -164,7 +164,7 @@ public class LiteratureReviewView extends ViewPart {
 
 		//composite for links
 		reviewInfoFooterComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
-		reviewInfoFooterComposite.setLayout(new GridLayout(2, false));
+		reviewInfoFooterComposite.setLayout(new GridLayout(3, false));
 		GridData reviewFooterCompositeData = new GridData(GridData.FILL_BOTH);
 		reviewFooterCompositeData.horizontalSpan = 1;
 		reviewInfoFooterComposite.setLayoutData(reviewFooterCompositeData);
@@ -180,6 +180,12 @@ public class LiteratureReviewView extends ViewPart {
 		studyLinkLayout.grabExcessVerticalSpace = true;
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
+		
+		Hyperlink deleteLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Delete Literature Review", SWT.WRAP);
+		GridData deleteLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
+		deleteLinkLayout.grabExcessVerticalSpace = true;
+		deleteLink.setLayoutData(deleteLinkLayout);
+		deleteLink.addHyperlinkListener(new DeleteLiteratureReviewLinkHandler());
 
 		sectionList.setClient(listComposite);
 		sectionInfo.setClient(reviewInfoComposite);
@@ -352,6 +358,45 @@ public class LiteratureReviewView extends ViewPart {
 			
 			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
 			literatureReviewStudiesView.setLiteratureReview(selectedLiteratureReview);
+		}
+		
+	}
+	
+	private class DeleteLiteratureReviewLinkHandler implements IHyperlinkListener {
+
+		public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+			
+		}
+
+		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+
+			LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+			literatureReviewController.deleteLiteratureReview(selectedLiteratureReview);
+			
+			list.remove(selectedLiteratureReview.getTitle());
+			literatureReviews.remove(selectedLiteratureReview);
+			
+			if(!literatureReviews.isEmpty()) {
+				if(literatureReviews.get(0) != null) {
+					selectedLiteratureReview = literatureReviews.get(0);
+				}
+				else {
+					selectedLiteratureReview = null;
+					sectionInfo.setVisible(false);
+				}
+			}
+			else {
+				selectedLiteratureReview = null;
+				sectionInfo.setVisible(false);
+			}
+
+			WidgetsUtil.refreshComposite(listComposite);
+			WidgetsUtil.refreshComposite(reviewInfoComposite);
+			
 		}
 		
 	}

@@ -36,6 +36,14 @@ public class LiteratureReviewController implements ITransactionalController {
 		}
 	}
 	
+	public void deleteLiteratureReview(LiteratureReview literatureReview) {
+		try {
+			this.dao.delete(literatureReview);
+		} catch (PersistenceException e) {
+			throw new CoreException("An error occurred trying to destroy an literature review.", e);
+		}
+	}
+	
 	public List<LiteratureReview> findAllLiteratureReview() {
 		List<LiteratureReview> toReturn = new LinkedList<LiteratureReview>();
 		
