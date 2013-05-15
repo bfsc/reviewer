@@ -60,23 +60,38 @@ public class StudyAnalysisView extends ViewPart {
 		label_Title_conteudo.setText(study.getTitle());
 		label_Status_conteudo.setText(study.getStatus().toString());
 		label_Source_conteudo.setText(study.getSource());
+		
 		String authors = "";
 		for (String author : study.getAuthors()) {
 			authors += author + ",";
 		}
 		label_Authors_conteudo.setText(authors);
+		
 		String institutions = "";
 		for (String institution : study.getInstitutions()) {
 			institutions += institution + ",";
 		}
 		label_Institution_conteudo.setText(institutions);
+		
 		String countries = "";
 		for (String country : study.getCountries()) {
 			countries += country + ",";
 		}
 		label_Country_conteudo.setText(countries);
-		label_Link_conteudo.setText(study.getUrl());
-		label_Abstract_conteudo.setText(study.getAbstract());
+		
+		if(study.getUrl() != null) {
+			label_Link_conteudo.setText(study.getUrl());
+		}
+		else {
+			label_Link_conteudo.setText("");
+		}
+		
+		if(study.getAbstract() != null) {
+			label_Abstract_conteudo.setText(study.getAbstract());
+		}
+		else {
+			label_Abstract_conteudo.setText("");
+		}
 		
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
