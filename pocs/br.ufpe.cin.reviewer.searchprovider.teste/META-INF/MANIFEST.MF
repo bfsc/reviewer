@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Teste
+Bundle-SymbolicName: br.ufpe.cin.reviewer.searchprovider.teste;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: br.ufpe.cin.reviewer.searchprovider.teste.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1",
+ br.ufpe.cin.reviewer.model;bundle-version="0.0.1"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
