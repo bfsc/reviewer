@@ -1,7 +1,11 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -25,6 +29,7 @@ import org.eclipse.ui.part.ViewPart;
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
+import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
@@ -51,19 +56,9 @@ public class LiteratureReviewView extends ViewPart {
 	private Text titleText;
 	private Label totalFoundLabel;
 	private Label totalFetchedLabel;
-	
-	private Label ieeeTotalFoundLabel;
-	private Label ieeeTotalFetchedLabel;
-	private Label acmTotalFoundLabel;
-	private Label acmTotalFetchedLabel;
-	private Label engineeringTotalFoundLabel;
-	private Label engineeringtotalFetchedLabel;
-	private Label scienceTotalFoundLabel;
-	private Label scienceTotalFetchedLabel;
-	private Label scopusTotalFoundLabel;
-	private Label scopusTotalFetchedLabel;
-	private Label springerTotalFoundLabel;
-	private Label springerTotalFetchedLabel;
+
+	private java.util.List<Label> searchProvidersTotalFoundLabels = new ArrayList<Label>();
+	private java.util.List<Label> searchProvidersTotalFetchedLabels = new ArrayList<Label>();
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -195,117 +190,50 @@ public class LiteratureReviewView extends ViewPart {
 
 		public void widgetSelected(SelectionEvent e) {
 			int selectionIndex = list.getSelectionIndex();
+
+			for (Label label : searchProvidersTotalFoundLabels) {
+				label.dispose();
+			}
+			for (Label label : searchProvidersTotalFetchedLabels) {
+				label.dispose();
+			}
 			
-			if(ieeeTotalFoundLabel != null)
-				ieeeTotalFoundLabel.dispose();
-			if(ieeeTotalFetchedLabel != null)
-				ieeeTotalFetchedLabel.dispose();
-			
-			if(acmTotalFoundLabel != null)
-				acmTotalFoundLabel.dispose();
-			if(acmTotalFetchedLabel != null)
-				acmTotalFetchedLabel.dispose();
-			
-			if(engineeringTotalFoundLabel != null)
-				engineeringTotalFoundLabel.dispose();
-			if(engineeringtotalFetchedLabel != null)
-				engineeringtotalFetchedLabel.dispose();
-			
-			if(scienceTotalFoundLabel != null)
-				scienceTotalFoundLabel.dispose();
-			if(scienceTotalFetchedLabel != null)
-				scienceTotalFetchedLabel.dispose();
-			
-			if(scopusTotalFoundLabel != null)
-				scopusTotalFoundLabel.dispose();
-			if(scopusTotalFetchedLabel != null)
-				scopusTotalFetchedLabel.dispose();
-			
-			if(springerTotalFoundLabel != null)
-				springerTotalFoundLabel.dispose();
-			if(springerTotalFetchedLabel != null)
-				springerTotalFetchedLabel.dispose();
+			searchProvidersTotalFoundLabels.clear();
+			searchProvidersTotalFetchedLabels.clear();
 			
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
 				titleText.setText(selectedLiteratureReview.getTitle());
 				totalFoundLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
 				totalFetchedLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
+
+				java.util.List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
+				Collections.sort(configs, new SearchProviderConfiguratorElementComparator());
+				
 				for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
-					if(source.getName().equals("IEEE")){
-						ieeeTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Ieee total Found: " + source.getTotalFound());
-						GridData ieeeTotalFoundLayout = new GridData();
-						ieeeTotalFoundLayout.horizontalSpan = 1;
-						ieeeTotalFoundLabel.setLayoutData(ieeeTotalFoundLayout);
-						
-						ieeeTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Ieee total Fetched: " + source.getTotalFetched());
-						GridData ieeeTotalFetchedLayout = new GridData();
-						ieeeTotalFetchedLayout.horizontalIndent = 30;
-						ieeeTotalFetchedLayout.horizontalSpan = 1;
-						ieeeTotalFetchedLabel.setLayoutData(ieeeTotalFetchedLayout);
-					}
-					if(source.getName().equals("ACM")){
-						acmTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "ACM total Found: " + source.getTotalFound());
-						GridData acmTotalFoundLayout = new GridData();
-						acmTotalFoundLayout.horizontalSpan = 1;
-						acmTotalFoundLabel.setLayoutData(acmTotalFoundLayout);
-						
-						acmTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "ACM total Fetched: " + source.getTotalFetched());
-						GridData acmTotalFetchedLayout = new GridData();
-						acmTotalFetchedLayout.horizontalIndent = 30;
-						acmTotalFetchedLayout.horizontalSpan = 1;
-						acmTotalFetchedLabel.setLayoutData(acmTotalFetchedLayout);
-					}
-					if(source.getName().equals("ENGINEERING_VILLAGE")){
-						engineeringTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Engineering village total Found: " + source.getTotalFound());
-						GridData engineeringtotalFoundLayout = new GridData();
-						engineeringtotalFoundLayout.horizontalSpan = 1;
-						engineeringTotalFoundLabel.setLayoutData(engineeringtotalFoundLayout);
-						
-						engineeringtotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Engineering village total Fetched: " + source.getTotalFetched());
-						GridData engineeringtotalFetchedLayout = new GridData();
-						engineeringtotalFetchedLayout.horizontalIndent = 30;
-						engineeringtotalFetchedLayout.horizontalSpan = 1;
-						engineeringtotalFetchedLabel.setLayoutData(engineeringtotalFetchedLayout);
-					}
-					if(source.getName().equals("SCIENCE_DIRECT")){
-						scienceTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Science direct total Found: " + source.getTotalFound());
-						GridData scienceTotalFoundLayout = new GridData();
-						scienceTotalFoundLayout.horizontalSpan = 1;
-						scienceTotalFoundLabel.setLayoutData(scienceTotalFoundLayout);
-						
-						scienceTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Science direct total Fetched: " + source.getTotalFetched());
-						GridData scienceTotalFetchedLayout = new GridData();
-						scienceTotalFetchedLayout.horizontalIndent = 30;
-						scienceTotalFetchedLayout.horizontalSpan = 1;
-						scienceTotalFetchedLabel.setLayoutData(scienceTotalFetchedLayout);
-					}
-					if(source.getName().equals("SCOPUS")){
-						scopusTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Scopus total Found: " + source.getTotalFound());
-						GridData scopusTotalFoundLayout = new GridData();
-						scopusTotalFoundLayout.horizontalSpan = 1;
-						scopusTotalFoundLabel.setLayoutData(scopusTotalFoundLayout);
-						
-						scopusTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Scopus total Fetched: " + source.getTotalFetched());
-						GridData scopusTotalFetchedLayout = new GridData();
-						scopusTotalFetchedLayout.horizontalIndent = 30;
-						scopusTotalFetchedLayout.horizontalSpan = 1;
-						scopusTotalFetchedLabel.setLayoutData(scopusTotalFetchedLayout);
-					}
-					if(source.getName().equals("SPRINGER_LINK")){
-						springerTotalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Springer link total Found: " + source.getTotalFound());
-						GridData springerTotalFoundLayout = new GridData();
-						springerTotalFoundLayout.horizontalSpan = 1;
-						springerTotalFoundLabel.setLayoutData(springerTotalFoundLayout);
-						
-						springerTotalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Springer link total Fetched: " + source.getTotalFetched());
-						GridData springerTotalFetchedLayout = new GridData();
-						springerTotalFetchedLayout.horizontalIndent = 30;
-						springerTotalFetchedLayout.horizontalSpan = 1;
-						springerTotalFetchedLabel.setLayoutData(springerTotalFetchedLayout);
+					
+					for (IConfigurationElement config : configs) {
+						if(source.getName().equals( config.getAttribute("key") )){
+							Label totalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, config.getAttribute("friendly.name") + " total Found: " + source.getTotalFound());
+							totalFoundLabel.setData(config.getAttribute("key"));
+							GridData sourceTotalFoundLayout = new GridData();
+							sourceTotalFoundLayout.horizontalSpan = 1;
+							totalFoundLabel.setLayoutData(sourceTotalFoundLayout);
+							searchProvidersTotalFoundLabels.add(totalFoundLabel);
+	
+							Label totalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, config.getAttribute("friendly.name") + " total Fetched: " + source.getTotalFetched());
+							totalFetchedLabel.setData(config.getAttribute("key"));
+							GridData sourceTotalFetchedLayout = new GridData();
+							sourceTotalFetchedLayout.horizontalIndent = 30;
+							sourceTotalFetchedLayout.horizontalSpan = 1;
+							totalFetchedLabel.setLayoutData(sourceTotalFetchedLayout);
+							searchProvidersTotalFetchedLabels.add(totalFetchedLabel);
+						}
 					}
 				}
+				System.out.println(searchProvidersTotalFoundLabels.size());
 				WidgetsUtil.refreshComposite(reviewInfoComposite);
+				WidgetsUtil.refreshComposite(reviewInfoBodyComposite);
 				sectionInfo.setVisible(true);
 			}
 		}
@@ -397,6 +325,14 @@ public class LiteratureReviewView extends ViewPart {
 			WidgetsUtil.refreshComposite(listComposite);
 			WidgetsUtil.refreshComposite(reviewInfoComposite);
 			
+		}
+		
+	}
+	
+	private class SearchProviderConfiguratorElementComparator implements Comparator<IConfigurationElement> {
+
+		public int compare(IConfigurationElement config1, IConfigurationElement config2) {
+			return config1.getAttribute("friendly.name").compareTo(config2.getAttribute("friendly.name"));
 		}
 		
 	}

@@ -57,9 +57,27 @@ public class StudyAnalysisView extends ViewPart {
 		this.study = study;
 		
 		label_Id_conteudo.setText(study.getCode());
-		label_Title_conteudo.setText(study.getTitle());
-		label_Status_conteudo.setText(study.getStatus().toString());
-		label_Source_conteudo.setText(study.getSource());
+		
+		if(study.getTitle() != null) {
+			label_Title_conteudo.setText(study.getTitle());
+		}
+		else {
+			label_Title_conteudo.setText("");
+		}
+		
+		if(study.getStatus() != null) {
+			label_Status_conteudo.setText(study.getStatus().toString());
+		}
+		else {
+			label_Status_conteudo.setText("");
+		}
+		
+		if(study.getSource() != null) {
+			label_Source_conteudo.setText(study.getSource());
+		}
+		else {
+			label_Source_conteudo.setText("");
+		}
 		
 		String authors = "";
 		for (String author : study.getAuthors()) {
