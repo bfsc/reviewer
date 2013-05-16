@@ -5,15 +5,15 @@ REviewER is a tool to help researchers to conduct literature reviews.
 
 ## How to use
 
-<to be written>
+TODO
 
 ### Linux
 
-<to be written>
+TODO
 
 ### Windows
 
-<to be written>
+TODO
 
 
 How to contribute
