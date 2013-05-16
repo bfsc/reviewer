@@ -14,6 +14,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -39,15 +40,15 @@ public class StudyAnalysisView extends ViewPart {
 	private FormToolkit toolkit;
 	private Form form;
 	
-	private Label label_Id_conteudo;
-	private Label label_Title_conteudo;
-	private Label label_Status_conteudo;
-	private Label label_Source_conteudo;
-	private Label label_Authors_conteudo;
-	private Label label_Institution_conteudo;
-	private Label label_Country_conteudo;
-	private Label label_Link_conteudo;
-	private Label label_Abstract_conteudo;
+	private Text label_Id_conteudo;
+	private Text label_Title_conteudo;
+	private Text label_Status_conteudo;
+	private Text label_Source_conteudo;
+	private Text label_Authors_conteudo;
+	private Text label_Institution_conteudo;
+	private Text label_Country_conteudo;
+	private Text label_Link_conteudo;
+	private Text label_Abstract_conteudo;
 	
 	public StudyAnalysisView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -141,7 +142,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Id.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Id_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		label_Id_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Id_conteudo.setLayoutData(td);
 		
@@ -150,7 +151,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Title.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Title_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		label_Title_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Title_conteudo.setLayoutData(td);
 		
@@ -159,7 +160,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Status.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Status_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		label_Status_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Status_conteudo.setLayoutData(td);
 		
@@ -168,7 +169,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Source.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Source_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		label_Source_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Source_conteudo.setLayoutData(td);
 		
@@ -177,7 +178,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Authors.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Authors_conteudo = toolkit.createLabel(form.getBody(), "Victor Basili", SWT.WRAP);
+		label_Authors_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Authors_conteudo.setLayoutData(td);
 		
@@ -186,7 +187,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Institution.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Institution_conteudo = toolkit.createLabel(form.getBody(), "Universidade Federal de Pernambuco", SWT.WRAP);
+		label_Institution_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Institution_conteudo.setLayoutData(td);
 		
@@ -195,7 +196,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Country.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Country_conteudo = toolkit.createLabel(form.getBody(), "BRA", SWT.WRAP);
+		label_Country_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Country_conteudo.setLayoutData(td);
 		
@@ -204,7 +205,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Link.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Link_conteudo = toolkit.createLabel(form.getBody(), "http://aehbdfi.com", SWT.WRAP);
+		label_Link_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Link_conteudo.setLayoutData(td);
 	
@@ -238,7 +239,7 @@ public class StudyAnalysisView extends ViewPart {
 		td.horizontalSpan = 1;
 		label_Abstract.setLayoutData(td);
 		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Abstract_conteudo = toolkit.createLabel(form.getBody(), "", SWT.WRAP);
+		label_Abstract_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
 		td.horizontalSpan = 3;
 		label_Abstract_conteudo.setLayoutData(td);
 		
