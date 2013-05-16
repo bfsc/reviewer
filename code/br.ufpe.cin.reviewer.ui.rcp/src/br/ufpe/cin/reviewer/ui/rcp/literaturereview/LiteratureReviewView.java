@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -53,7 +52,7 @@ public class LiteratureReviewView extends ViewPart {
 	private Composite reviewInfoFooterComposite;
 	private Composite searchTitleComposite;
 	private Label titleLabel;
-	private Text titleText;
+	private Label titleContent;
 	private Label totalFoundLabel;
 	private Label totalFetchedLabel;
 
@@ -76,7 +75,7 @@ public class LiteratureReviewView extends ViewPart {
 	
 	public void setSelectedLiteratureReview(LiteratureReview literatureReview) {
 		selectedLiteratureReview = literatureReview;
-		titleText.setText(selectedLiteratureReview.getTitle());
+		titleContent.setText(selectedLiteratureReview.getTitle());
 		sectionInfo.setVisible(true);
 	}
 	
@@ -133,11 +132,11 @@ public class LiteratureReviewView extends ViewPart {
 		searchTitleCompositeData.horizontalSpan = 2;
 		searchTitleComposite.setLayoutData(searchTitleCompositeData);
 
-		titleLabel = toolkit.createLabel(searchTitleComposite, "Title ");
+		titleLabel = toolkit.createLabel(searchTitleComposite, "Title: ");
 		titleLabel.setLayoutData(new GridData());
 		
-		titleText = toolkit.createText(searchTitleComposite, "");
-		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		titleContent = toolkit.createLabel(searchTitleComposite, "");
+		titleContent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//composite for labels
 		reviewInfoBodyComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
@@ -203,7 +202,7 @@ public class LiteratureReviewView extends ViewPart {
 			
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
-				titleText.setText(selectedLiteratureReview.getTitle());
+				titleContent.setText(selectedLiteratureReview.getTitle());
 				totalFoundLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
 				totalFetchedLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
 
