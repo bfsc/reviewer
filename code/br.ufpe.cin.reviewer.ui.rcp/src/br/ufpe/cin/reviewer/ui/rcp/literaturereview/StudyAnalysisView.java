@@ -57,6 +57,13 @@ public class StudyAnalysisView extends ViewPart {
 	public void setStudy(Study study) {
 		this.study = study;
 		
+		if(study.getCode() != null) {
+			label_Id_conteudo.setText(study.getCode());
+		}
+		else {
+			label_Id_conteudo.setText("");
+		}
+		
 		label_Id_conteudo.setText(study.getCode());
 		
 		if(study.getTitle() != null) {
@@ -81,20 +88,26 @@ public class StudyAnalysisView extends ViewPart {
 		}
 		
 		String authors = "";
-		for (String author : study.getAuthors()) {
-			authors += author + ",";
+		if(study.getAuthors() != null) {
+			for (String author : study.getAuthors()) {
+				authors += author + ",";
+			}
 		}
 		label_Authors_conteudo.setText(authors);
 		
 		String institutions = "";
-		for (String institution : study.getInstitutions()) {
-			institutions += institution + ",";
+		if(study.getInstitutions() != null) {
+			for (String institution : study.getInstitutions()) {
+				institutions += institution + ",";
+			}
 		}
 		label_Institution_conteudo.setText(institutions);
 		
 		String countries = "";
-		for (String country : study.getCountries()) {
-			countries += country + ",";
+		if(study.getCountries() != null) {
+			for (String country : study.getCountries()) {
+				countries += country + ",";
+			}
 		}
 		label_Country_conteudo.setText(countries);
 		
