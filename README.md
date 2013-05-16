@@ -1,4 +1,4 @@
-Reviewer
+REviewER
 ========
 
 Reviewer is a tool to help researchers to conduct literature reviews.
@@ -17,7 +17,7 @@ to be written
 How to contribute
 -----------------
 
-You can find guidelines to contribute to VRaptor here.
+You can find guidelines to contribute to REviewRR here.
 
 
 ### Collaborating with the documentation
