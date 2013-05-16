@@ -1,23 +1,25 @@
 REviewER
 ========
 
-Reviewer is a tool to help researchers to conduct literature reviews.
+REviewER is a tool to help researchers to conduct literature reviews.
 
 ## How to use
 
+<to be written>
+
 ### Linux
 
-to be written
+<to be written>
 
 ### Windows
 
-to be written
+<to be written>
 
 
 How to contribute
 -----------------
 
-You can find guidelines to contribute to REviewRR here.
+You can find guidelines to contribute to REviewER here.
 
 
 ### Collaborating with the documentation
