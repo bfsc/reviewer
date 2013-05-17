@@ -20,7 +20,6 @@ Export-Package: br.ufpe.cin.reviewer.core,
  br.ufpe.cin.reviewer.core.literaturereview;uses:="br.ufpe.cin.reviewer.core,br.ufpe.cin.reviewer.model.literaturereview",
  br.ufpe.cin.reviewer.core.search
 Bundle-ClassPath: .,
- libs/hibernate-jpa-2.0-api-1.0.1.Final.jar,
  libs/jdom2-2.0.5.jar
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: br.ufpe.cin.reviewer.persistence
