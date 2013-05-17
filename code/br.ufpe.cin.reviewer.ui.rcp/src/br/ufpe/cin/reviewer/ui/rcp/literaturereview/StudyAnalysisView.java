@@ -1,20 +1,17 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.DragSourceListener;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -28,6 +25,7 @@ import br.ufpe.cin.reviewer.core.common.StudyController;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class StudyAnalysisView extends ViewPart {
@@ -40,15 +38,15 @@ public class StudyAnalysisView extends ViewPart {
 	private FormToolkit toolkit;
 	private Form form;
 	
-	private Text label_Id_conteudo;
-	private Text label_Title_conteudo;
-	private Text label_Status_conteudo;
-	private Text label_Source_conteudo;
-	private Text label_Authors_conteudo;
-	private Text label_Institution_conteudo;
-	private Text label_Country_conteudo;
-	private Text label_Link_conteudo;
-	private Text label_Abstract_conteudo;
+	private StyledText codeStyledText;
+	private StyledText titleStyledText;
+	private StyledText statusStyledText;
+	private StyledText sourceStyledText;
+	private StyledText authorsStyledText;
+	private StyledText institutionsStyledText;
+	private StyledText countriesStyledText;
+	private StyledText urlStyledText;
+	private StyledText abstractStyledText;
 	
 	public StudyAnalysisView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -57,73 +55,83 @@ public class StudyAnalysisView extends ViewPart {
 	public void setStudy(Study study) {
 		this.study = study;
 		
-		if(study.getCode() != null) {
-			label_Id_conteudo.setText(study.getCode());
+		// Setting study code
+		if (study.getCode() == null) {
+			this.codeStyledText.setText("");
+		} else {
+			this.codeStyledText.setText(study.getCode());
 		}
-		else {
-			label_Id_conteudo.setText("");
-		}
+		this.codeStyledText.setLineJustify(0, this.codeStyledText.getLineCount(), true);
 		
-		label_Id_conteudo.setText(study.getCode());
+		// Setting study title
+		if (study.getTitle() == null) {
+			this.titleStyledText.setText("");
+		} else {
+			this.titleStyledText.setText(study.getTitle());
+		}
+		this.titleStyledText.setLineJustify(0, this.titleStyledText.getLineCount(), true);
 		
-		if(study.getTitle() != null) {
-			label_Title_conteudo.setText(study.getTitle());
+		// Setting study status
+		if (study.getStatus() == null) {
+			this.statusStyledText.setText("");
+		} else {
+			this.statusStyledText.setText(study.getStatus().toString());
 		}
-		else {
-			label_Title_conteudo.setText("");
+		this.statusStyledText.setLineJustify(0, this.statusStyledText.getLineCount(), true);
+
+		// Setting study source
+		if (study.getSource() == null) {
+			this.sourceStyledText.setText("");
+		} else {
+			this.sourceStyledText.setText(study.getSource());
 		}
-		
-		if(study.getStatus() != null) {
-			label_Status_conteudo.setText(study.getStatus().toString());
-		}
-		else {
-			label_Status_conteudo.setText("");
-		}
-		
-		if(study.getSource() != null) {
-			label_Source_conteudo.setText(study.getSource());
-		}
-		else {
-			label_Source_conteudo.setText("");
-		}
-		
+		this.sourceStyledText.setLineJustify(0, this.sourceStyledText.getLineCount(), true);
+
+		// Setting study authors
 		String authors = "";
 		if(study.getAuthors() != null) {
 			for (String author : study.getAuthors()) {
 				authors += author + ",";
 			}
 		}
-		label_Authors_conteudo.setText(authors);
-		
+		this.authorsStyledText.setText(authors);
+		this.authorsStyledText.setLineJustify(0, this.authorsStyledText.getLineCount(), true);
+
+		// Setting study institutions
 		String institutions = "";
 		if(study.getInstitutions() != null) {
 			for (String institution : study.getInstitutions()) {
 				institutions += institution + ",";
 			}
 		}
-		label_Institution_conteudo.setText(institutions);
+		this.institutionsStyledText.setText(institutions);
+		this.institutionsStyledText.setLineJustify(0, this.institutionsStyledText.getLineCount(), true);
 		
+		// Setting study countries
 		String countries = "";
 		if(study.getCountries() != null) {
 			for (String country : study.getCountries()) {
 				countries += country + ",";
 			}
 		}
-		label_Country_conteudo.setText(countries);
+		this.countriesStyledText.setText(countries);
+		this.countriesStyledText.setLineJustify(0, this.countriesStyledText.getLineCount(), true);
 		
-		if(study.getUrl() != null) {
-			label_Link_conteudo.setText(study.getUrl());
+		// Setting study url
+		if (study.getUrl() == null) {
+			this.urlStyledText.setText("");
+		} else {
+			this.urlStyledText.setText(study.getUrl());
 		}
-		else {
-			label_Link_conteudo.setText("");
-		}
+		this.urlStyledText.setLineJustify(0, this.urlStyledText.getLineCount(), true);
 		
-		if(study.getAbstract() != null) {
-			label_Abstract_conteudo.setText(study.getAbstract());
+		// Setting study abstract
+		if (study.getAbstract() == null) {
+			this.abstractStyledText.setText("");
+		} else {
+			this.abstractStyledText.setText(study.getAbstract());
 		}
-		else {
-			label_Abstract_conteudo.setText("");
-		}
+		this.abstractStyledText.setLineJustify(0, this.abstractStyledText.getLineCount(), true);
 		
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
@@ -142,147 +150,155 @@ public class StudyAnalysisView extends ViewPart {
 		form = toolkit.createForm(parent);
 		toolkit.decorateFormHeading(form);
 		form.setText("Reviewer");
-		form.getBody().setLayout(new GridLayout(4, false));
+		
+		GridLayout layoutData = new GridLayout(4, false);
+		layoutData.marginTop = 10;
+		layoutData.marginLeft = 10;
+		layoutData.marginRight = 20;
+		layoutData.marginBottom = 10;
+		
+		form.getBody().setLayout(layoutData);
 	}
 
 	private void createStudyWidgets(Composite parent) {
-		GridData layout = new GridData(GridData.GRAB_VERTICAL, GridData.GRAB_HORIZONTAL);
-		form.getBody().setLayoutData(layout);
+		this.form.getBody().setLayoutData(new GridData(GridData.GRAB_VERTICAL, GridData.GRAB_HORIZONTAL));
 
-		GridData td;
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Id = toolkit.createLabel(form.getBody(), "Id:");
-		td.horizontalSpan = 1;
-		label_Id.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Id_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Id_conteudo.setLayoutData(td);
+		GridData layoutData;
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Title = toolkit.createLabel(form.getBody(), "Title:");
-		td.horizontalSpan = 1;
-		label_Title.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Title_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Title_conteudo.setLayoutData(td);
+		// Code widgets
+		Label codeLabel = toolkit.createLabel(form.getBody(), "CODE: ");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		this.codeStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.codeStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.codeStyledText.setLayoutData(layoutData);
+		this.codeStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Status = toolkit.createLabel(form.getBody(), "Status:");
-		td.horizontalSpan = 1;
-		label_Status.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Status_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Status_conteudo.setLayoutData(td);
+		// Title widgets
+		Label titleLabel = toolkit.createLabel(form.getBody(), "TITLE: ");
+		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		titleLabel.setLayoutData(layoutData);
+		this.titleStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.titleStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.titleStyledText.setLayoutData(layoutData);
+		this.titleStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Source = toolkit.createLabel(form.getBody(), "Source:");
-		td.horizontalSpan = 1;
-		label_Source.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Source_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Source_conteudo.setLayoutData(td);
+		// Status widgets
+		Label statusLabel = toolkit.createLabel(form.getBody(), "STATUS: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		statusLabel.setLayoutData(layoutData);
+		this.statusStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.statusStyledText.setLayoutData(layoutData);
+		this.statusStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Authors = toolkit.createLabel(form.getBody(), "Authors:");
-		td.horizontalSpan = 1;
-		label_Authors.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Authors_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Authors_conteudo.setLayoutData(td);
+		// Source widgets
+		Label sourceLabel = toolkit.createLabel(form.getBody(), "SOURCE: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		sourceLabel.setLayoutData(layoutData);
+		this.sourceStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.sourceStyledText.setLayoutData(layoutData);
+		this.sourceStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Institution = toolkit.createLabel(form.getBody(), "Institution(s):");
-		td.horizontalSpan = 1;
-		label_Institution.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Institution_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Institution_conteudo.setLayoutData(td);
+		// Authors widgets
+		Label authorsLabel = toolkit.createLabel(form.getBody(), "AUTHORS: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		authorsLabel.setLayoutData(layoutData);
+		this.authorsStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.authorsStyledText.setLayoutData(layoutData);
+		this.authorsStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Country = toolkit.createLabel(form.getBody(), "Country:");
-		td.horizontalSpan = 1;
-		label_Country.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Country_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Country_conteudo.setLayoutData(td);
+		// Institutions widgets
+		Label institutionsLabel = toolkit.createLabel(form.getBody(), "INSTITUTIONS: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		institutionsLabel.setLayoutData(layoutData);
+		this.institutionsStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.institutionsStyledText.setLayoutData(layoutData);
+		this.institutionsStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Link = toolkit.createLabel(form.getBody(), "Link:");
-		td.horizontalSpan = 1;
-		label_Link.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Link_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Link_conteudo.setLayoutData(td);
-	
+		// Countries widgets
+		Label countriesLabel = toolkit.createLabel(form.getBody(), "COUNTRIES: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		countriesLabel.setLayoutData(layoutData);
+		this.countriesStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.countriesStyledText.setLayoutData(layoutData);
+		this.countriesStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		//DRAG AND DROP SOLUTION
-		DragSource source = new DragSource(label_Link_conteudo, DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_LINK);
-		source.setTransfer(new Transfer[] { TextTransfer.getInstance() });
-
-	    source.addDragListener(new DragSourceListener() {
-	      public void dragStart(DragSourceEvent event) {
-	    	  label_Link_conteudo.setBackground(form.getDisplay().getSystemColor(SWT.COLOR_BLUE));
-	    	  label_Link_conteudo.setForeground(form.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-	    	  event.doit = (label_Link_conteudo.getText().length() != 0);
-	      }
-
-	      public void dragSetData(DragSourceEvent event) {
-	    	  event.data = label_Link_conteudo.getText();
-	      }
-
-	      public void dragFinished(DragSourceEvent event) {
-		    	label_Link_conteudo.setForeground(form.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-	        	label_Link_conteudo.setBackground(form.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-		    	WidgetsUtil.refreshComposite(form.getBody());
-	      }
-	    });
+		// URL widgets
+		Label urlLabel = toolkit.createLabel(form.getBody(), "URL: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		urlLabel.setLayoutData(layoutData);
+		this.urlStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		this.urlStyledText.setLayoutData(layoutData);
+		this.urlStyledText.addFocusListener(new StyleTextFocusHandler());
 		
+		// Abstract widgets
+		Label abstractLabel = toolkit.createLabel(form.getBody(), "ABSTRACT:");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		abstractLabel.setLayoutData(layoutData);
+		this.abstractStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData.horizontalSpan = 3;
+		abstractStyledText.setLayoutData(layoutData);
+		this.abstractStyledText.addFocusListener(new StyleTextFocusHandler());
 		
-		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		Label label_Abstract = toolkit.createLabel(form.getBody(), "Abstract:");
-		td.horizontalSpan = 1;
-		label_Abstract.setLayoutData(td);
-		td = new GridData(GridData.GRAB_HORIZONTAL);
-		label_Abstract_conteudo = toolkit.createText(form.getBody(), "", SWT.WRAP | SWT.READ_ONLY);
-		td.horizontalSpan = 3;
-		label_Abstract_conteudo.setLayoutData(td);
-		
-		td = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		// Include button
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Button include = toolkit.createButton(form.getBody(), "Include", SWT.PUSH);
-		td.horizontalSpan = 1;
-		td.grabExcessVerticalSpace = true;
-		td.verticalAlignment = SWT.END;
-		include.setLayoutData(td);
-		td = new GridData();
+		layoutData.horizontalSpan = 1;
+		layoutData.grabExcessVerticalSpace = true;
+		layoutData.verticalAlignment = SWT.END;
+		include.setLayoutData(layoutData);
+		layoutData = new GridData();
 		include.addSelectionListener(new IncludeButtonHandler());
 		
+		// Exclude button
 		Button exclude = toolkit.createButton(form.getBody(), "Exclude", SWT.PUSH);
-		td.horizontalSpan = 1;
-		td.grabExcessVerticalSpace = true;
-		td.verticalAlignment = SWT.END;
-		exclude.setLayoutData(td);
-		td = new GridData();
+		layoutData.horizontalSpan = 1;
+		layoutData.grabExcessVerticalSpace = true;
+		layoutData.verticalAlignment = SWT.END;
+		exclude.setLayoutData(layoutData);
+		layoutData = new GridData();
 		exclude.addSelectionListener(new ExcludeButtonHandler());
 		
+		// Skip button
 		Button skip = toolkit.createButton(form.getBody(), "Skip", SWT.PUSH);
-		td.horizontalSpan = 1;
-		td.grabExcessVerticalSpace = true;
-		td.verticalAlignment = SWT.END;
-		skip.setLayoutData(td);
+		layoutData.horizontalSpan = 1;
+		layoutData.grabExcessVerticalSpace = true;
+		layoutData.verticalAlignment = SWT.END;
+		skip.setLayoutData(layoutData);
 		skip.addSelectionListener(new SkipButtonHandler());
 		
+		// View all studies link
 		Hyperlink studyLink = toolkit.createHyperlink(form.getBody(), "View all studies", SWT.WRAP);
 		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
-		td.horizontalSpan = 1;
+		layoutData.horizontalSpan = 1;
 		studyLinkLayout.grabExcessVerticalSpace = true;
 		studyLinkLayout.horizontalAlignment = SWT.END;
 		studyLink.setLayoutData(studyLinkLayout);
@@ -383,4 +399,17 @@ public class StudyAnalysisView extends ViewPart {
 		
 	}
 
+	private class StyleTextFocusHandler implements FocusListener {
+
+		public void focusGained(FocusEvent e) {
+			
+		}
+
+		public void focusLost(FocusEvent e) {
+			StyledText sourceWidget = (StyledText) e.getSource();
+			sourceWidget.setSelection(0);
+		}
+		
+	}
+	
 }
