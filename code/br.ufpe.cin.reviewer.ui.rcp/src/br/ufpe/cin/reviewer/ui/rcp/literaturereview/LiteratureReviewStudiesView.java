@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +23,7 @@ import org.eclipse.ui.part.ViewPart;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class LiteratureReviewStudiesView extends ViewPart {
@@ -106,7 +108,8 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		studiesComposite.setLayout(new GridLayout(1, false));
 		studiesComposite.setLayoutData(new GridData());
 		
-		titleLabel = toolkit.createLabel(studiesComposite, "Title: ");
+		titleLabel = toolkit.createLabel(studiesComposite, "TITLE: ");
+		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
 
 		table = toolkit.createTable(studiesComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
