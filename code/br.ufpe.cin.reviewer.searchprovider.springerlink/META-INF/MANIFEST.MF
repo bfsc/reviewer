@@ -5,7 +5,8 @@ Bundle-SymbolicName: br.ufpe.cin.reviewer.searchprovider.springerlink;singleton:
 Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.0.1",
- br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1"
+ br.ufpe.cin.reviewer.searchprovider.spi;bundle-version="0.0.1",
+ br.ufpe.cin.reviewer.logger;bundle-version="0.0.1"
 Export-Package: br.ufpe.cin.reviewer.searchprovider.springerlink
 Bundle-ClassPath: .,
  libs/commons-codec-1.7.jar,

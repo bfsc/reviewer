@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
 
+import br.ufpe.cin.reviewer.logger.ReviewerLogger;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
@@ -15,6 +16,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlParagraph;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
+import com.gargoylesoftware.htmlunit.html.HtmlStrong;
 
 public class SpringerLinkSearchProvider implements SearchProvider {
 	
@@ -31,6 +33,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 	private static final String XPATH_STUDY_ABSTRACT = "//p[@class='snippet']";
 	private static final String XPATH_STUDY_NUMBER_OF_PAGES = "//span[@class='number-of-pages']";
 	private static final String STUDY_ABSTRACT_END_MARKER = "...";
+	private static final String XPATH_STRONG_TOTAL_FOUND = "//strong";
 	
 	private int NEXT_PAGE_COUNTER = 2;
 	private String SEARCH_STRING = "";
@@ -50,9 +53,8 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			// Assemble search URL
 			String searchUrl = assembleSearchUrl(searchString);
 			
-			
 			// Extract studies data
-			result.getStudies().addAll(extractStudiesData(browser, searchUrl));
+			result.getStudies().addAll(extractStudiesData(browser, searchUrl, result));
 			result.setTotalFetched(result.getStudies().size());
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
@@ -79,11 +81,14 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		return URL_DL_SPRINGER_LINK_SEARCH + query + URL_DL_SPRINGER_LINK_ARTICLE_SEARCH;
 	}
 	
-	private List<Study> extractStudiesData(WebClient browser, String searchUrl) {
+	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		try {
+			browser.getOptions().setJavaScriptEnabled(false);
 			HtmlPage page = browser.getPage(searchUrl);
+			HtmlStrong totalFound = (HtmlStrong) page.getByXPath(XPATH_STRONG_TOTAL_FOUND).get(0);
+			result.setTotalFound(Integer.parseInt(totalFound.getTextContent().replaceAll(",", "").trim()));
 			
 			String numberOfPages;
 			try {
@@ -93,7 +98,6 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			} catch (Exception e) {
 				numberOfPages = "1";
 			}
-			
 			// Extracting studies data.
 			List<?> studyTablesAnchors = page.getByXPath(XPATH_STUDY_TITLE_AND_URL);
 			for (int i = 0; i < studyTablesAnchors.size(); i++) {
@@ -127,16 +131,14 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 				
 				toReturn.add(study);
 			}
-			
 			// Extracting the URL of next page.
 			String nextPageUrl = extractNextPageUrl(numberOfPages);
 			
 			if (nextPageUrl != null) {
-				toReturn.addAll(extractStudiesData(browser, nextPageUrl));
+				toReturn.addAll(extractStudiesData(browser, nextPageUrl, result));
 			}
 		} catch (Exception e) {
-			//TRATAR EXCECAO
-			e.printStackTrace();
+			ReviewerLogger.info(e.getMessage());
 		}
 		
 		return toReturn;
