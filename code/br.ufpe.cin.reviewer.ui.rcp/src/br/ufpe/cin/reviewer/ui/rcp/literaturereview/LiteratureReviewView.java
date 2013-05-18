@@ -166,13 +166,13 @@ public class LiteratureReviewView extends ViewPart {
 		reviewInfoFooterComposite.setLayoutData(reviewFooterCompositeData);
 		
 		Hyperlink studyLink = toolkit.createHyperlink(reviewInfoFooterComposite, "View studies", SWT.WRAP);
-		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
+		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END | GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL);
 		studyLinkLayout.grabExcessVerticalSpace = true;
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
 		
 		Hyperlink deleteLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Delete Literature Review", SWT.WRAP);
-		GridData deleteLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
+		GridData deleteLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END | GridData.HORIZONTAL_ALIGN_END);
 		deleteLinkLayout.grabExcessVerticalSpace = true;
 		deleteLink.setLayoutData(deleteLinkLayout);
 		deleteLink.addHyperlinkListener(new DeleteLiteratureReviewLinkHandler());
