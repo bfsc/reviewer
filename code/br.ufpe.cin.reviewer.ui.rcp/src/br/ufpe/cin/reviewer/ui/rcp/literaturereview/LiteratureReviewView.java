@@ -1,11 +1,9 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
@@ -14,6 +12,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -27,7 +28,6 @@ import org.eclipse.ui.part.ViewPart;
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
-import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
@@ -48,16 +48,17 @@ public class LiteratureReviewView extends ViewPart {
 	
 	private Section sectionInfo;
 	private Composite reviewInfoComposite;
+	
+	private Composite searchHeaderComposite;
 	private Composite reviewInfoBodyComposite;
 	private Composite reviewInfoFooterComposite;
-	private Composite searchTitleComposite;
-	private Label titleLabel;
-	private Label titleContent;
-	private Label totalFoundLabel;
-	private Label totalFetchedLabel;
 
-	private java.util.List<Label> searchProvidersTotalFoundLabels = new ArrayList<Label>();
-	private java.util.List<Label> searchProvidersTotalFetchedLabels = new ArrayList<Label>();
+	private Label titleLabel;
+	private StyledText titleText;
+	
+	private StyledText queryStringText;
+	
+	private Table sourcesTable;
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -75,7 +76,7 @@ public class LiteratureReviewView extends ViewPart {
 	
 	public void setSelectedLiteratureReview(LiteratureReview literatureReview) {
 		selectedLiteratureReview = literatureReview;
-		titleContent.setText(selectedLiteratureReview.getTitle());
+		populateReviewInfo();
 		sectionInfo.setVisible(true);
 	}
 	
@@ -120,45 +121,62 @@ public class LiteratureReviewView extends ViewPart {
 		sectionInfo.setVisible(false);
 
 		reviewInfoComposite = toolkit.createComposite(sectionInfo, SWT.BORDER);
-		reviewInfoComposite.setLayout(new GridLayout(1, false));
 		GridData reviewCompositeData = new GridData(GridData.FILL_BOTH);
 		reviewCompositeData.horizontalSpan = 1;
 		reviewInfoComposite.setLayoutData(reviewCompositeData);
+		reviewInfoComposite.setLayout(new GridLayout(1, false));
 		
-		//composite for literature review title
-		searchTitleComposite = toolkit.createComposite(reviewInfoComposite);
-		searchTitleComposite.setLayout(new GridLayout(2, false));
+		// Header composite
+		searchHeaderComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
 		GridData searchTitleCompositeData = new GridData(GridData.FILL_HORIZONTAL);
 		searchTitleCompositeData.horizontalSpan = 2;
-		searchTitleComposite.setLayoutData(searchTitleCompositeData);
+		searchHeaderComposite.setLayoutData(searchTitleCompositeData);
+		searchHeaderComposite.setLayout(new GridLayout(2, false));
 
-		titleLabel = toolkit.createLabel(searchTitleComposite, "TITLE: ");
+		titleLabel = toolkit.createLabel(searchHeaderComposite, "TITLE: ");
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
 		
-		titleContent = toolkit.createLabel(searchTitleComposite, "");
-		titleContent.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
-		titleContent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		titleText = new StyledText(searchHeaderComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.titleText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+		this.titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.titleText.addFocusListener(new StyleTextFocusHandler());
 		
-		//composite for labels
+		// Body composite
 		reviewInfoBodyComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
-		reviewInfoBodyComposite.setLayout(new GridLayout(2, false));
-		GridData reviewBodyCompositeData = new GridData(GridData.FILL_HORIZONTAL);
-		reviewBodyCompositeData.horizontalSpan = 2;
-		reviewInfoComposite.setLayoutData(reviewBodyCompositeData);
+		reviewInfoBodyComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		reviewInfoBodyComposite.setLayout(new GridLayout(1, false));
 		
-		totalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, "Total Found: ");
-		GridData totalFoundLayout = new GridData();
-		totalFoundLayout.horizontalSpan = 1;
-		totalFoundLabel.setLayoutData(totalFoundLayout);
+		// Query string
+		Composite queryStringComposite = toolkit.createComposite(reviewInfoBodyComposite);
+		queryStringComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		queryStringComposite.setLayout(new GridLayout(2, false));
 		
-		totalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, "Total Fetched: ");
-		GridData totalFetchedLayout = new GridData();
-		totalFetchedLayout.horizontalIndent = 30;
-		totalFetchedLayout.horizontalSpan = 1;
-		totalFetchedLabel.setLayoutData(totalFetchedLayout);
+		toolkit.createLabel(queryStringComposite, "QUERY STRING:");
+		this.queryStringText = new StyledText(queryStringComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.queryStringText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.queryStringText.addFocusListener(new StyleTextFocusHandler());
+		
+		// Sources
+		Composite sourcesComposite = toolkit.createComposite(reviewInfoBodyComposite);
+		sourcesComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		sourcesComposite.setLayout(new GridLayout(2, false));
+		
+		Label sourcesLabel = toolkit.createLabel(sourcesComposite, "SOURCES INFORMATIONS:");
+		sourcesLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		
+		this.sourcesTable = toolkit.createTable(sourcesComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		this.sourcesTable.setLinesVisible (true);
+		this.sourcesTable.setHeaderVisible (true);
+		this.sourcesTable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		String[] titles = {"Source", "Total Found", "Total Fetched"};
+		for (int i=0; i<titles.length; i++) {
+			TableColumn column = new TableColumn (this.sourcesTable, SWT.NONE);
+			column.setText(titles [i]);
+		}
 
-		//composite for links
+		// Footer composite
 		reviewInfoFooterComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
 		reviewInfoFooterComposite.setLayout(new GridLayout(2, false));
 		GridData reviewFooterCompositeData = new GridData(GridData.FILL_BOTH);
@@ -171,7 +189,7 @@ public class LiteratureReviewView extends ViewPart {
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
 		
-		Hyperlink deleteLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Delete Literature Review", SWT.WRAP);
+		Hyperlink deleteLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Delete literature review", SWT.WRAP);
 		GridData deleteLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END | GridData.HORIZONTAL_ALIGN_END);
 		deleteLinkLayout.grabExcessVerticalSpace = true;
 		deleteLink.setLayoutData(deleteLinkLayout);
@@ -181,54 +199,41 @@ public class LiteratureReviewView extends ViewPart {
 		sectionInfo.setClient(reviewInfoComposite);
 	}
 
+	private void populateReviewInfo() {
+		titleText.setText(selectedLiteratureReview.getTitle());
+
+		queryStringText.setText("\"teem one\" AND (termtwo OR termthree OR termfour OR \"term five\") AND termsix");
+		
+		sourcesTable.removeAll();
+		
+		TableItem generalItem = new TableItem (sourcesTable, SWT.NONE);
+		generalItem.setText(0, "ALL");
+		generalItem.setText(1, String.valueOf(selectedLiteratureReview.getTotalFound()));
+		generalItem.setText(2, String.valueOf(selectedLiteratureReview.getTotalFetched()));
+		
+		for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
+			TableItem item = new TableItem (sourcesTable, SWT.NONE);
+			item.setText(0, source.getName());
+			item.setText(1, String.valueOf(source.getTotalFound()));
+			item.setText(2, String.valueOf(source.getTotalFetched()));
+		}
+		
+		for (int i=0; i < sourcesTable.getColumnCount(); i++) {
+			sourcesTable.getColumn(i).pack();
+		}
+		
+		WidgetsUtil.refreshComposite(form.getBody());
+		WidgetsUtil.refreshComposite(reviewInfoBodyComposite);
+	}
+	
 	private class LiteratureReviewsListHandler implements SelectionListener {
 
 		public void widgetSelected(SelectionEvent e) {
 			int selectionIndex = list.getSelectionIndex();
-
-			for (Label label : searchProvidersTotalFoundLabels) {
-				label.dispose();
-			}
-			for (Label label : searchProvidersTotalFetchedLabels) {
-				label.dispose();
-			}
-			
-			searchProvidersTotalFoundLabels.clear();
-			searchProvidersTotalFetchedLabels.clear();
 			
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
-				titleContent.setText(selectedLiteratureReview.getTitle());
-				totalFoundLabel.setText("Total Found: " + selectedLiteratureReview.getTotalFound());
-				totalFetchedLabel.setText("Total Fetched: " + selectedLiteratureReview.getTotalFetched());
-
-				java.util.List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
-				Collections.sort(configs, new SearchProviderConfiguratorElementComparator());
-				
-				for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
-					
-					for (IConfigurationElement config : configs) {
-						if(source.getName().equals( config.getAttribute("key") )){
-							Label totalFoundLabel = toolkit.createLabel(reviewInfoBodyComposite, config.getAttribute("friendly.name") + " total Found: " + source.getTotalFound());
-							totalFoundLabel.setData(config.getAttribute("key"));
-							GridData sourceTotalFoundLayout = new GridData();
-							sourceTotalFoundLayout.horizontalSpan = 1;
-							totalFoundLabel.setLayoutData(sourceTotalFoundLayout);
-							searchProvidersTotalFoundLabels.add(totalFoundLabel);
-	
-							Label totalFetchedLabel = toolkit.createLabel(reviewInfoBodyComposite, config.getAttribute("friendly.name") + " total Fetched: " + source.getTotalFetched());
-							totalFetchedLabel.setData(config.getAttribute("key"));
-							GridData sourceTotalFetchedLayout = new GridData();
-							sourceTotalFetchedLayout.horizontalIndent = 30;
-							sourceTotalFetchedLayout.horizontalSpan = 1;
-							totalFetchedLabel.setLayoutData(sourceTotalFetchedLayout);
-							searchProvidersTotalFetchedLabels.add(totalFetchedLabel);
-						}
-					}
-				}
-				System.out.println(searchProvidersTotalFoundLabels.size());
-				WidgetsUtil.refreshComposite(reviewInfoComposite);
-				WidgetsUtil.refreshComposite(reviewInfoBodyComposite);
+				populateReviewInfo();
 				sectionInfo.setVisible(true);
 			}
 		}
@@ -278,19 +283,8 @@ public class LiteratureReviewView extends ViewPart {
 			list.remove(selectedLiteratureReview.getTitle());
 			literatureReviews.remove(selectedLiteratureReview);
 			
-			if(!literatureReviews.isEmpty()) {
-				if(literatureReviews.get(0) != null) {
-					selectedLiteratureReview = literatureReviews.get(0);
-				}
-				else {
-					selectedLiteratureReview = null;
-					sectionInfo.setVisible(false);
-				}
-			}
-			else {
-				selectedLiteratureReview = null;
-				sectionInfo.setVisible(false);
-			}
+			selectedLiteratureReview = null;
+			sectionInfo.setVisible(false);
 
 			WidgetsUtil.refreshComposite(listComposite);
 			WidgetsUtil.refreshComposite(reviewInfoComposite);
@@ -299,10 +293,15 @@ public class LiteratureReviewView extends ViewPart {
 		
 	}
 	
-	private class SearchProviderConfiguratorElementComparator implements Comparator<IConfigurationElement> {
+	private class StyleTextFocusHandler implements FocusListener {
 
-		public int compare(IConfigurationElement config1, IConfigurationElement config2) {
-			return config1.getAttribute("friendly.name").compareTo(config2.getAttribute("friendly.name"));
+		public void focusGained(FocusEvent e) {
+			
+		}
+
+		public void focusLost(FocusEvent e) {
+			StyledText sourceWidget = (StyledText) e.getSource();
+			sourceWidget.setSelection(0);
 		}
 		
 	}

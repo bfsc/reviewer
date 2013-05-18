@@ -398,8 +398,8 @@ public class SearchView extends ViewPart {
 					activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));
 					
 					LiteratureReviewView literatureReviewView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
-					literatureReviewView.setSelectedLiteratureReview(literatureReview);
 					if (literatureReviewView != null) {
+						literatureReviewView.setSelectedLiteratureReview(literatureReview);
 						literatureReviewView.refreshView();
 					}
 				}
