@@ -9,6 +9,8 @@ public class UIConstants {
 	
 	public static final String SYSTEM_FONT_NAME = APP_DISPLAY.getSystemFont().getFontData()[0].getName();
 	
+	public static final int SYSTEM_FONT_HEIGHT = APP_DISPLAY.getSystemFont().getFontData()[0].getHeight();
+	
 	public static final String SYSTEM_LINE_BREAK = System.getProperty("line.separator");
 	
 	

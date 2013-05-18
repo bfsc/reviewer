@@ -167,12 +167,12 @@ public class StudyAnalysisView extends ViewPart {
 		
 		// Code widgets
 		Label codeLabel = toolkit.createLabel(form.getBody(), "CODE: ");
-		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		codeLabel.setLayoutData(layoutData);
 		this.codeStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		this.codeStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		this.codeStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 		layoutData.horizontalSpan = 3;
 		this.codeStyledText.setLayoutData(layoutData);
@@ -180,12 +180,12 @@ public class StudyAnalysisView extends ViewPart {
 		
 		// Title widgets
 		Label titleLabel = toolkit.createLabel(form.getBody(), "TITLE: ");
-		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		titleLabel.setLayoutData(layoutData);
 		this.titleStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		this.titleStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 8, SWT.BOLD));
+		this.titleStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
 		layoutData.horizontalSpan = 3;
 		this.titleStyledText.setLayoutData(layoutData);

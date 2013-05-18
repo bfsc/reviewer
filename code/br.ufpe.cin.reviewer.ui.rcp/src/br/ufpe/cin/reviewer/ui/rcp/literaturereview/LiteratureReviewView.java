@@ -2,6 +2,8 @@ package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
@@ -52,7 +54,7 @@ public class LiteratureReviewView extends ViewPart {
 	private Composite reviewInfoFooterComposite;
 
 	private Label titleLabel;
-	private Label titleContent;
+	private StyledText titleText;
 	
 	private StyledText queryStringText;
 	
@@ -135,9 +137,10 @@ public class LiteratureReviewView extends ViewPart {
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
 		
-		titleContent = toolkit.createLabel(searchHeaderComposite, "");
-		titleContent.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
-		titleContent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		titleText = new StyledText(searchHeaderComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.titleText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+		this.titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.titleText.addFocusListener(new StyleTextFocusHandler());
 		
 		// Body composite
 		reviewInfoBodyComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
@@ -152,6 +155,7 @@ public class LiteratureReviewView extends ViewPart {
 		toolkit.createLabel(queryStringComposite, "QUERY STRING:");
 		this.queryStringText = new StyledText(queryStringComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.queryStringText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.queryStringText.addFocusListener(new StyleTextFocusHandler());
 		
 		// Sources
 		Composite sourcesComposite = toolkit.createComposite(reviewInfoBodyComposite);
@@ -185,7 +189,7 @@ public class LiteratureReviewView extends ViewPart {
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
 		
-		Hyperlink deleteLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Delete Literature Review", SWT.WRAP);
+		Hyperlink deleteLink = toolkit.createHyperlink(reviewInfoFooterComposite, "Delete literature review", SWT.WRAP);
 		GridData deleteLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END | GridData.HORIZONTAL_ALIGN_END);
 		deleteLinkLayout.grabExcessVerticalSpace = true;
 		deleteLink.setLayoutData(deleteLinkLayout);
@@ -196,7 +200,7 @@ public class LiteratureReviewView extends ViewPart {
 	}
 
 	private void populateReviewInfo() {
-		titleContent.setText(selectedLiteratureReview.getTitle());
+		titleText.setText(selectedLiteratureReview.getTitle());
 
 		queryStringText.setText("\"teem one\" AND (termtwo OR termthree OR termfour OR \"term five\") AND termsix");
 		
@@ -285,6 +289,19 @@ public class LiteratureReviewView extends ViewPart {
 			WidgetsUtil.refreshComposite(listComposite);
 			WidgetsUtil.refreshComposite(reviewInfoComposite);
 			
+		}
+		
+	}
+	
+	private class StyleTextFocusHandler implements FocusListener {
+
+		public void focusGained(FocusEvent e) {
+			
+		}
+
+		public void focusLost(FocusEvent e) {
+			StyledText sourceWidget = (StyledText) e.getSource();
+			sourceWidget.setSelection(0);
 		}
 		
 	}
