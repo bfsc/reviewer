@@ -3,7 +3,20 @@ REviewER
 
 REviewER is a tool to help researchers to conduct literature reviews.
 
-## How to use
+Releases
+-----------------
+
+### Next Release
+
+Version: 0.0.1 - Date: 05/31/2013
+
+
+How to use
+-----------------
+
+TODO
+
+### Mac
 
 TODO
 
