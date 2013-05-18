@@ -47,7 +47,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 	public void setLiteratureReview(LiteratureReview literatureReview) {
 		this.literatureReview = literatureReview;
 
-		titleLabel.setText("Title: " + this.literatureReview.getTitle());
+		titleLabel.setText("TITLE: " + this.literatureReview.getTitle());
 
 		table.removeAll();
 		for (Study study : this.literatureReview.getStudies()) {

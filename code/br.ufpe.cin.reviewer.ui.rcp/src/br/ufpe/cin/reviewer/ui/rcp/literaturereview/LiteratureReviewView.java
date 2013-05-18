@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +29,7 @@ import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class LiteratureReviewView extends ViewPart {
@@ -123,17 +125,19 @@ public class LiteratureReviewView extends ViewPart {
 		reviewCompositeData.horizontalSpan = 1;
 		reviewInfoComposite.setLayoutData(reviewCompositeData);
 		
-		//composite for title and text field
+		//composite for literature review title
 		searchTitleComposite = toolkit.createComposite(reviewInfoComposite);
 		searchTitleComposite.setLayout(new GridLayout(2, false));
 		GridData searchTitleCompositeData = new GridData(GridData.FILL_HORIZONTAL);
 		searchTitleCompositeData.horizontalSpan = 2;
 		searchTitleComposite.setLayoutData(searchTitleCompositeData);
 
-		titleLabel = toolkit.createLabel(searchTitleComposite, "Title: ");
+		titleLabel = toolkit.createLabel(searchTitleComposite, "TITLE: ");
+		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
 		
 		titleContent = toolkit.createLabel(searchTitleComposite, "");
+		titleContent.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleContent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		//composite for labels
