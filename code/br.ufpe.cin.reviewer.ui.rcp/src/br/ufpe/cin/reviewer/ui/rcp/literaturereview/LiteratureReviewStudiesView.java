@@ -1,8 +1,8 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
@@ -116,7 +116,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		table.addSelectionListener(new StudyClickHandler());
+		table.addMouseListener(new StudyMouseHandler());
 
 		String[] titles = {"Code", "Status", "Title", "Year"};
 		for (int i=0; i< titles.length; i++) {
@@ -135,15 +135,15 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		this.table.setFocus();
 	}
 
-	private class StudyClickHandler implements SelectionListener {
+	private class StudyMouseHandler implements MouseListener {
 
-		public void widgetSelected(SelectionEvent e) {
+		public void mouseDoubleClick(MouseEvent e) {
 			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyAnalysisPerspective.ID));
 			
 			
-			TableItem item = (TableItem)e.item;
+			TableItem item = ((Table)e.getSource()).getSelection()[0];
 			
 			for (Study study : literatureReview.getStudies()) {
 				if (study.getCode().equals(item.getText())) {
@@ -153,10 +153,13 @@ public class LiteratureReviewStudiesView extends ViewPart {
 					break;
 				}
 			}
+		}
+
+		public void mouseDown(MouseEvent e) {
 			
 		}
 
-		public void widgetDefaultSelected(SelectionEvent e) {
+		public void mouseUp(MouseEvent e) {
 			
 		}
 		
