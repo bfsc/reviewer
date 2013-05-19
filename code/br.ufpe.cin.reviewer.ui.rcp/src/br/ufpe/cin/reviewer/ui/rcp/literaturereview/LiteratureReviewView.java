@@ -107,7 +107,7 @@ public class LiteratureReviewView extends ViewPart {
 		listComposite.setLayout(new GridLayout(2, false));
 		listComposite.setLayoutData(new GridData());
 		
-		list = new List (listComposite, SWT.MULTI | SWT.V_SCROLL);
+		list = new List (listComposite, SWT.V_SCROLL);
 		GridData listLayoutData = new GridData(GridData.FILL_VERTICAL);
 		listLayoutData.horizontalSpan = 1;
 		list.setLayoutData(listLayoutData);
@@ -141,6 +141,7 @@ public class LiteratureReviewView extends ViewPart {
 		this.titleText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		this.titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		this.titleText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.titleText, true, true);
 		
 		// Body composite
 		reviewInfoBodyComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
@@ -156,6 +157,7 @@ public class LiteratureReviewView extends ViewPart {
 		this.queryStringText = new StyledText(queryStringComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.queryStringText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		this.queryStringText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.queryStringText, true, true);
 		
 		// Sources
 		Composite sourcesComposite = toolkit.createComposite(reviewInfoBodyComposite);
@@ -165,7 +167,7 @@ public class LiteratureReviewView extends ViewPart {
 		Label sourcesLabel = toolkit.createLabel(sourcesComposite, "SOURCES INFORMATIONS:");
 		sourcesLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		
-		this.sourcesTable = toolkit.createTable(sourcesComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		this.sourcesTable = toolkit.createTable(sourcesComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		this.sourcesTable.setLinesVisible (true);
 		this.sourcesTable.setHeaderVisible (true);
 		this.sourcesTable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

@@ -81,6 +81,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 			table.getColumn(i).pack ();
 		}
 		
+		this.table.setFocus();
 		this.section.setVisible(true);
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
@@ -112,7 +113,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
 
-		table = toolkit.createTable(studiesComposite, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		table = toolkit.createTable(studiesComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -127,12 +128,14 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		for (int i=0; i<titles.length; i++) {
 			table.getColumn (i).pack ();
 		}
-
+		
+		this.table.setFocus();
+		
 		section.setClient(studiesComposite);
 	}
 	
 	public void setFocus() {
-
+		this.table.setFocus();
 	}
 
 	private class StudyClickHandler implements SelectionListener {

@@ -177,6 +177,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.codeStyledText.setLayoutData(layoutData);
 		this.codeStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.codeStyledText, true, true);
 		
 		// Title widgets
 		Label titleLabel = toolkit.createLabel(form.getBody(), "TITLE: ");
@@ -190,6 +191,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.titleStyledText.setLayoutData(layoutData);
 		this.titleStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.titleStyledText, true, true);
 		
 		// Status widgets
 		Label statusLabel = toolkit.createLabel(form.getBody(), "STATUS: ");
@@ -201,6 +203,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.statusStyledText.setLayoutData(layoutData);
 		this.statusStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.statusStyledText, true, true);
 		
 		// Source widgets
 		Label sourceLabel = toolkit.createLabel(form.getBody(), "SOURCE: ");
@@ -212,6 +215,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.sourceStyledText.setLayoutData(layoutData);
 		this.sourceStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.sourceStyledText, true, true);
 		
 		// Authors widgets
 		Label authorsLabel = toolkit.createLabel(form.getBody(), "AUTHORS: ");
@@ -223,6 +227,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.authorsStyledText.setLayoutData(layoutData);
 		this.authorsStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.authorsStyledText, true, true);
 		
 		// Institutions widgets
 		Label institutionsLabel = toolkit.createLabel(form.getBody(), "INSTITUTIONS: ");
@@ -234,6 +239,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.institutionsStyledText.setLayoutData(layoutData);
 		this.institutionsStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.institutionsStyledText, true, true);
 		
 		// Countries widgets
 		Label countriesLabel = toolkit.createLabel(form.getBody(), "COUNTRIES: ");
@@ -245,6 +251,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.countriesStyledText.setLayoutData(layoutData);
 		this.countriesStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.countriesStyledText, true, true);
 		
 		// URL widgets
 		Label urlLabel = toolkit.createLabel(form.getBody(), "URL: ");
@@ -256,6 +263,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		this.urlStyledText.setLayoutData(layoutData);
 		this.urlStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.urlStyledText, true, true);
 		
 		// Abstract widgets
 		Label abstractLabel = toolkit.createLabel(form.getBody(), "ABSTRACT:");
@@ -267,6 +275,7 @@ public class StudyAnalysisView extends ViewPart {
 		layoutData.horizontalSpan = 3;
 		abstractStyledText.setLayoutData(layoutData);
 		this.abstractStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.abstractStyledText, true, true);
 		
 		// Include button
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END);

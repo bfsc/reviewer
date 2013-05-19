@@ -125,7 +125,7 @@ public class SearchView extends ViewPart {
 	
 	private class SearchComposite extends Composite {
 		
-		private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your text here...";
+		private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your query string here...";
 		
 		private Text searchText;
 		private Composite checkBoxesComposite;
@@ -223,6 +223,7 @@ public class SearchView extends ViewPart {
 						
 						public void run() {
 							SearchView.this.resultComposite.setSearchResult(AsyncSearchJob.this.searchResult);
+							SearchView.this.resultComposite.getTable().setFocus();
 							progressMonitor.done();
 						}
 					});
@@ -284,7 +285,7 @@ public class SearchView extends ViewPart {
 			totalFetchedLayout.horizontalSpan = 1;
 			labelTotalFetched.setLayoutData(totalFetchedLayout);
 			
-			table = toolkit.createTable(this, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+			table = toolkit.createTable(this, SWT.BORDER | SWT.FULL_SELECTION);
 			table.setLinesVisible (true);
 			table.setHeaderVisible (true);
 			GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
