@@ -42,7 +42,6 @@ public class IeeeSearchProvider implements SearchProvider {
 			
 			while(count < totalFound){
 				searchUrl = mountSearchUrl(searchString);
-				System.out.println(searchUrl);
 				page = browser.getPage(searchUrl);
 					
 				List<?> documents = page.getByXPath("//document");

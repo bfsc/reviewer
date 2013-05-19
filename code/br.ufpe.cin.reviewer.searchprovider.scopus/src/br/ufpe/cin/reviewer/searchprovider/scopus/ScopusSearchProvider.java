@@ -48,6 +48,8 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Create the web browser
 			WebClient browser = new WebClient();
 			browser.getOptions().setThrowExceptionOnScriptError(false);
+			browser.getOptions().setJavaScriptEnabled(true);
+			browser.getOptions().setCssEnabled(false);
 			browser.getOptions().setUseInsecureSSL(true);
 			
 			// Throwing an exception if the search string is invalid.

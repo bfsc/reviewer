@@ -44,6 +44,8 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		try {
 			// Create the web browser
 			WebClient browser = new WebClient();
+			browser.getOptions().setJavaScriptEnabled(false);
+			browser.getOptions().setCssEnabled(false);
 			
 			// Throwing an exception if the search string is invalid.
 			if (searchString == null || searchString.trim().equalsIgnoreCase("")) {
@@ -85,7 +87,6 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		try {
-			browser.getOptions().setJavaScriptEnabled(false);
 			HtmlPage page = browser.getPage(searchUrl);
 			HtmlStrong totalFound = (HtmlStrong) page.getByXPath(XPATH_STRONG_TOTAL_FOUND).get(0);
 			result.setTotalFound(Integer.parseInt(totalFound.getTextContent().replaceAll(",", "").trim()));
