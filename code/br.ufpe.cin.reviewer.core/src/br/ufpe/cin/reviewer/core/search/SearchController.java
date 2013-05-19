@@ -13,19 +13,19 @@ import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 
 public class SearchController {
 
-	public SearchResult search(String searchString, SearchFilter filter, boolean async) {
+	public SearchResult search(String searchString, SearchFilter filter, boolean concurrent) {
 		SearchResult result = null;
 		
-		if (async) {
-			result = asyncSearch(searchString, filter);
+		if (concurrent) {
+			result = concurrentSearch(searchString, filter);
 		} else {
-			result = syncSearch(searchString, filter);
+			result = sequentialSearch(searchString, filter);
 		}
 			
 		return result;
 	}
 
-	private SearchResult syncSearch(String searchString, SearchFilter filter) {
+	private SearchResult sequentialSearch(String searchString, SearchFilter filter) {
 		SearchResult result = new SearchResult();
 
 		try {
@@ -53,7 +53,7 @@ public class SearchController {
 		return result;
 	}
 	
-	private SearchResult asyncSearch(String searchString, SearchFilter filter) {
+	private SearchResult concurrentSearch(String searchString, SearchFilter filter) {
 		SearchResult result = new SearchResult();
 
 		try {
