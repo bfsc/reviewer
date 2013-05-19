@@ -50,6 +50,7 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		titleLabel.setText("TITLE: " + this.literatureReview.getTitle());
 
 		table.removeAll();
+		
 		for (Study study : this.literatureReview.getStudies()) {
 			Color red = form.getDisplay().getSystemColor(SWT.COLOR_RED);
 			Color green = form.getDisplay().getSystemColor(SWT.COLOR_GREEN);
@@ -81,7 +82,6 @@ public class LiteratureReviewStudiesView extends ViewPart {
 			table.getColumn(i).pack ();
 		}
 		
-		this.table.setFocus();
 		this.section.setVisible(true);
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
@@ -101,7 +101,6 @@ public class LiteratureReviewStudiesView extends ViewPart {
 
 	private void createLiteratureStudiesWidgets(Composite parent) {
 	    section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
-	    section.setVisible(false);
 	    section.setLayout(new GridLayout(1, false));
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
@@ -128,8 +127,6 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		for (int i=0; i<titles.length; i++) {
 			table.getColumn (i).pack ();
 		}
-		
-		this.table.setFocus();
 		
 		section.setClient(studiesComposite);
 	}
