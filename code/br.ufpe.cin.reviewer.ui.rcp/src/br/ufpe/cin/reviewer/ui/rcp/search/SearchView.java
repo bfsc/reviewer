@@ -217,7 +217,7 @@ public class SearchView extends ViewPart {
 					});
 					
 					SearchController searchController = new SearchController();
-					AsyncSearchJob.this.searchResult = searchController.search(searchString, searchFilter);
+					AsyncSearchJob.this.searchResult = searchController.search(searchString, searchFilter, true);
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						
