@@ -170,7 +170,7 @@ public class SearchView extends BaseView {
 				}
 				
 				if (searchString.trim().isEmpty()) {
-					SearchView.super.form.setMessage("Your must inform a query string to search.", IMessageProvider.ERROR);
+					SearchView.super.form.setMessage("You must inform a query string to search.", IMessageProvider.ERROR);
 				} else if (!anySearchProviderSelected) {
 					SearchView.super.form.setMessage("You must select at least one source to search.", IMessageProvider.ERROR);
 				} else {
