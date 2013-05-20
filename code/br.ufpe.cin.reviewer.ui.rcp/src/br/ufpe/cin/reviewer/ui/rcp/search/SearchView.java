@@ -158,8 +158,6 @@ public class SearchView extends BaseView {
 		private class SearchButtonHandler implements SelectionListener {
 
 			public void widgetSelected(SelectionEvent e) {
-				SearchView.this.resultComposite.getTable().removeAll();
-				
 				if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
 					searchText.setText("");
 				}
