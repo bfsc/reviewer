@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.ufpe.cin.reviewer.persistence.JPAEntityManager;
@@ -79,7 +80,8 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 
 	public void delete(E entity) throws PersistenceException {
 		try {
-			JPAEntityManager.ENTITY_MANAGER.remove(entity);
+			EntityManager em  = JPAEntityManager.ENTITY_MANAGER;
+			em.remove(em.contains(entity) ? entity : em.merge(entity));
 		} catch (Exception e) {
 			throw new PersistenceException("An error occurred trying to delete an entity.",e);
 		}
