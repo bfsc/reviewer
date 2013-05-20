@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -164,16 +165,29 @@ public class SearchView extends BaseView {
 				}
 				
 				String searchString = searchText.getText();
-			
-				SearchFilter searchFilter = new SearchFilter();
 				
-				for (Button checkBox : searchProvidersCheckBoxes) {
-					if (checkBox.getSelection()) {
-						searchFilter.addSearchProviderKey((String) checkBox.getData());
-					}
+				boolean anySearchProviderSelected = false;
+				for (Button checkBoxes : searchProvidersCheckBoxes) {
+					anySearchProviderSelected |= checkBoxes.getSelection();
 				}
 				
-				new AsyncSearchJob(searchString, searchFilter).schedule();
+				if (searchString.trim().isEmpty()) {
+					SearchView.super.form.setMessage("Your must inform a query string to search.", IMessageProvider.ERROR);
+				} else if (!anySearchProviderSelected) {
+					SearchView.super.form.setMessage("You must select at least one source to search.", IMessageProvider.ERROR);
+				} else {
+					SearchView.super.form.setMessage("", IMessageProvider.NONE);
+					
+					SearchFilter searchFilter = new SearchFilter();
+					
+					for (Button checkBox : searchProvidersCheckBoxes) {
+						if (checkBox.getSelection()) {
+							searchFilter.addSearchProviderKey((String) checkBox.getData());
+						}
+					}
+					
+					new AsyncSearchJob(searchString, searchFilter).schedule();
+				}
 			}
 
 			public void widgetDefaultSelected(SelectionEvent e) {
