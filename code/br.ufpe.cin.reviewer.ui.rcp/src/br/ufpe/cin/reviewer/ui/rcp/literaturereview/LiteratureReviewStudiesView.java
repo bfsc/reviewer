@@ -15,25 +15,20 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
-import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
-import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
+import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
+import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
-public class LiteratureReviewStudiesView extends ViewPart {
+public class LiteratureReviewStudiesView extends BaseView {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
 	
 	private LiteratureReview literatureReview;
-	
-	private FormToolkit toolkit;
-	private Form form;
 	
 	private Section section;
 	private Composite studiesComposite;
@@ -86,16 +81,13 @@ public class LiteratureReviewStudiesView extends ViewPart {
 		WidgetsUtil.refreshComposite(form.getBody());
 	}
 	
-	public void createPartControl(Composite parent) {
+	public void createPartControlImpl(Composite parent) {
 		configureView(parent);
 		createLiteratureStudiesWidgets(parent);
 	}
 	
 	private void configureView(Composite parent) {
-		toolkit = new FormToolkit(parent.getDisplay());
-		form = toolkit.createForm(parent);
-		toolkit.decorateFormHeading(form);
-		form.setText("Literature Review Studies");
+		super.form.setText(super.form.getText() + " - Literature review studies");
 		form.getBody().setLayout(new GridLayout(2, false));
 	}
 

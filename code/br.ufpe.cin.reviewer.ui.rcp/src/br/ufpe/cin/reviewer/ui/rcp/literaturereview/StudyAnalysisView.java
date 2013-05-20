@@ -16,27 +16,22 @@ import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
-import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.common.StudyController;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
-import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
-import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
+import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
+import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
-public class StudyAnalysisView extends ViewPart {
+public class StudyAnalysisView extends BaseView {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView";
 	
 	private Study study;
 	private LiteratureReview literatureReview;
-	
-	private FormToolkit toolkit;
-	private Form form;
 	
 	private StyledText codeStyledText;
 	private StyledText titleStyledText;
@@ -140,16 +135,13 @@ public class StudyAnalysisView extends ViewPart {
 		this.literatureReview = literatureReview;
 	}
 	
-	public void createPartControl(Composite parent) {
+	public void createPartControlImpl(Composite parent) {
 		configureView(parent);
 		createStudyWidgets(parent);
 	}
 	
 	private void configureView(Composite parent) {
-		toolkit = new FormToolkit(parent.getDisplay());
-		form = toolkit.createForm(parent);
-		toolkit.decorateFormHeading(form);
-		form.setText("Reviewer");
+		super.form.setText(super.form.getText() + " - Study analysis");
 		
 		GridLayout layoutData = new GridLayout(4, false);
 		layoutData.marginTop = 10;

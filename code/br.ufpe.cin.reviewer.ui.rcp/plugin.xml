@@ -84,60 +84,45 @@
       <perspectiveExtension
             targetID="br.ufpe.cin.reviewer.ui.rcp.LiteratureReviewPerspective">
          <view
+               closeable="false"
                id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView"
                minimized="false"
+               moveable="false"
                relationship="left"
                relative="org.eclipse.ui.editorss"
                showTitle="false"
-               standalone="true">
+               standalone="true"
+               visible="true">
          </view>
       </perspectiveExtension>
       <perspectiveExtension
             targetID="br.ufpe.cin.reviewer.ui.rcp.LiteratureReviewStudiesPerspective">
          <view
+               closeable="false"
                id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView"
                minimized="false"
+               moveable="false"
                relationship="left"
                relative="org.eclipse.ui.editorss"
                showTitle="false"
-               standalone="true">
+               standalone="true"
+               visible="true">
          </view>
       </perspectiveExtension>
       <perspectiveExtension
             targetID="br.ufpe.cin.reviewer.ui.rcp.StudyAnalysisPerspective">
          <view
+               closeable="false"
                id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView"
                minimized="false"
+               moveable="false"
                relationship="left"
                relative="org.eclipse.ui.editorss"
                showTitle="false"
-               standalone="true">
+               standalone="true"
+               visible="true">
          </view>
       </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.eclipse.ui.actionSets">
-      <actionSet
-            id="br.ufpe.cin.reviewer.ui.rcp.toolBarActionSet"
-            label="ToolBar Action Set"
-            visible="true">
-         <action
-               class="br.ufpe.cin.reviewer.ui.rcp.search.SearchAction"
-               id="br.ufpe.cin.reviewer.ui.rcp.search.searchAction"
-               label="Search"
-               style="push"
-               toolbarPath="Normal"
-               tooltip="Search">
-         </action>
-         <action
-               class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewAction"
-               id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.literatureReview"
-               label="Literature Review"
-               style="push"
-               toolbarPath="Normal"
-               tooltip="Literature Review">
-         </action>
-      </actionSet>
    </extension>
    <extension
          id="reviewer"

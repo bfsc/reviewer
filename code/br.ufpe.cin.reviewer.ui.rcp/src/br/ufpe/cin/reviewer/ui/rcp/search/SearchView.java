@@ -33,13 +33,10 @@ import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
-import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.core.search.SearchController;
@@ -51,17 +48,15 @@ import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.SourceType;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
-import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
+import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
-public class SearchView extends ViewPart {
+public class SearchView extends BaseView {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
-	
-	private FormToolkit toolkit;
-	private Form form;
 	
 	private SearchComposite searchComposite;
 	private ResultComposite resultComposite;
@@ -74,7 +69,7 @@ public class SearchView extends ViewPart {
 	
 	// PUBLIC METHODS ==========================================================	
 	
-	public void createPartControl(Composite parent) {
+	public void createPartControlImpl(Composite parent) {
 		configureView(parent);
 		createSearchWidgets(parent);
 		createResultWidgets();
@@ -87,11 +82,8 @@ public class SearchView extends ViewPart {
 	// PRIVATE METHODS =========================================================
 	
 	private void configureView(Composite parent) {
-		this.toolkit = new FormToolkit(parent.getDisplay());
-		this.form = toolkit.createForm(parent);
-		this.toolkit.decorateFormHeading(this.form);
-		this.form.setText("Search Studies");
-		this.form.getBody().setLayout(new GridLayout(1, false));
+		super.form.setText(super.form.getText() + " - Search studies");
+		super.form.getBody().setLayout(new GridLayout(1, false));
 	}
 
 	private void createSearchWidgets(Composite parent) {
@@ -101,7 +93,6 @@ public class SearchView extends ViewPart {
 		
 		TableWrapLayout layout = new TableWrapLayout();
 		layout.numColumns = 2;
-//		layout.numColumns = 7;
 		searchComposite = new SearchComposite(section, SWT.NONE);
 		searchComposite.setLayout(layout);
 		

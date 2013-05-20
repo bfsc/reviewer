@@ -1,10 +1,16 @@
 package br.ufpe.cin.reviewer.ui.rcp;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 import br.ufpe.cin.reviewer.persistence.util.HSQLUtil;
+import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -60,5 +66,17 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+	
+	protected void initializeImageRegistry(ImageRegistry reg) {
+//		super.initializeImageRegistry(reg);
+		
+        Bundle bundle = Platform.getBundle(PLUGIN_ID);
+
+        ImageDescriptor toolbarSearchImage = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/toolbar.search.png"), null));
+        reg.put(UIConstants.TOOLBAR_SEARCH_ACTION_IMAGE_ID, toolbarSearchImage);
+        
+        ImageDescriptor toolbarLiteratureReviewImage = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/toobar.literaturereview.png"), null));
+        reg.put(UIConstants.TOOLBAR_LITERATURE_REVIEW_ACTION_IMAGE_ID, toolbarLiteratureReviewImage);
 	}
 }

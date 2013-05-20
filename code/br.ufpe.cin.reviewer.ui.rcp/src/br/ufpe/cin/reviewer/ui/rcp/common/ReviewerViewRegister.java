@@ -1,4 +1,4 @@
-package br.ufpe.cin.reviewer.ui.rcp;
+package br.ufpe.cin.reviewer.ui.rcp.common;
 
 import java.util.HashMap;
 import java.util.Map;

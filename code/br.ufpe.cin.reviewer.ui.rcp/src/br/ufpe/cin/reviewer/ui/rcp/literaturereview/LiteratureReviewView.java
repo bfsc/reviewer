@@ -19,28 +19,23 @@ import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
-import br.ufpe.cin.reviewer.ui.rcp.ReviewerViewRegister;
-import br.ufpe.cin.reviewer.ui.rcp.UIConstants;
+import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
+import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
-public class LiteratureReviewView extends ViewPart {
+public class LiteratureReviewView extends BaseView {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";
 
 	private java.util.List<LiteratureReview> literatureReviews;
 	private LiteratureReview selectedLiteratureReview;
-	
-	private FormToolkit toolkit;
-	private Form form;
 	
 	private Section sectionList;
 	private Composite listComposite;
@@ -80,7 +75,7 @@ public class LiteratureReviewView extends ViewPart {
 		sectionInfo.setVisible(true);
 	}
 	
-	public void createPartControl(Composite parent) {
+	public void createPartControlImpl(Composite parent) {
 		configureView(parent);
 		createLiteratureWidgets(parent);
 	}
@@ -90,11 +85,8 @@ public class LiteratureReviewView extends ViewPart {
 	}
 	
 	private void configureView(Composite parent) {
-		toolkit = new FormToolkit(parent.getDisplay());
-		form = toolkit.createForm(parent);
-		toolkit.decorateFormHeading(form);
-		form.setText("Literature Reviews");
-		form.getBody().setLayout(new GridLayout(2, false));
+		super.form.setText(super.form.getText() + " - My literature reviews");
+		super.form.getBody().setLayout(new GridLayout(2, false));
 	}
 
 	private void createLiteratureWidgets(Composite parent) {
