@@ -6,8 +6,4 @@ DEVELOPMENT ENVIRONMENT
     For Windows 32 bits - http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR2/eclipse-rcp-juno-SR2-win32.zip
     For Windows 64 bits - http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR2/eclipse-rcp-juno-SR2-win32-x86_64.zip
 
-[Git Eclipse Plugin] - EGit - 2.2.0 - http://download.eclipse.org/egit/updates
-
 [AspecJ Eclipse Plugin] - AJDT - http://download.eclipse.org/tools/ajdt/42/update
-
-[Maven Eclipse Plugin] - M2E - 1.2.0 - http://download.eclipse.org/technology/m2e/releases
