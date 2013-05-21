@@ -112,7 +112,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 				if (study == null) {
 					study = new Study();
 					study.setStatus(Study.StudyStatus.NOT_EVALUATED);
-					study.setSource("Science Direct");
+					study.setSource(SEARCH_PROVIDER_NAME);
 				}
 				
 				if (line.startsWith("title = \"")) {

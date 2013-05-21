@@ -1,5 +1,10 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusEvent;
@@ -21,6 +26,7 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import br.ufpe.cin.reviewer.core.common.StudyController;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
@@ -78,7 +84,16 @@ public class StudyAnalysisView extends BaseView {
 		if (study.getSource() == null) {
 			this.sourceStyledText.setText("");
 		} else {
-			this.sourceStyledText.setText(study.getSource());
+			List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
+			Collections.sort(configs, new SearchProviderConfiguratorElementComparator());
+			
+			for (IConfigurationElement config : configs) {
+				System.out.println(study.getSource());
+				if (config.getAttribute("key").equals(study.getSource())) {
+					System.out.println("entrou aqui!");
+					this.sourceStyledText.setText(config.getAttribute("friendly.name"));
+				}
+			}
 		}
 		this.sourceStyledText.setLineJustify(0, this.sourceStyledText.getLineCount(), true);
 
@@ -409,6 +424,14 @@ public class StudyAnalysisView extends BaseView {
 		public void focusLost(FocusEvent e) {
 			StyledText sourceWidget = (StyledText) e.getSource();
 			sourceWidget.setSelection(0);
+		}
+		
+	}
+	
+	private class SearchProviderConfiguratorElementComparator implements Comparator<IConfigurationElement> {
+
+		public int compare(IConfigurationElement config1, IConfigurationElement config2) {
+			return config1.getAttribute("friendly.name").compareTo(config2.getAttribute("friendly.name"));
 		}
 		
 	}

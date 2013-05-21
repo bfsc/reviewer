@@ -122,7 +122,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 				if (study == null) {
 					study = new Study();
 					study.setStatus(Study.StudyStatus.NOT_EVALUATED);
-					study.setSource("Engineering Village");
+					study.setSource(SEARCH_PROVIDER_NAME);
 				}
 				
 				if (line.startsWith("title = {")) {
