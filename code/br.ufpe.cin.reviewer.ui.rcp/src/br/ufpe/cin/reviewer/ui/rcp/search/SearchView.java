@@ -59,6 +59,7 @@ public class SearchView extends BaseView {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.search.SearchView";
 	
+	String searchString;
 	private SearchComposite searchComposite;
 	private ResultComposite resultComposite;
 	
@@ -162,7 +163,7 @@ public class SearchView extends BaseView {
 					searchText.setText("");
 				}
 				
-				String searchString = searchText.getText();
+				searchString = searchText.getText();
 				
 				boolean anySearchProviderSelected = false;
 				for (Button checkBoxes : searchProvidersCheckBoxes) {
@@ -375,6 +376,9 @@ public class SearchView extends BaseView {
 					LiteratureReview literatureReview = new LiteratureReview();
 					
 					literatureReview.setTitle(dialog.getValue());
+					if(searchString != null) {
+						literatureReview.setQueryString(searchString);
+					}
 					
 					// Adding studies to the literature review
 					int studyCounter = 1;

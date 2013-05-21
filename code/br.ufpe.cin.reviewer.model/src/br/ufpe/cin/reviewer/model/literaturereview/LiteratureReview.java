@@ -10,6 +10,7 @@ public class LiteratureReview {
 	private int id;
 	
 	private String title;
+	private String queryString;
 	private List<LiteratureReviewSource> sources = new LinkedList<LiteratureReviewSource>();
 	private List<Study> studies = new LinkedList<Study>();
 	
@@ -27,6 +28,14 @@ public class LiteratureReview {
 	
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	public String getQueryString() {
+		return queryString;
+	}
+	
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
 	}
 	
 	public List<LiteratureReviewSource> getSources() {

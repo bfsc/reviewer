@@ -197,7 +197,7 @@ public class LiteratureReviewView extends BaseView {
 	private void populateReviewInfo() {
 		titleText.setText(selectedLiteratureReview.getTitle());
 
-		queryStringText.setText("\"teem one\" AND (termtwo OR termthree OR termfour OR \"term five\") AND termsix");
+		queryStringText.setText(selectedLiteratureReview.getQueryString());
 		
 		sourcesTable.removeAll();
 		
