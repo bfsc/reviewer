@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -271,17 +272,25 @@ public class LiteratureReviewView extends BaseView {
 
 		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
 
-			LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-			literatureReviewController.deleteLiteratureReview(selectedLiteratureReview);
+			MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+			dialog.setText("Reviewer");
+			dialog.setMessage("Do you really want to delete this literature review?");
 			
-			list.remove(selectedLiteratureReview.getTitle());
-			literatureReviews.remove(selectedLiteratureReview);
+			int returnCode = dialog.open();
 			
-			selectedLiteratureReview = null;
-			sectionInfo.setVisible(false);
-
-			WidgetsUtil.refreshComposite(listComposite);
-			WidgetsUtil.refreshComposite(reviewInfoComposite);
+			if (returnCode == SWT.OK) {
+				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+				literatureReviewController.deleteLiteratureReview(selectedLiteratureReview);
+				
+				list.remove(selectedLiteratureReview.getTitle());
+				literatureReviews.remove(selectedLiteratureReview);
+				
+				selectedLiteratureReview = null;
+				sectionInfo.setVisible(false);
+	
+				WidgetsUtil.refreshComposite(listComposite);
+				WidgetsUtil.refreshComposite(reviewInfoComposite);
+			}
 			
 		}
 		
