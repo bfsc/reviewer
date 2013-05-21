@@ -9,6 +9,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import br.ufpe.cin.reviewer.persistence.JPAEntityManager;
 import br.ufpe.cin.reviewer.persistence.util.HSQLUtil;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 
@@ -37,6 +38,7 @@ public class Activator extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		HSQLUtil.initDatabase();
+		JPAEntityManager.ENTITY_MANAGER.isOpen();
 	}
 
 	/*
