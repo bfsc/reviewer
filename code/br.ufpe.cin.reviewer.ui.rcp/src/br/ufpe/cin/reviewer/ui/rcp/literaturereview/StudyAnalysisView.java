@@ -88,7 +88,6 @@ public class StudyAnalysisView extends BaseView {
 			Collections.sort(configs, new SearchProviderConfiguratorElementComparator());
 			
 			for (IConfigurationElement config : configs) {
-				System.out.println(study.getSource());
 				if (config.getAttribute("key").equals(study.getSource())) {
 					this.sourceStyledText.setText(config.getAttribute("friendly.name"));
 				}
@@ -172,7 +171,7 @@ public class StudyAnalysisView extends BaseView {
 	private void configureView(Composite parent) {
 		super.form.setText(super.form.getText() + " - Study analysis");
 		
-		GridLayout layoutData = new GridLayout(4, false);
+		GridLayout layoutData = new GridLayout(5, false);
 		layoutData.marginTop = 10;
 		layoutData.marginLeft = 10;
 		layoutData.marginRight = 20;
@@ -195,7 +194,7 @@ public class StudyAnalysisView extends BaseView {
 		this.codeStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.codeStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.codeStyledText.setLayoutData(layoutData);
 		this.codeStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.codeStyledText, true, true);
@@ -209,7 +208,7 @@ public class StudyAnalysisView extends BaseView {
 		this.titleStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.titleStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.titleStyledText.setLayoutData(layoutData);
 		this.titleStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.titleStyledText, true, true);
@@ -221,7 +220,7 @@ public class StudyAnalysisView extends BaseView {
 		statusLabel.setLayoutData(layoutData);
 		this.statusStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.statusStyledText.setLayoutData(layoutData);
 		this.statusStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.statusStyledText, true, true);
@@ -233,7 +232,7 @@ public class StudyAnalysisView extends BaseView {
 		sourceLabel.setLayoutData(layoutData);
 		this.sourceStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.sourceStyledText.setLayoutData(layoutData);
 		this.sourceStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.sourceStyledText, true, true);
@@ -245,7 +244,7 @@ public class StudyAnalysisView extends BaseView {
 		authorsLabel.setLayoutData(layoutData);
 		this.authorsStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.authorsStyledText.setLayoutData(layoutData);
 		this.authorsStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.authorsStyledText, true, true);
@@ -257,7 +256,7 @@ public class StudyAnalysisView extends BaseView {
 		institutionsLabel.setLayoutData(layoutData);
 		this.institutionsStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.institutionsStyledText.setLayoutData(layoutData);
 		this.institutionsStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.institutionsStyledText, true, true);
@@ -269,7 +268,7 @@ public class StudyAnalysisView extends BaseView {
 		countriesLabel.setLayoutData(layoutData);
 		this.countriesStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.countriesStyledText.setLayoutData(layoutData);
 		this.countriesStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.countriesStyledText, true, true);
@@ -281,7 +280,7 @@ public class StudyAnalysisView extends BaseView {
 		urlLabel.setLayoutData(layoutData);
 		this.urlStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		this.urlStyledText.setLayoutData(layoutData);
 		this.urlStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.urlStyledText, true, true);
@@ -293,13 +292,21 @@ public class StudyAnalysisView extends BaseView {
 		abstractLabel.setLayoutData(layoutData);
 		this.abstractStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
-		layoutData.horizontalSpan = 3;
+		layoutData.horizontalSpan = 4;
 		abstractStyledText.setLayoutData(layoutData);
 		this.abstractStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.abstractStyledText, true, true);
 		
-		// Include button
+		// Back button
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		Button back = toolkit.createButton(form.getBody(), "Back", SWT.PUSH);
+		layoutData.horizontalSpan = 1;
+		layoutData.grabExcessVerticalSpace = true;
+		layoutData.verticalAlignment = SWT.END;
+		back.setLayoutData(layoutData);
+		back.addSelectionListener(new BackButtonHandler());
+		
+		// Include button
 		Button include = toolkit.createButton(form.getBody(), "Include", SWT.PUSH);
 		layoutData.horizontalSpan = 1;
 		layoutData.grabExcessVerticalSpace = true;
@@ -335,6 +342,33 @@ public class StudyAnalysisView extends BaseView {
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
 	}
 	
+	public void back(){
+
+		int index = 0;
+		Study previewStudy;
+		
+		for (Study study : literatureReview.getStudies()) {
+			if(study.getId() == StudyAnalysisView.this.study.getId()){
+				index = literatureReview.getStudies().indexOf(study);
+				break;
+			}
+		}
+		
+		if((index - 1) >= 0){
+			previewStudy = literatureReview.getStudies().get(index - 1);
+			this.setStudy(previewStudy);
+		}
+		
+		else{
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+			
+			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			literatureReviewStudiesView.setLiteratureReview(literatureReview);
+		}
+	}
+	
 	public void skip(){
 		
 		int index = 0;
@@ -363,6 +397,19 @@ public class StudyAnalysisView extends BaseView {
 
 	public void setFocus() {
 
+	}
+	
+	public class BackButtonHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			
+			StudyAnalysisView.this.back();
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
 	}
 	
 	private class IncludeButtonHandler implements SelectionListener {
