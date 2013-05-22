@@ -90,7 +90,6 @@ public class StudyAnalysisView extends BaseView {
 			for (IConfigurationElement config : configs) {
 				System.out.println(study.getSource());
 				if (config.getAttribute("key").equals(study.getSource())) {
-					System.out.println("entrou aqui!");
 					this.sourceStyledText.setText(config.getAttribute("friendly.name"));
 				}
 			}
@@ -101,7 +100,12 @@ public class StudyAnalysisView extends BaseView {
 		String authors = "";
 		if(study.getAuthors() != null) {
 			for (String author : study.getAuthors()) {
-				authors += author + ",";
+				if (study.getAuthors().indexOf(author) != (study.getAuthors().size() - 1)) {
+					authors += author + ", ";
+				}
+				else {
+					authors += author;
+				}
 			}
 		}
 		this.authorsStyledText.setText(authors);
@@ -111,7 +115,12 @@ public class StudyAnalysisView extends BaseView {
 		String institutions = "";
 		if(study.getInstitutions() != null) {
 			for (String institution : study.getInstitutions()) {
-				institutions += institution + ",";
+				if (study.getInstitutions().indexOf(institution) != (study.getInstitutions().size() - 1)) {
+					institutions += institution + ", ";
+				}
+				else {
+					institutions += institution;
+				}
 			}
 		}
 		this.institutionsStyledText.setText(institutions);
@@ -121,7 +130,12 @@ public class StudyAnalysisView extends BaseView {
 		String countries = "";
 		if(study.getCountries() != null) {
 			for (String country : study.getCountries()) {
-				countries += country + ",";
+				if (study.getCountries().indexOf(country) != (study.getCountries().size() - 1)) {
+					countries += country + ", ";
+				}
+				else {
+					countries += country;
+				}
 			}
 		}
 		this.countriesStyledText.setText(countries);
