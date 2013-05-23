@@ -109,8 +109,8 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 				HtmlAnchor anchor = (HtmlAnchor) studyTablesAnchors.get(i);
 				
 				// Extracting study title and URL
-				study.setTitle(anchor.getTextContent().trim() + "\n");
-				study.setUrl(DOMAIN_DL_SPRINGER_LINK + anchor.getHrefAttribute().trim() + "\n");
+				study.setTitle(anchor.getTextContent().trim());
+				study.setUrl(DOMAIN_DL_SPRINGER_LINK + anchor.getHrefAttribute().trim());
 				
 				// Extracting study abstract.
 				List<?> studyPAbstracts = page.getByXPath(XPATH_STUDY_ABSTRACT);
