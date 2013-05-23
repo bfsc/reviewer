@@ -10,7 +10,6 @@ public class SearchProviderResult {
 	private String searchProviderName;
 	
 	private int totalFound;
-	private int totalFetched;
 	
 	private List<Study> studies = new LinkedList<Study>();
 
@@ -22,11 +21,6 @@ public class SearchProviderResult {
 		this.searchProviderName = searchProviderName;
 	}
 
-	public SearchProviderResult(int totalFound, int totalFetched) {
-		this.totalFound = totalFound;
-		this.totalFetched = totalFetched;
-	}
-	
 	public String getSearchProviderName() {
 		return searchProviderName;
 	}
@@ -48,10 +42,6 @@ public class SearchProviderResult {
 	}
 
 	public int getTotalFetched() {
-		return totalFetched;
-	}
-	
-	public void setTotalFetched(int totalFetched) {
-		this.totalFetched = totalFetched;
+		return studies.size();
 	}
 }
