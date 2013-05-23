@@ -130,7 +130,7 @@ public class SearchView extends BaseView {
 			
 			TableWrapData td = new TableWrapData();
 			
-			searchText = toolkit.createText(this, SEARCH_TEXT_DEFAULT_VALUE);
+			searchText = toolkit.createText(this, SEARCH_TEXT_DEFAULT_VALUE, SWT.WRAP);
 			searchText.addFocusListener(new SearchTextHandler());
 			td = new TableWrapData(TableWrapData.FILL_GRAB);
 			td.heightHint = 80;

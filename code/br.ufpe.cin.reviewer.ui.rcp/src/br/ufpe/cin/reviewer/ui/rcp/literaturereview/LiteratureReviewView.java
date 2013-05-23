@@ -146,7 +146,9 @@ public class LiteratureReviewView extends BaseView {
 		queryStringComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		queryStringComposite.setLayout(new GridLayout(2, false));
 		
-		toolkit.createLabel(queryStringComposite, "QUERY STRING:");
+		Label queryStringLabel = toolkit.createLabel(queryStringComposite, "QUERY STRING:");
+		queryStringLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+		
 		this.queryStringText = new StyledText(queryStringComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.queryStringText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		this.queryStringText.addFocusListener(new StyleTextFocusHandler());
