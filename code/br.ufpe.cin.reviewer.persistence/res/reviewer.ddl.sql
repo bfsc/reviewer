@@ -53,7 +53,7 @@ CREATE TABLE reviewer.studies_countries(
 CREATE TABLE reviewer.literature_review_studies(
 	study_id INTEGER,
 	literature_review_id INTEGER,
-	CONSTRAINT lrs_studies_fk FOREIGN KEY(study_id) REFERENCES reviewer.studies(study_id),
+	CONSTRAINT lrs_studies_fk FOREIGN KEY(study_id) REFERENCES reviewer.studies(study_id) on DELETE cascade,
 	CONSTRAINT lrs_literature_review_fk FOREIGN KEY(literature_review_id) REFERENCES reviewer.literature_reviews(literature_review_id)
 );
 
