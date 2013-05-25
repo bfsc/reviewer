@@ -17,7 +17,7 @@
 				<column name="query_string" />
 			</basic>
 			
-			<one-to-many name="studies" fetch="EAGER" orphan-removal="true">
+			<one-to-many name="studies" fetch="LAZY" orphan-removal="true">
 				<join-table name="literature_review_studies" schema="reviewer">
 					<join-column name="literature_review_id"/>
 					<inverse-join-column name="study_id"/>
