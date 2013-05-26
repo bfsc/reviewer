@@ -20,6 +20,7 @@ Export-Package: br.ufpe.cin.reviewer.core,
  br.ufpe.cin.reviewer.core.literaturereview;uses:="br.ufpe.cin.reviewer.core,br.ufpe.cin.reviewer.model.literaturereview",
  br.ufpe.cin.reviewer.core.search
 Bundle-ClassPath: .,
- libs/jdom2-2.0.5.jar
+ libs/poi-3.9-20121203.jar,
+ libs/poi-ooxml-3.9-20121203.jar
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: br.ufpe.cin.reviewer.persistence

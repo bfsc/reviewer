@@ -1,5 +1,7 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -8,6 +10,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -15,8 +18,12 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
+import org.eclipse.ui.forms.events.IHyperlinkListener;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 
+import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
@@ -120,6 +127,10 @@ public class LiteratureReviewStudiesView extends BaseView {
 			table.getColumn (i).pack ();
 		}
 		
+		Hyperlink exportLink = toolkit.createHyperlink(studiesComposite, "Export studies to spreedsheet...", SWT.NONE);
+		exportLink.addHyperlinkListener(new ExportLinkHandler());
+		exportLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		
 		section.setClient(studiesComposite);
 	}
 	
@@ -156,5 +167,31 @@ public class LiteratureReviewStudiesView extends BaseView {
 		}
 		
 	}
+	
+	private class ExportLinkHandler implements IHyperlinkListener {
+
+		public void linkEntered(HyperlinkEvent e) {
+			
+		}
+
+		public void linkExited(HyperlinkEvent e) {
+			
+		}
+
+		public void linkActivated(HyperlinkEvent e) {
+			FileDialog fileDialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), SWT.SAVE);
+			fileDialog.setFilterExtensions(new String[] {"*.xls"});
+			fileDialog.setOverwrite(true);
+			fileDialog.open();
+
+			String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName();
+			if (filePath != null && !filePath.trim().isEmpty()) {
+				LiteratureReviewController controller = new LiteratureReviewController();
+				controller.exportSudies(literatureReview, filePath);
+			}
+		}
+
+	}
+
 	
 }
