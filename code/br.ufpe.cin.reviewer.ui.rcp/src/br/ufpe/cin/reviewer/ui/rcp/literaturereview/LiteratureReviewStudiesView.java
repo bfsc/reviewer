@@ -3,6 +3,7 @@ package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 import java.io.File;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
@@ -29,6 +30,7 @@ import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
+import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsFactory;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class LiteratureReviewStudiesView extends BaseView {
@@ -39,7 +41,7 @@ public class LiteratureReviewStudiesView extends BaseView {
 	
 	private Section section;
 	private Composite studiesComposite;
-	private Label titleLabel;
+	private StyledText titleText;
 	private Table table;
 	
 	public LiteratureReviewStudiesView() {
@@ -49,7 +51,7 @@ public class LiteratureReviewStudiesView extends BaseView {
 	public void setLiteratureReview(LiteratureReview literatureReview) {
 		this.literatureReview = literatureReview;
 
-		titleLabel.setText("TITLE: " + this.literatureReview.getTitle());
+		titleText.setText(this.literatureReview.getTitle());
 
 		table.removeAll();
 		
@@ -104,17 +106,24 @@ public class LiteratureReviewStudiesView extends BaseView {
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		studiesComposite = toolkit.createComposite(section);
-		studiesComposite.setLayout(new GridLayout(1, false));
+		studiesComposite.setLayout(new GridLayout(2, false));
 		studiesComposite.setLayoutData(new GridData());
 		
-		titleLabel = toolkit.createLabel(studiesComposite, "TITLE: ");
+		Label titleLabel = toolkit.createLabel(studiesComposite, "TITLE: ");
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
+		
+		this.titleText = WidgetsFactory.createStyledText(studiesComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.titleText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+		this.titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		this.toolkit.adapt(this.titleText, true, true);
 
 		table = toolkit.createTable(studiesComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setLinesVisible (true);
 		table.setHeaderVisible (true);
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData tableGridData = new GridData(GridData.FILL_BOTH);
+		tableGridData.horizontalSpan = 2;
+		table.setLayoutData(tableGridData);
 		table.addMouseListener(new StudyMouseHandler());
 
 		String[] titles = {"Code", "Status", "Title", "Year"};
@@ -129,7 +138,9 @@ public class LiteratureReviewStudiesView extends BaseView {
 		
 		Hyperlink exportLink = toolkit.createHyperlink(studiesComposite, "Export studies to spreedsheet...", SWT.NONE);
 		exportLink.addHyperlinkListener(new ExportLinkHandler());
-		exportLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		GridData exportLinkGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		exportLinkGridData.horizontalSpan = 2;
+		exportLink.setLayoutData(exportLinkGridData);
 		
 		section.setClient(studiesComposite);
 	}

@@ -193,7 +193,7 @@ public class StudyAnalysisView extends BaseView {
 		codeLabel.setLayoutData(layoutData);
 		this.codeStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.codeStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.codeStyledText.setLayoutData(layoutData);
 		this.codeStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -207,7 +207,7 @@ public class StudyAnalysisView extends BaseView {
 		titleLabel.setLayoutData(layoutData);
 		this.titleStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.titleStyledText.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.titleStyledText.setLayoutData(layoutData);
 		this.titleStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -219,7 +219,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		statusLabel.setLayoutData(layoutData);
 		this.statusStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.statusStyledText.setLayoutData(layoutData);
 		this.statusStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -231,7 +231,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		sourceLabel.setLayoutData(layoutData);
 		this.sourceStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.sourceStyledText.setLayoutData(layoutData);
 		this.sourceStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -243,7 +243,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		authorsLabel.setLayoutData(layoutData);
 		this.authorsStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.authorsStyledText.setLayoutData(layoutData);
 		this.authorsStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -255,7 +255,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		institutionsLabel.setLayoutData(layoutData);
 		this.institutionsStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.institutionsStyledText.setLayoutData(layoutData);
 		this.institutionsStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -267,7 +267,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		countriesLabel.setLayoutData(layoutData);
 		this.countriesStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.countriesStyledText.setLayoutData(layoutData);
 		this.countriesStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -279,7 +279,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		urlLabel.setLayoutData(layoutData);
 		this.urlStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		this.urlStyledText.setLayoutData(layoutData);
 		this.urlStyledText.addFocusListener(new StyleTextFocusHandler());
@@ -291,7 +291,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		abstractLabel.setLayoutData(layoutData);
 		this.abstractStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
-		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 4;
 		abstractStyledText.setLayoutData(layoutData);
 		this.abstractStyledText.addFocusListener(new StyleTextFocusHandler());
