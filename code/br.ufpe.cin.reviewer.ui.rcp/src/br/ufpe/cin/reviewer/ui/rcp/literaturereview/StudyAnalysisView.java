@@ -46,6 +46,7 @@ public class StudyAnalysisView extends BaseView {
 	private StyledText authorsStyledText;
 	private StyledText institutionsStyledText;
 	private StyledText countriesStyledText;
+	private StyledText yearStyledText;
 	private StyledText urlStyledText;
 	private StyledText abstractStyledText;
 	
@@ -139,6 +140,14 @@ public class StudyAnalysisView extends BaseView {
 		}
 		this.countriesStyledText.setText(countries);
 		this.countriesStyledText.setLineJustify(0, this.countriesStyledText.getLineCount(), true);
+
+		// Setting study year
+		if (study.getYear() == null) {
+			this.yearStyledText.setText("");
+		} else {
+			this.yearStyledText.setText(study.getYear());
+		}
+		this.yearStyledText.setLineJustify(0, this.yearStyledText.getLineCount(), true);
 		
 		// Setting study url
 		if (study.getUrl() == null) {
@@ -272,6 +281,18 @@ public class StudyAnalysisView extends BaseView {
 		this.countriesStyledText.setLayoutData(layoutData);
 		this.countriesStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.countriesStyledText, true, true);
+		
+		// Year widgets
+		Label yearLabel = toolkit.createLabel(form.getBody(), "YEAR: ");
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		yearLabel.setLayoutData(layoutData);
+		this.yearStyledText = new StyledText(form.getBody(), SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
+		layoutData.horizontalSpan = 4;
+		this.yearStyledText.setLayoutData(layoutData);
+		this.yearStyledText.addFocusListener(new StyleTextFocusHandler());
+		this.toolkit.adapt(this.yearStyledText, true, true);
 		
 		// URL widgets
 		Label urlLabel = toolkit.createLabel(form.getBody(), "URL: ");
