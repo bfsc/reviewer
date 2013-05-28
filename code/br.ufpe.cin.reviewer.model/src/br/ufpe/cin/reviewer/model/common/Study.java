@@ -1,6 +1,6 @@
 package br.ufpe.cin.reviewer.model.common;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Study {
@@ -15,9 +15,9 @@ public class Study {
 	private String studyAbstract;
 	private String year;
 	private String url;
-	private List<String> authors = new ArrayList<String>();
-	private List<String> institutions = new ArrayList<String>();
-	private List<String> countries = new ArrayList<String>();
+	private List<String> authors = new LinkedList<String>();
+	private List<String> institutions = new LinkedList<String>();
+	private List<String> countries = new LinkedList<String>();
 	
 	public int getId() {
 		return id;

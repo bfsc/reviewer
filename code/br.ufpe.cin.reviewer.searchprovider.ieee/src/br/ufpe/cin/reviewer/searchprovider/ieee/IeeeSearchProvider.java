@@ -1,7 +1,6 @@
 package br.ufpe.cin.reviewer.searchprovider.ieee;
 
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
@@ -39,6 +38,7 @@ public class IeeeSearchProvider implements SearchProvider {
 			XmlPage page = browser.getPage(searchUrl);
 			DomElement totalFoundElement = page.getFirstByXPath("/root/totalfound");
 			totalFound = Integer.parseInt(totalFoundElement.getTextContent());
+			result.setTotalFound(totalFound);
 			
 			while(count < totalFound){
 				searchUrl = mountSearchUrl(searchString);
@@ -48,6 +48,7 @@ public class IeeeSearchProvider implements SearchProvider {
 				for (Object object : documents) {
 					Study study = new Study();
 					study.setSource(SEARCH_PROVIDER_NAME);
+					study.setStatus(Study.StudyStatus.NOT_EVALUATED);
 					
 					DomElement element = (DomElement) object;
 					DomNodeList<DomNode> childNodes = element.getChildNodes();
@@ -69,51 +70,25 @@ public class IeeeSearchProvider implements SearchProvider {
 							study.setYear(domNode.getTextContent());
 						}
 						if (domNode.getLocalName() != null && domNode.getLocalName().equalsIgnoreCase("affiliations")) {
-							//ajeitar ainda pois ta pegando como uma string só e tem que pegar como lista
-							String string = domNode.getTextContent();
-							List<String> stringList = new ArrayList<String>();
-							int lastIndex = 0;
-							for(int i = 0;i < string.length();i++){
-								String substring = null;
-								if(string.charAt(i) == ','){
-									substring = string.substring(lastIndex, i);
-									lastIndex = i + 2;
-									stringList.add(substring);
-								}
-								if(i+1 == string.length()){
-									substring = string.substring(lastIndex);
-									stringList.add(substring);
-								}
+							String nodeText = domNode.getTextContent();
+							
+							if (nodeText.contains(",")) {
+								study.addCountry(nodeText.substring(nodeText.lastIndexOf(",") + 1).trim());
+								study.addInstitution(nodeText.substring(0, nodeText.lastIndexOf(",")).replaceAll(",", "-").trim());
+							} else {
+								study.addInstitution(nodeText.trim());
 							}
-							List<String> institutions = new ArrayList<String>();
-							List<String> countries = new ArrayList<String>();
-							if(stringList.size() >= 3 && stringList.size() != 1){
-								institutions = stringList.subList(0, stringList.size() - 1);
-								countries = stringList.subList(stringList.size() - 1, stringList.size());
-							}
-							else if(stringList.size() == 1){
-								institutions = stringList.subList(0, stringList.size());
-								countries = null;
-							}
-							else{
-								institutions = stringList.subList(0, stringList.size() - 1);
-								countries = stringList.subList(stringList.size() - 1, stringList.size());
-							}
-							study.setInstitutions(institutions);
-							study.setCountries(countries);
 						}
-						
-						study.setStatus(Study.StudyStatus.NOT_EVALUATED);
 					}
+					
 					result.getStudies().add(study);
 				}
+				
 				count = count + 1000;
 				if(count - 1 + numeroDeEstudos > totalFound){
 					numeroDeEstudos = totalFound - (count - 1);
 				}
 			}
-			
-			result.setTotalFound(totalFound);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
