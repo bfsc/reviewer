@@ -16,6 +16,7 @@ import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlBold;
+import com.gargoylesoftware.htmlunit.html.HtmlButton;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
@@ -78,7 +79,13 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			
 			HtmlListItem maximumListItem = resultsPage.getFirstByXPath(XPATH_LIST_ITEM_MAXIMUM);
 			resultsPage = maximumListItem.click();
-			browser.waitForBackgroundJavaScript(10000);
+			
+			HtmlButton okButton = resultsPage.getFirstByXPath("//button[@type='button' and @class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only' and @role='button' and @aria-disabled='false']");
+			if (okButton != null) {
+				okButton.click();
+			}
+			
+			browser.waitForBackgroundJavaScriptStartingBefore(10000);
 
 			// Calling the download page
 			HtmlAnchor downloadAnchor = resultsPage.getFirstByXPath(XPATH_ANCHOR_DOWNLOAD);
