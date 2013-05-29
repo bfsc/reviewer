@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
@@ -41,6 +42,12 @@ public class ScopusSearchProvider implements SearchProvider {
 	
 	private static final String XPATH_TOTAL_FOUND = "//span[@class='Bold txtLarge1']";
 
+	private AtomicBoolean die;
+	
+	public ScopusSearchProvider() {
+		this.die = new AtomicBoolean(false);
+	}
+	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		
@@ -102,7 +109,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			Page exportedStudiesPage = exportButton.click();
 			
 			// Extract studies data
-			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
+			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream(), browser));
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
@@ -110,7 +117,11 @@ public class ScopusSearchProvider implements SearchProvider {
 		return  result;
 	}
 	
-	private List<Study> extractStudiesData(InputStream inputStream) throws SearchProviderException {
+	public void die() {
+		this.die.set(true);
+	}
+	
+	private List<Study> extractStudiesData(InputStream inputStream, WebClient browser) throws SearchProviderException {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		try {
@@ -136,6 +147,11 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Parsing studies from input stream
 			Study study = null;
 			while ((line = reader.readLine()) != null){
+				
+				if (die.get()) {
+					return toReturn;
+				}
+				
 				if (study == null) {
 					study = new Study();
 					study.setStatus(Study.StudyStatus.NOT_EVALUATED);
@@ -183,6 +199,8 @@ public class ScopusSearchProvider implements SearchProvider {
 			
 			//Adding the last study
 			toReturn.add(study);
+			
+			browser.closeAllWindows();
 		} catch (Exception e) {
 			throw new SearchProviderException("Error trying to parse bibtex input stream.", e);
 		}

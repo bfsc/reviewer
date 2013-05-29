@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
@@ -35,6 +36,12 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 	private static final String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='SearchText' and @wrap='virtual' and @rows='5' and @cols='60']";
 	private static final String XPATH_ANCHOR_EXPERT_SEARCH = "//div[@class='advExpertLink' and @style='float:right;']//a";
 	private static final String XPATH_ANCHOR_ADVANCED_SEARCH = "//a[@style='vertical-align:bottom;font-size:0.92em;']";
+	
+	private AtomicBoolean die;
+	
+	public ScienceDirectSearchProvider() {
+		this.die = new AtomicBoolean(false);
+	}
 	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
@@ -86,11 +93,17 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
+			
+			browser.closeAllWindows();
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return  result;
+	}
+	
+	public void die() {
+		this.die.set(true);
 	}
 	
 	private List<Study> extractStudiesData(InputStream inputStream) throws SearchProviderException {
@@ -108,6 +121,11 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			// Parsing studies from input stream
 			Study study = null;
 			while ((line = reader.readLine()) != null){
+				
+				if (die.get()) {
+					return toReturn;
+				}
+				
 				if (study == null) {
 					study = new Study();
 					study.setStatus(Study.StudyStatus.NOT_EVALUATED);

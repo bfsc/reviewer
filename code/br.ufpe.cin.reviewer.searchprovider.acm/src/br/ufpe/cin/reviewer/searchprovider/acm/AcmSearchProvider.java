@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
@@ -39,6 +40,12 @@ public class AcmSearchProvider implements SearchProvider {
 	private static final String XPATH_TOTAL_FOUND = "//table[@border='0' and @width='100%' and @align='left' and @class='small-text']//tr[@valign='top']//td";
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
 	
+	private AtomicBoolean die;
+	
+	public AcmSearchProvider() {
+		this.die = new AtomicBoolean(false);
+	}
+	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		
@@ -56,11 +63,17 @@ public class AcmSearchProvider implements SearchProvider {
 			
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(browser, searchUrl, result));
+			
+			browser.closeAllWindows();
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return result;
+	}
+	
+	public void die() {
+		this.die.set(true);
 	}
 	
 	private String assembleSearchUrl(String searchString) {
@@ -81,6 +94,10 @@ public class AcmSearchProvider implements SearchProvider {
 	
 	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) {
 		List<Study> toReturn = new LinkedList<Study>();
+		
+		if (die.get()) {
+			return toReturn;
+		}
 		
 		try {
 			HtmlPage page = browser.getPage(searchUrl);

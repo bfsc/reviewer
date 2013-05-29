@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
@@ -41,6 +42,12 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	private static final String XPATH_BUTTON_SEARCH = "//input[@type='submit' and @value='Search' and @style='float:right;' and @class='button']";
 	private static final String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='searchWord1' and @wrap='PHYSICAL' and @id='srchWrd1' and @style='height:4em;width:560px; resize:none;overflow:auto']";
 	private static final String XPATH_ANCHOR_EXPERT_SEARCH = "//a[@class='tablink' and @title='Expert Search']";
+	
+	private AtomicBoolean die;
+	
+	public EngineeringVillageSearchProvider() {
+		this.die = new AtomicBoolean(false);
+	}
 	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
@@ -103,11 +110,17 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
+			
+			browser.closeAllWindows();
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return  result;
+	}
+	
+	public void die() {
+		this.die.set(true);
 	}
 	
 	private List<Study> extractStudiesData(InputStream inputStream) throws SearchProviderException {
@@ -125,6 +138,11 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			// Parsing studies from input stream
 			Study study = null;
 			while ((line = reader.readLine()) != null){
+				
+				if (die.get()) {
+					return toReturn;
+				}
+				
 				if (study == null) {
 					study = new Study();
 					study.setStatus(Study.StudyStatus.NOT_EVALUATED);

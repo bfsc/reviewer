@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import br.ufpe.cin.reviewer.logger.ReviewerLogger;
 import br.ufpe.cin.reviewer.model.common.Study;
@@ -38,6 +39,12 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 	private int NEXT_PAGE_COUNTER = 2;
 	private String SEARCH_STRING = "";
 	
+	private AtomicBoolean die;
+	
+	public SpringerLinkSearchProvider() {
+		this.die = new AtomicBoolean(false);
+	}
+	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		
@@ -57,6 +64,8 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(browser, searchUrl, result));
+			
+			browser.closeAllWindows();
 		} catch (Exception e) {
 			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
@@ -64,6 +73,9 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		return result;
 	}
 	
+	public void die() {
+		this.die.set(true);
+	}
 	
 	private String assembleSearchUrl(String searchString) {
 		String query = "";
@@ -84,6 +96,10 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 	
 	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) {
 		List<Study> toReturn = new LinkedList<Study>();
+		
+		if (die.get()) {
+			return toReturn;
+		}
 		
 		try {
 			HtmlPage page = browser.getPage(searchUrl);

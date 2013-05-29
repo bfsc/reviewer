@@ -13,6 +13,8 @@ import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 
 public class SearchController {
 
+	private static Set<SearchProviderThread> searchProviderThreads = new HashSet<SearchProviderThread>();
+	
 	public SearchResult search(String searchString, SearchFilter filter, boolean concurrent) {
 		SearchResult result = null;
 		
@@ -25,6 +27,20 @@ public class SearchController {
 		return result;
 	}
 
+	public void stopSearch() {
+		try {
+			// Stopping all running threads
+			for (SearchProviderThread thread : searchProviderThreads) {
+				thread.die();
+			}
+			
+			// Removing all used threads
+			searchProviderThreads.clear();
+		} catch (Throwable t) {
+			throw new CoreException("Error trying to stop a search", t);
+		}
+	}
+	
 	private SearchResult sequentialSearch(String searchString, SearchFilter filter) {
 		SearchResult result = new SearchResult();
 
@@ -60,8 +76,6 @@ public class SearchController {
 			// TODO REMOVER INSTRUMENTACAO PARA MEDIR PERFORMANCE
 			long start = System.currentTimeMillis();
 			
-			Set<SearchProviderThread> searchProviderThreads = new HashSet<SearchProviderThread>();
-			
 			// Performing the search
 			for (String searchProviderKey : filter.getSearchProvidersKeys()) {
 				List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
@@ -73,7 +87,6 @@ public class SearchController {
 						SearchProviderThread thread = new SearchProviderThread(searchProviderKey, searchProvider, searchString);
 						searchProviderThreads.add(thread);
 						thread.start();
-						
 						break;
 					}
 				}
@@ -86,8 +99,13 @@ public class SearchController {
 
 			// Adding the search provider results to search result 
 			for (SearchProviderThread thread : searchProviderThreads) {
-				result.addSearchProviderResult(thread.getResult());
+				if (thread.getResult() != null) {
+					result.addSearchProviderResult(thread.getResult());
+				}
 			}
+			
+			// Removing all used threads
+			searchProviderThreads.clear();
 
 			// TODO REMOVER INSTRUMENTACAO PARA MEDIR PERFORMANCE
 			System.out.println(((System.currentTimeMillis() - start) / 1000) + "s");
@@ -104,7 +122,7 @@ public class SearchController {
 		private String searchString;
 
 		private SearchProviderResult result;
-
+		
 		public SearchProviderThread(String threadName, SearchProvider provider, String searchString) {
 			super(threadName);
 			this.provider = provider;
@@ -122,7 +140,9 @@ public class SearchController {
 		public SearchProviderResult getResult() {
 			return result;
 		}
-
+		
+		public void die() {
+			this.provider.die();
+		}
 	}
-
 }

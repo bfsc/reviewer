@@ -6,4 +6,6 @@ public interface SearchProvider {
 
 	public SearchProviderResult search(String searchString) throws SearchProviderException;
 	
+	public void die();
+	
 }

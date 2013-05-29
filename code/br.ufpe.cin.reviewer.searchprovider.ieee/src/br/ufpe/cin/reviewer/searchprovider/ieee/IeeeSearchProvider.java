@@ -2,6 +2,7 @@ package br.ufpe.cin.reviewer.searchprovider.ieee;
 
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
@@ -25,6 +26,12 @@ public class IeeeSearchProvider implements SearchProvider {
 	private int count = 1;
 	private int numeroDeEstudos = 1000;
 	
+	private AtomicBoolean die;
+	
+	public IeeeSearchProvider() {
+		this.die = new AtomicBoolean(false);
+	}
+	
 	public SearchProviderResult search(String searchString) throws SearchProviderException {
 		SearchProviderResult result = new SearchProviderResult(SEARCH_PROVIDER_NAME);
 		int totalFound;
@@ -46,6 +53,11 @@ public class IeeeSearchProvider implements SearchProvider {
 					
 				List<?> documents = page.getByXPath("//document");
 				for (Object object : documents) {
+					
+					if (die.get()) {
+						return result;
+					}
+					
 					Study study = new Study();
 					study.setSource(SEARCH_PROVIDER_NAME);
 					study.setStatus(Study.StudyStatus.NOT_EVALUATED);
@@ -89,11 +101,17 @@ public class IeeeSearchProvider implements SearchProvider {
 					numeroDeEstudos = totalFound - (count - 1);
 				}
 			}
+			
+			browser.closeAllWindows();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return result;
+	}
+	
+	public void die() {
+		this.die.set(true);
 	}
 	
 	private String mountSearchUrl(String searchString) {

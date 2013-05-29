@@ -120,10 +120,15 @@ public class SearchView extends BaseView {
 		
 		private static final String SEARCH_TEXT_DEFAULT_VALUE = "Type your query string here...";
 		
+		private Button searchStopButton;
+		private boolean stop = false;
+		
 		private Text searchText;
 		private Composite checkBoxesComposite;
 		
 		private List<Button> searchProvidersCheckBoxes = new ArrayList<Button>();
+		
+		private br.ufpe.cin.reviewer.ui.rcp.search.SearchView.SearchComposite.SearchButtonHandler.AsyncSearchJob searchJob;
 		
 		public SearchComposite(Composite parent, int style) {
 			super(parent, style);
@@ -137,10 +142,10 @@ public class SearchView extends BaseView {
 			searchText.setLayoutData(td);
 			
 			td = new TableWrapData();
-			Button search = toolkit.createButton(this, "Search", SWT.PUSH);
+			this.searchStopButton = toolkit.createButton(this, "Search", SWT.PUSH);
 			td.heightHint = 40;
-			search.setLayoutData(td);
-			search.addSelectionListener(new SearchButtonHandler());
+			this.searchStopButton.setLayoutData(td);
+			this.searchStopButton.addSelectionListener(new SearchButtonHandler());
 			
 			List<IConfigurationElement> configs = SearchProviderExtensionsRegistry.getConfigElements();
 			Collections.sort(configs, new SearchProviderConfiguratorElementComparator());
@@ -158,34 +163,52 @@ public class SearchView extends BaseView {
 		
 		private class SearchButtonHandler implements SelectionListener {
 
+			private IProgressMonitor progressMonitor;
+			
 			public void widgetSelected(SelectionEvent e) {
-				if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
-					searchText.setText("");
-				}
-				
-				searchString = searchText.getText();
-				
-				boolean anySearchProviderSelected = false;
-				for (Button checkBoxes : searchProvidersCheckBoxes) {
-					anySearchProviderSelected |= checkBoxes.getSelection();
-				}
-				
-				if (searchString.trim().isEmpty()) {
-					SearchView.super.form.setMessage("You must inform a query string to search.", IMessageProvider.ERROR);
-				} else if (!anySearchProviderSelected) {
-					SearchView.super.form.setMessage("You must select at least one source to search.", IMessageProvider.ERROR);
+				if (stop) {
+					searchJob.cancelJob();
+					searchStopButton.setText("Search");
+					stop = false;
+					WidgetsUtil.refreshComposite(form.getBody());					
 				} else {
-					SearchView.super.form.setMessage("", IMessageProvider.NONE);
+					searchStopButton.setText("Stop");
+					stop = true;
 					
-					SearchFilter searchFilter = new SearchFilter();
-					
-					for (Button checkBox : searchProvidersCheckBoxes) {
-						if (checkBox.getSelection()) {
-							searchFilter.addSearchProviderKey((String) checkBox.getData());
-						}
+					if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
+						searchText.setText("");
 					}
 					
-					new AsyncSearchJob(searchString, searchFilter).schedule();
+					searchString = searchText.getText().trim();
+					
+					boolean anySearchProviderSelected = false;
+					for (Button checkBoxes : searchProvidersCheckBoxes) {
+						anySearchProviderSelected |= checkBoxes.getSelection();
+					}
+					
+					if (searchString.trim().isEmpty()) {
+						SearchView.super.form.setMessage("You must inform a query string to search.", IMessageProvider.ERROR);
+					} else if (!anySearchProviderSelected) {
+						SearchView.super.form.setMessage("You must select at least one source to search.", IMessageProvider.ERROR);
+					} else {
+						SearchView.super.form.setMessage("", IMessageProvider.NONE);
+						
+						SearchFilter searchFilter = new SearchFilter();
+						
+						for (Button checkBox : searchProvidersCheckBoxes) {
+							if (checkBox.getSelection()) {
+								searchFilter.addSearchProviderKey((String) checkBox.getData());
+							}
+						}
+						
+						IActionBars bars = SearchView.this.getViewSite().getActionBars();
+						IStatusLineManager statusLine = bars.getStatusLineManager();
+						this.progressMonitor = statusLine.getProgressMonitor();
+						this.progressMonitor.beginTask("Searching... This may take several minutes.", IProgressMonitor.UNKNOWN);
+						
+						searchJob = new AsyncSearchJob(searchString, searchFilter);
+						searchJob.schedule();
+					}
 				}
 			}
 
@@ -195,12 +218,12 @@ public class SearchView extends BaseView {
 			
 			private class AsyncSearchJob extends Job {
 
+				private SearchController searchController = new SearchController();
+				
 				private String searchString;
 				private SearchFilter searchFilter;
 				
 				private SearchResult searchResult;
-				
-				private IProgressMonitor progressMonitor;
 				
 				public AsyncSearchJob(String searchString, SearchFilter searchFilter) {
 					super("AsyncSearchJob");
@@ -209,30 +232,32 @@ public class SearchView extends BaseView {
 				}
 
 				protected IStatus run(IProgressMonitor monitor) {
-					Display.getDefault().asyncExec(new Runnable() {
-						
-						public void run() {
-							IActionBars bars = SearchView.this.getViewSite().getActionBars();
-							IStatusLineManager statusLine = bars.getStatusLineManager();
-							AsyncSearchJob.this.progressMonitor = statusLine.getProgressMonitor();
-							
-							AsyncSearchJob.this.progressMonitor.beginTask("Searching... This may take several minutes.", IProgressMonitor.UNKNOWN);
-						}
-					});
-					
-					SearchController searchController = new SearchController();
-					AsyncSearchJob.this.searchResult = searchController.search(searchString, searchFilter, true);
+					this.searchResult = this.searchController.search(searchString, searchFilter, true);
 					
 					Display.getDefault().asyncExec(new Runnable() {
 						
 						public void run() {
-							SearchView.this.resultComposite.setSearchResult(AsyncSearchJob.this.searchResult);
+							SearchView.this.resultComposite.setSearchResult(searchJob.getSearchResult());
 							SearchView.this.resultComposite.getTable().setFocus();
 							progressMonitor.done();
+							
+							stop = false;
+							searchStopButton.setText("Search");
+							WidgetsUtil.refreshComposite(form.getBody());
 						}
 					});
 					
 					return Status.OK_STATUS;
+				}
+				
+				public void cancelJob() {
+					progressMonitor.done();
+					this.searchController.stopSearch();
+					this.getThread().interrupt();
+				}
+
+				public SearchResult getSearchResult() {
+					return searchResult;
 				}
 				
 			}
