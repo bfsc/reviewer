@@ -96,7 +96,7 @@ public class LiteratureReviewView extends BaseView {
 		
 		sash = new SashForm(form.getBody(),SWT.HORIZONTAL);
 		sash.setLayout(new GridLayout(4, false));
-		GridData sashLayout = new GridData(GridData.FILL_VERTICAL, GridData.FILL_HORIZONTAL);
+		GridData sashLayout = new GridData(GridData.FILL_BOTH);
 		sashLayout.grabExcessHorizontalSpace = true;
 		sashLayout.grabExcessVerticalSpace = true;
 		sash.setLayoutData(sashLayout);
