@@ -1,6 +1,7 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -38,6 +39,7 @@ public class LiteratureReviewView extends BaseView {
 	private java.util.List<LiteratureReview> literatureReviews;
 	private LiteratureReview selectedLiteratureReview;
 	
+	private SashForm sash;
 	private Section sectionList;
 	private Composite listComposite;
 	private List list;
@@ -87,14 +89,25 @@ public class LiteratureReviewView extends BaseView {
 	
 	private void configureView(Composite parent) {
 		super.form.setText(super.form.getText() + " - My literature reviews");
-		super.form.getBody().setLayout(new GridLayout(2, false));
+		super.form.getBody().setLayout(new GridLayout(1, false));
 	}
 
 	private void createLiteratureWidgets(Composite parent) {
+		
+		sash = new SashForm(form.getBody(),SWT.HORIZONTAL);
+		sash.setLayout(new GridLayout(4, false));
+		GridData sashLayout = new GridData(GridData.FILL_VERTICAL, GridData.FILL_HORIZONTAL);
+		sashLayout.grabExcessHorizontalSpace = true;
+		sashLayout.grabExcessVerticalSpace = true;
+		sash.setLayoutData(sashLayout);
+		sash.getMaximizedControl();
+		
 		//Section for List
-	    sectionList = toolkit.createSection(form.getBody(), Section.NO_TITLE);
+	    sectionList = toolkit.createSection(sash, Section.NO_TITLE);
 	    sectionList.setLayout(new GridLayout(1, false));
-		sectionList.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+	    GridData sectionListLayout = new GridData(GridData.FILL_VERTICAL);
+	    sectionListLayout.horizontalSpan = 1;
+		sectionList.setLayoutData(sectionListLayout);
 		
 		listComposite = toolkit.createComposite(sectionList, SWT.BORDER);
 		listComposite.setLayout(new GridLayout(2, false));
@@ -108,16 +121,19 @@ public class LiteratureReviewView extends BaseView {
 		refreshView();
 		
 		//Section for information
-	    sectionInfo = toolkit.createSection(form.getBody(), Section.NO_TITLE);
+	    sectionInfo = toolkit.createSection(sash, Section.NO_TITLE);
 	    sectionInfo.setLayout(new GridLayout(1, false));
 		sectionInfo.setLayoutData(new GridData(GridData.FILL_BOTH));
-		sectionInfo.setVisible(false);
 
 		reviewInfoComposite = toolkit.createComposite(sectionInfo, SWT.BORDER);
 		GridData reviewCompositeData = new GridData(GridData.FILL_BOTH);
 		reviewCompositeData.horizontalSpan = 1;
 		reviewInfoComposite.setLayoutData(reviewCompositeData);
 		reviewInfoComposite.setLayout(new GridLayout(1, false));
+		reviewInfoComposite.setVisible(false);
+		
+		
+		sash.setWeights(new int[] { 1, 3});
 		
 		// Header composite
 		searchHeaderComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
@@ -231,7 +247,7 @@ public class LiteratureReviewView extends BaseView {
 			if (selectionIndex >= 0) {
 				selectedLiteratureReview = literatureReviews.get(selectionIndex);
 				populateReviewInfo();
-				sectionInfo.setVisible(true);
+				reviewInfoComposite.setVisible(true);				
 			}
 		}
 
