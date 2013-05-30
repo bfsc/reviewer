@@ -68,6 +68,12 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Performing the search in the advanced search page
 			HtmlPage advancedSearchPage = browser.getPage(URL_SCOPUS_ADVANCED_SEARCH);
 			HtmlDivision searchDiv = advancedSearchPage.getFirstByXPath(XPATH_DIV_SEARCH_FIELD);
+			
+			if(searchDiv == null) {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_SCOPUS_ERROR_LOGIN_REQUIRED);
+				throw new RuntimeException("Can not access provider page.");
+			}
+			
 			searchDiv.setTextContent("TITLE-ABS-KEY(" + searchString + ")");
 			HtmlSubmitInput searchButton = advancedSearchPage.getFirstByXPath(XPATH_SEARCH_BUTTON);
 			HtmlPage resultsPage = searchButton.click();
@@ -112,7 +118,9 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream(), browser));
 		} catch (Exception e) {
-			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
+			if (result.getRaisedErrors().size() == 0) {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
+			}
 			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		

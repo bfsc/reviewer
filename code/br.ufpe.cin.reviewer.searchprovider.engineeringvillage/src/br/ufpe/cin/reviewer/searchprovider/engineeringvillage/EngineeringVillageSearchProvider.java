@@ -69,6 +69,11 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			HtmlPage mainSitePage = browser.getPage(URL_MAIN_SITE);
 			HtmlAnchor expertSearchAnchor = mainSitePage.getFirstByXPath(XPATH_ANCHOR_EXPERT_SEARCH);
 			
+			if(expertSearchAnchor == null) {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_ENG_VILLAGE_ERROR_LOGIN_REQUIRED);
+				throw new RuntimeException("Can not access provider page.");
+			}
+			
 			// Performing the search in the expert search page
 			HtmlPage expertSearchPage = expertSearchAnchor.click();
 			HtmlTextArea searchStringTextArea = expertSearchPage.getFirstByXPath(XPATH_TEXTAREA_SEARCH_STRING);
@@ -114,7 +119,9 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			
 			browser.closeAllWindows();
 		} catch (Exception e) {
-			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
+			if (result.getRaisedErrors().size() == 0) {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
+			}	
 			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		

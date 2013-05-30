@@ -482,8 +482,8 @@ public class SearchView extends BaseView {
 
 				ListDialog dialog = new ListDialog(shell);
 				dialog.setContentProvider(new ArrayContentProvider());
-				dialog.setTitle("Search providers erros.");
-				dialog.setMessage("Search providers erros.");
+				dialog.setTitle("Search Providers Erros");
+				dialog.setMessage("Search providers erros:");
 				dialog.setLabelProvider(new ArrayLabelProvider());
 				dialog.setAddCancelButton(false);
 				List<String[]> input = new ArrayList<String[]>();
@@ -494,6 +494,12 @@ public class SearchView extends BaseView {
 						switch (error) {
 						case SEARCH_PROVIDER_COMMON_ERROR:
 							input.add(new String[]{result.getSearchProviderName()+ " - " + "Search provider common error."});
+							break;
+						case SEARCH_PROVIDER_SCOPUS_ERROR_LOGIN_REQUIRED:
+							input.add(new String[]{result.getSearchProviderName()+ " - " + "Login required to this provider."});
+							break;
+						case SEARCH_PROVIDER_ENG_VILLAGE_ERROR_LOGIN_REQUIRED:
+							input.add(new String[]{result.getSearchProviderName()+ " - " + "Login required to this provider."});
 							break;
 						default:
 							break;
