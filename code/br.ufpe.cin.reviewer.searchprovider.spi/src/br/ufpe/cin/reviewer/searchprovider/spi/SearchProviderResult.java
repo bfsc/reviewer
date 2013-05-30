@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 
 public class SearchProviderResult {
 
@@ -12,6 +13,8 @@ public class SearchProviderResult {
 	private int totalFound;
 	
 	private List<Study> studies = new LinkedList<Study>();
+	
+	private List<SearchProviderError> raisedErrors = new LinkedList<SearchProviderError>();
 
 	public SearchProviderResult() {
 		
@@ -43,5 +46,17 @@ public class SearchProviderResult {
 
 	public int getTotalFetched() {
 		return studies.size();
+	}
+	
+	public void addError(SearchProviderError error) {
+		this.raisedErrors.add(error);
+	}
+	
+	public List<SearchProviderError> getRaisedErrors() {
+		return this.raisedErrors;
+	}
+	
+	public void clearErrors() {
+		this.raisedErrors.clear();
 	}
 }

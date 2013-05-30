@@ -13,11 +13,15 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -33,6 +37,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
@@ -49,6 +54,7 @@ import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.SourceType;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
@@ -172,7 +178,7 @@ public class SearchView extends BaseView {
 					stop = false;
 					WidgetsUtil.refreshComposite(form.getBody());					
 				} else {
-					searchStopButton.setText("Stop");
+					searchStopButton.setText("Cancel");
 					stop = true;
 					
 					if (searchText.getText().equals(SEARCH_TEXT_DEFAULT_VALUE)) {
@@ -295,6 +301,7 @@ public class SearchView extends BaseView {
 		private Composite resultCompositeLabels;
 		private Label labelTotalFound;
 		private Label labelTotalFetched;
+		private Hyperlink errorsLink;
 		
 		public ResultComposite(Composite parent, int style) {
 			super(parent, style);
@@ -319,10 +326,14 @@ public class SearchView extends BaseView {
 			table.setHeaderVisible (true);
 			GridData tableLayoutData = new GridData(GridData.FILL_BOTH);
 			table.setLayoutData(tableLayoutData);
-			
-			Hyperlink studyLink = toolkit.createHyperlink(this, "Create new literature review from these results...", SWT.WRAP);
-			GridData studyLinkLayout = new GridData(GridData.HORIZONTAL_ALIGN_END);
-			studyLink.setLayoutData(studyLinkLayout);
+	
+			Composite c = toolkit.createComposite(this);
+			c.setLayout(new GridLayout(2, false));
+			GridData td = new GridData(GridData.HORIZONTAL_ALIGN_END);
+			c.setLayoutData(td);
+			errorsLink = toolkit.createHyperlink(c, "Some errors occurred at search. See the details here...", SWT.NONE);			
+			errorsLink.addHyperlinkListener(new ShowErrorsLinkHandler()); 
+			Hyperlink studyLink = toolkit.createHyperlink(c, "Create new literature review from these results...", SWT.NONE);			
 			studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
 		}
 		
@@ -379,9 +390,26 @@ public class SearchView extends BaseView {
 			
 			WidgetsUtil.refreshComposite(form.getBody());
 			
+			if (!this.hasSearchProviderErrors()) {
+				errorsLink.setVisible(false);
+			} else {
+				errorsLink.setVisible(true);
+			}
+			
 			resultComposite.setVisible(true);
 		}
 		
+		private boolean hasSearchProviderErrors() {
+			boolean ret = false;
+			for (SearchProviderResult result : searchResult.getSearchProviderResults()) {
+				if (result.getRaisedErrors().size() > 0) {
+					ret = true;
+					break;
+				}
+			}
+			return ret;
+		}
+
 		private class CreateLiteratureReviewLinkHandler implements IHyperlinkListener {
 
 			public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
@@ -436,6 +464,65 @@ public class SearchView extends BaseView {
 						literatureReviewView.refreshView();
 					}
 				}
+			}
+		}
+		
+		private class ShowErrorsLinkHandler implements IHyperlinkListener {
+
+			public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+				
+			}
+
+			public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+				
+			}
+
+			public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+
+				ListDialog dialog = new ListDialog(shell);
+				dialog.setContentProvider(new ArrayContentProvider());
+				dialog.setTitle("Search providers erros.");
+				dialog.setMessage("Search providers erros.");
+				dialog.setLabelProvider(new ArrayLabelProvider());
+				dialog.setAddCancelButton(false);
+				List<String[]> input = new ArrayList<String[]>();
+				
+				for (SearchProviderResult result : searchResult.getSearchProviderResults()) {
+
+					for (SearchProviderError error:  result.getRaisedErrors()) {
+						switch (error) {
+						case SEARCH_PROVIDER_COMMON_ERROR:
+							input.add(new String[]{result.getSearchProviderName()+ " - " + "Search provider common error."});
+							break;
+						default:
+							break;
+						}
+					}
+				}		
+				
+				dialog.setInput(input);
+				dialog.setWidthInChars(70);
+				dialog.open();
+
+			}
+
+			private class ArrayLabelProvider extends LabelProvider implements ITableLabelProvider{
+				public String getText(Object element) {
+					return ((String[]) element)[0].toString();
+				}
+
+				@Override
+				public Image getColumnImage(Object element, int columnIndex) {
+					return null;
+				}
+
+				@Override
+				public String getColumnText(Object element, int columnIndex) {
+					String[] ss = (String[]) element;
+					return ss[columnIndex];
+				}
+
 			}
 		}
 		

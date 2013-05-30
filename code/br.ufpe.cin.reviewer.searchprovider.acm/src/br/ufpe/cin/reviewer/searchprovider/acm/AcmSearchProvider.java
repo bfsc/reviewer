@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -65,8 +66,9 @@ public class AcmSearchProvider implements SearchProvider {
 			result.getStudies().addAll(extractStudiesData(browser, searchUrl, result));
 			
 			browser.closeAllWindows();
-		} catch (Exception e) {
-			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
+		} catch (Exception e) {		
+			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
+			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return result;
@@ -85,7 +87,7 @@ public class AcmSearchProvider implements SearchProvider {
 			try {
 				query = URLEncoder.encode(searchString, URL_ENCODE_UTF_8).toString();
 			} catch (UnsupportedEncodingException e2) {
-				throw new RuntimeException("An error occurred tryinf to encode the url.", e2);
+				throw new RuntimeException("An error occurred trying to encode the url.", e2);
 			}
 		}
 		
@@ -146,7 +148,7 @@ public class AcmSearchProvider implements SearchProvider {
 				
 				// Extracting study abstract.
 				List<?> studyDivsAbstracts = page.getByXPath(XPATH_STUDY_ABSTRACT);
-				if (studyDivsAbstracts.size() >= i) {
+				if (studyDivsAbstracts.size() > i) {
 					HtmlDivision div = (HtmlDivision) studyDivsAbstracts.get(i);
 					
 					// Extracting study abstract div content.
@@ -163,7 +165,7 @@ public class AcmSearchProvider implements SearchProvider {
 				
 				// Extracting study year.
 				List<?> studyTdYear = page.getByXPath(XPATH_STUDY_YEAR);
-				if (studyTdYear.size() >= i) {
+				if (studyTdYear.size() > i) {
 					HtmlTableDataCell div = (HtmlTableDataCell) studyTdYear.get(i);
 					
 					// Extracting study abstract div content.
@@ -188,8 +190,7 @@ public class AcmSearchProvider implements SearchProvider {
 				toReturn.addAll(extractStudiesData(browser, nextPageUrl, result));
 			}
 		} catch (Exception e) {
-			//TRATAR EXCECAO
-			e.printStackTrace();
+			throw new RuntimeException("An error occurred trying to extract study data.", e);
 		}
 		
 		return toReturn;

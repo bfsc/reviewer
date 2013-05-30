@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
@@ -113,7 +114,8 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			
 			browser.closeAllWindows();
 		} catch (Exception e) {
-			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
+			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
+			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return  result;

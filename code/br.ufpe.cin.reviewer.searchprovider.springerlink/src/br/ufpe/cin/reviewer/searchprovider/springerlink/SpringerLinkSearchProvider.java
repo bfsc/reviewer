@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import br.ufpe.cin.reviewer.logger.ReviewerLogger;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
+import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -67,7 +67,8 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 			
 			browser.closeAllWindows();
 		} catch (Exception e) {
-			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
+			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
+			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return result;
@@ -94,7 +95,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 		return URL_DL_SPRINGER_LINK_SEARCH + query + URL_DL_SPRINGER_LINK_ARTICLE_SEARCH;
 	}
 	
-	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) {
+	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) throws SearchProviderException {
 		List<Study> toReturn = new LinkedList<Study>();
 		
 		if (die.get()) {
@@ -154,7 +155,7 @@ public class SpringerLinkSearchProvider implements SearchProvider {
 				toReturn.addAll(extractStudiesData(browser, nextPageUrl, result));
 			}
 		} catch (Exception e) {
-			ReviewerLogger.info(e.getMessage());
+			throw new SearchProviderException("An error occurred trying to extract study data.", e);
 		}
 		
 		return toReturn;
