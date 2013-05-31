@@ -308,18 +308,13 @@ public class SearchView extends BaseView {
 			
 			//Composite for labels
 			resultCompositeLabels = toolkit.createComposite(this);
-			resultCompositeLabels.setLayout(new GridLayout(2, true));
-			resultCompositeLabels.setLayoutData(new GridData());
+			resultCompositeLabels.setLayout(new GridLayout(2, false));
 
 			labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:");
-			GridData totalFoundLayout = new GridData();
-			totalFoundLayout.horizontalSpan = 1;
-			labelTotalFound.setLayoutData(totalFoundLayout);
+			labelTotalFound.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			
 			labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:");
-			GridData totalFetchedLayout = new GridData();
-			totalFetchedLayout.horizontalSpan = 1;
-			labelTotalFetched.setLayoutData(totalFetchedLayout);
+			labelTotalFetched.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			
 			table = toolkit.createTable(this, SWT.BORDER | SWT.FULL_SELECTION);
 			table.setLinesVisible (true);
@@ -331,10 +326,14 @@ public class SearchView extends BaseView {
 			c.setLayout(new GridLayout(2, false));
 			GridData td = new GridData(GridData.HORIZONTAL_ALIGN_END);
 			c.setLayoutData(td);
-			errorsLink = toolkit.createHyperlink(c, "Some errors occurred at search. See the details here...", SWT.NONE);			
-			errorsLink.addHyperlinkListener(new ShowErrorsLinkHandler()); 
-			Hyperlink studyLink = toolkit.createHyperlink(c, "Create new literature review from these results...", SWT.NONE);			
+			
+			errorsLink = toolkit.createHyperlink(c, "See search errors", SWT.NONE);			
+			errorsLink.addHyperlinkListener(new ShowErrorsLinkHandler());
+			errorsLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+			
+			Hyperlink studyLink = toolkit.createHyperlink(c, "CREATE LITERATURE REVIEW from these results...", SWT.NONE);			
 			studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
+			studyLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		}
 		
 		public Table getTable(){

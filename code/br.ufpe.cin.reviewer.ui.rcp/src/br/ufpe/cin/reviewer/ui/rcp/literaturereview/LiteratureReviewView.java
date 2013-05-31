@@ -114,7 +114,7 @@ public class LiteratureReviewView extends BaseView {
 		listComposite.setLayoutData(new GridData());
 		
 		list = new List (listComposite, SWT.V_SCROLL);
-		GridData listLayoutData = new GridData(GridData.FILL_VERTICAL);
+		GridData listLayoutData = new GridData(GridData.FILL_BOTH);
 		listLayoutData.horizontalSpan = 1;
 		list.setLayoutData(listLayoutData);
 		list.addSelectionListener(new LiteratureReviewsListHandler());
@@ -132,8 +132,7 @@ public class LiteratureReviewView extends BaseView {
 		reviewInfoComposite.setLayout(new GridLayout(1, false));
 		reviewInfoComposite.setVisible(false);
 		
-		
-		sash.setWeights(new int[] { 1, 3});
+		sash.setWeights(new int[] {1, 3});
 		
 		// Header composite
 		searchHeaderComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
@@ -304,7 +303,7 @@ public class LiteratureReviewView extends BaseView {
 				literatureReviews.remove(selectedLiteratureReview);
 				
 				selectedLiteratureReview = null;
-				sectionInfo.setVisible(false);
+				reviewInfoComposite.setVisible(false);
 	
 				WidgetsUtil.refreshComposite(listComposite);
 				WidgetsUtil.refreshComposite(reviewInfoComposite);
