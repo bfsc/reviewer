@@ -123,10 +123,19 @@ public class Study {
 		this.institutions.remove(institution);
 	}
 	
-	public void addCountry(String country) {
-		if (!this.countries.contains(country)) {
-			this.countries.add(country);
-		}		
+	public void addCountry(String newCountry) {
+		boolean exist = false;
+		
+		for (String country : this.countries) {
+			if (country.equalsIgnoreCase(country.trim())) {
+				exist = true;
+				break;
+			}
+		}
+		
+		if (!exist) {
+			this.countries.add(newCountry);
+		}
 	}
 	
 	public void removeCountry(String country) {
