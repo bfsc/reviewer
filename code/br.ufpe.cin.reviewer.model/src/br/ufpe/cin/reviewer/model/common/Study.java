@@ -124,7 +124,9 @@ public class Study {
 	}
 	
 	public void addCountry(String country) {
-		this.countries.add(country);
+		if (!this.countries.contains(country)) {
+			this.countries.add(country);
+		}		
 	}
 	
 	public void removeCountry(String country) {
