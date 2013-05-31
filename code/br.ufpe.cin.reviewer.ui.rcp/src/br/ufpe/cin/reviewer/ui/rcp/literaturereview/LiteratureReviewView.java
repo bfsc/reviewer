@@ -154,30 +154,37 @@ public class LiteratureReviewView extends BaseView {
 		// Body composite
 		reviewInfoBodyComposite = toolkit.createComposite(reviewInfoComposite, SWT.NONE);
 		reviewInfoBodyComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		reviewInfoBodyComposite.setLayout(new GridLayout(1, false));
+		reviewInfoBodyComposite.setLayout(new GridLayout(2, false));
 		
 		// Query string
-		Composite queryStringComposite = toolkit.createComposite(reviewInfoBodyComposite);
-		queryStringComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		queryStringComposite.setLayout(new GridLayout(2, false));
+//		Composite queryStringComposite = toolkit.createComposite(reviewInfoBodyComposite);
+//		queryStringComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		queryStringComposite.setLayout(new GridLayout(2, false));
 		
-		Label queryStringLabel = toolkit.createLabel(queryStringComposite, "QUERY STRING:");
+		Label queryStringLabel = toolkit.createLabel(reviewInfoBodyComposite, "QUERY STRING:");
 		queryStringLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		
-		this.queryStringText = new StyledText(queryStringComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
+		this.queryStringText = new StyledText(reviewInfoBodyComposite, SWT.FULL_SELECTION | SWT.READ_ONLY | SWT.WRAP);
 		this.queryStringText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		this.queryStringText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.queryStringText, true, true);
 		
-		// Sources
-		Composite sourcesComposite = toolkit.createComposite(reviewInfoBodyComposite);
-		sourcesComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		sourcesComposite.setLayout(new GridLayout(2, false));
+		// Span composite
+		Composite spanComposite = toolkit.createComposite(reviewInfoBodyComposite);
+		GridData sgc = new GridData(GridData.FILL_HORIZONTAL);
+		sgc.heightHint = 10;
+		sgc.horizontalSpan = 2;
+		spanComposite.setLayoutData(sgc);
 		
-		Label sourcesLabel = toolkit.createLabel(sourcesComposite, "SOURCES INFORMATIONS:");
+		// Sources
+//		Composite sourcesComposite = toolkit.createComposite(reviewInfoBodyComposite);
+//		sourcesComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		sourcesComposite.setLayout(new GridLayout(2, false));
+		
+		Label sourcesLabel = toolkit.createLabel(reviewInfoBodyComposite, "SOURCES:");
 		sourcesLabel.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		
-		this.sourcesTable = toolkit.createTable(sourcesComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		this.sourcesTable = toolkit.createTable(reviewInfoBodyComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		this.sourcesTable.setLinesVisible (true);
 		this.sourcesTable.setHeaderVisible (true);
 		this.sourcesTable.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
