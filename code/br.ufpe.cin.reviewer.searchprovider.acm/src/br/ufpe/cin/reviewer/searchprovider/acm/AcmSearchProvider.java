@@ -24,7 +24,8 @@ public class AcmSearchProvider implements SearchProvider {
 	
 	private static final int YEAR_STRING_LENGTH = 4;
 	private static final String DOMAIN_DL_ACM = "http://dl.acm.org/";
-	private static final String URL_DL_ACM_SEARCH = "http://dl.acm.org/results.cfm?query=";
+	private static final String URL_DL_ACM_SEARCH = "http://dl.acm.org/results.cfm?within=";
+	private static final String URL_DL_ACM_SEARCH_END = "&adv=1";
 
 	private static final String URL_ENCODE_UTF_8 = "UTF-8";
 	private static final String URL_ENCODE_ISO_8859_1 = "ISO-8859-1";
@@ -91,7 +92,7 @@ public class AcmSearchProvider implements SearchProvider {
 			}
 		}
 		
-		return URL_DL_ACM_SEARCH + query;
+		return URL_DL_ACM_SEARCH + query + URL_DL_ACM_SEARCH_END;
 	}
 	
 	private List<Study> extractStudiesData(WebClient browser, String searchUrl, SearchProviderResult result) {
