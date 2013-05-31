@@ -70,7 +70,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			HtmlAnchor expertSearchAnchor = mainSitePage.getFirstByXPath(XPATH_ANCHOR_EXPERT_SEARCH);
 			
 			if(expertSearchAnchor == null) {
-				result.addError(SearchProviderError.SEARCH_PROVIDER_ENG_VILLAGE_ERROR_LOGIN_REQUIRED);
+				result.addError(SearchProviderError.SEARCH_PROVIDER_ERROR_LOGIN_REQUIRED);
 				throw new RuntimeException("Can not access provider page.");
 			}
 			

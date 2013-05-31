@@ -196,7 +196,7 @@ public class AcmSearchProvider implements SearchProvider {
 			}
 		} catch (Exception e) {
 			if (e.getMessage().contains(FORBIDDEN_MESSAGE)) {
-				result.addError(SearchProviderError.SEARCH_PROVIDER_ACM_ERROR_FORBIDDEN);
+				result.addError(SearchProviderError.SEARCH_PROVIDER_ERROR_FORBIDDEN);
 			} else {
 				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
 			}

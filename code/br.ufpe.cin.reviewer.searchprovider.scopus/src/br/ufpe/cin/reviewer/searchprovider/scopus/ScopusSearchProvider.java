@@ -70,7 +70,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			HtmlDivision searchDiv = advancedSearchPage.getFirstByXPath(XPATH_DIV_SEARCH_FIELD);
 			
 			if(searchDiv == null) {
-				result.addError(SearchProviderError.SEARCH_PROVIDER_SCOPUS_ERROR_LOGIN_REQUIRED);
+				result.addError(SearchProviderError.SEARCH_PROVIDER_ERROR_LOGIN_REQUIRED);
 				throw new RuntimeException("Can not access provider page.");
 			}
 			

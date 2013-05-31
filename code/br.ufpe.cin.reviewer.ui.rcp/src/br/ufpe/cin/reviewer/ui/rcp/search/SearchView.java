@@ -493,16 +493,13 @@ public class SearchView extends BaseView {
 					for (SearchProviderError error:  result.getRaisedErrors()) {
 						switch (error) {
 						case SEARCH_PROVIDER_COMMON_ERROR:
-							input.add(new String[]{result.getSearchProviderName()+ " - " + "Search provider common error."});
+							input.add(new String[]{result.getSearchProviderName()+ " - Search provider common error."});
 							break;
-						case SEARCH_PROVIDER_SCOPUS_ERROR_LOGIN_REQUIRED:
-							input.add(new String[]{result.getSearchProviderName()+ " - " + "Login required to this provider."});
+						case SEARCH_PROVIDER_ERROR_LOGIN_REQUIRED:
+							input.add(new String[]{result.getSearchProviderName()+ " - Login required to this provider."});
 							break;
-						case SEARCH_PROVIDER_ENG_VILLAGE_ERROR_LOGIN_REQUIRED:
-							input.add(new String[]{result.getSearchProviderName()+ " - " + "Login required to this provider."});
-							break;
-						case SEARCH_PROVIDER_ACM_ERROR_FORBIDDEN:
-							input.add(new String[]{result.getSearchProviderName()+ " - " + "403 Forbidden."});
+						case SEARCH_PROVIDER_ERROR_FORBIDDEN:
+							input.add(new String[]{result.getSearchProviderName()+ " - 403 Forbidden."});
 							break;
 						default:
 							break;
