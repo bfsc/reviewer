@@ -214,7 +214,8 @@ public class LiteratureReviewView extends BaseView {
 	private void populateReviewInfo() {
 		titleText.setText(selectedLiteratureReview.getTitle());
 
-		queryStringText.setText(selectedLiteratureReview.getQueryString());
+		this.queryStringText.setText(selectedLiteratureReview.getQueryString());
+		this.queryStringText.setLineJustify(0, this.queryStringText.getLineCount(), true);
 		
 		sourcesTable.removeAll();
 		
