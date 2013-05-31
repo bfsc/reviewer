@@ -442,12 +442,14 @@ public class SearchView extends BaseView {
 					
 					// Adding sources to the literature review
 					for (SearchProviderResult result : searchResult.getSearchProviderResults()) {
-						LiteratureReviewSource source = new LiteratureReviewSource();
-						source.setName(result.getSearchProviderName());
-						source.setTotalFound(result.getTotalFound());
-						source.setTotalFetched(result.getTotalFetched());
-						source.setType(SourceType.AUTOMATIC);
-						literatureReview.addSource(source);
+						if (result.getTotalFetched() > 0) {
+							LiteratureReviewSource source = new LiteratureReviewSource();
+							source.setName(result.getSearchProviderName());
+							source.setTotalFound(result.getTotalFound());
+							source.setTotalFetched(result.getTotalFetched());
+							source.setType(SourceType.AUTOMATIC);
+							literatureReview.addSource(source);
+						}
 					}
 					
 					LiteratureReviewController literatureReviewController = new LiteratureReviewController();
