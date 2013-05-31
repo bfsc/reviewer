@@ -134,7 +134,7 @@ public class Study {
 		}
 		
 		if (!exist) {
-			this.countries.add(newCountry);
+			this.countries.add(newCountry.trim());
 		}
 	}
 	
