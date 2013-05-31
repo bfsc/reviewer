@@ -501,6 +501,9 @@ public class SearchView extends BaseView {
 						case SEARCH_PROVIDER_ENG_VILLAGE_ERROR_LOGIN_REQUIRED:
 							input.add(new String[]{result.getSearchProviderName()+ " - " + "Login required to this provider."});
 							break;
+						case SEARCH_PROVIDER_ACM_ERROR_FORBIDDEN:
+							input.add(new String[]{result.getSearchProviderName()+ " - " + "403 Forbidden."});
+							break;
 						default:
 							break;
 						}

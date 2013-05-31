@@ -118,7 +118,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream(), browser));
 		} catch (Exception e) {
-			if (result.getRaisedErrors().size() == 0) {
+			if (result.getRaisedErrors().isEmpty()) {
 				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
 			}
 			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);

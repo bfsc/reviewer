@@ -42,6 +42,8 @@ public class AcmSearchProvider implements SearchProvider {
 	private static final String XPATH_TOTAL_FOUND = "//table[@border='0' and @width='100%' and @align='left' and @class='small-text']//tr[@valign='top']//td";
 	private static final String X_PATH_NEXT_PAGE = "//td[@colspan='2' and @align='right']/a";
 	
+	private static final String FORBIDDEN_MESSAGE = "403 Forbidden";
+	
 	private AtomicBoolean die;
 	
 	public AcmSearchProvider() {
@@ -68,7 +70,9 @@ public class AcmSearchProvider implements SearchProvider {
 			
 			browser.closeAllWindows();
 		} catch (Exception e) {		
-			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
+			if (result.getRaisedErrors().isEmpty()) {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
+			}
 			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
@@ -191,7 +195,12 @@ public class AcmSearchProvider implements SearchProvider {
 				toReturn.addAll(extractStudiesData(browser, nextPageUrl, result));
 			}
 		} catch (Exception e) {
-			throw new RuntimeException("An error occurred trying to extract study data.", e);
+			if (e.getMessage().contains(FORBIDDEN_MESSAGE)) {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_ACM_ERROR_FORBIDDEN);
+			} else {
+				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
+			}
+			//throw new RuntimeException("An error occurred trying to extract study data.", e);
 		}
 		
 		return toReturn;
