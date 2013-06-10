@@ -5,11 +5,13 @@ REviewER is a tool to help researchers to conduct literature reviews.
 
 Releases
 -----------------
+### Current Release
+
+Version: 0.1.0 - Available Here!!! 
+https://sites.google.com/site/eseportal/tools/reviewer
 
 ### Next Release
-
-Version: 0.0.1 - Date: 05/31/2013
-
+Version 0.1.1 - Bug fixes and enhancements.
 
 How to use
 -----------------
@@ -41,8 +43,8 @@ You can help us writing Javadocs, improving this file content, or with an articl
 
 ### Reporting bugs and suggesting new features
 
-If you found a bug, tell the development team creating an issue on Github.
+If you found a bug, tell the development team creating an issue on Github in: https://github.com/bfsc/reviewer/issues
 
 ### Collaborating with code
 
-If you have any improvements you'd like to see in Reviewer, add your suggestion to the issue list. If you have already implemented, please send your pull request via GitHub.
+If you have any improvements you'd like to see in REviewER, add your suggestion to the issue list. If you have already implemented, please send your pull request via GitHub.
