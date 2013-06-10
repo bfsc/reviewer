@@ -5,13 +5,12 @@ REviewER is a tool to help researchers to conduct literature reviews.
 
 Releases
 -----------------
-### Current Release
+### Current Release - 0.1.0 - Now Available Here!!! 
 
-Version: 0.1.0 - Available Here!!! 
 https://sites.google.com/site/eseportal/tools/reviewer
 
 ### Next Release
-Version 0.1.1 - Bug fixes and enhancements.
+0.1.1 - Bug fixes and enhancements.
 
 How to use
 -----------------
