@@ -1,7 +1,7 @@
 REviewER
 ========
 
-REviewER is a tool to help researchers to conduct literature reviews.
+REviewER is a tool to support literature reviews subtle process.
 
 Releases
 -----------------
