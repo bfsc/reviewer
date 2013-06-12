@@ -10,7 +10,7 @@ Releases
 https://sites.google.com/site/eseportal/tools/reviewer
 
 ### Next Release
-0.1.1 - Bug fixes and enhancements.
+0.1.1 - Bug fixes and enhancements - 15/07/2013
 
 How to use
 -----------------
