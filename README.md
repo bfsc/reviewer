@@ -17,19 +17,6 @@ How to use
 
 TODO
 
-### Mac
-
-TODO
-
-### Linux
-
-TODO
-
-### Windows
-
-TODO
-
-
 How to contribute
 -----------------
 
