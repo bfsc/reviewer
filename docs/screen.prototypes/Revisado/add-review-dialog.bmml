@@ -1,0 +1,43 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="682" measuredH="278" mockupW="460" mockupH="235">
+  <controls>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::TitleWindow" x="222" y="43" w="460" h="235" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <close>true</close>
+        <maximizeRestore>true</maximizeRestore>
+        <minimize>true</minimize>
+        <text>Reviewer</text>
+        <topheight>30</topheight>
+        <verticalScrollbar>false</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="18" controlTypeID="com.balsamiq.mockups::PointyButton" x="359" y="216" w="-1" h="-1" measuredW="96" measuredH="39" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>center</direction>
+        <href>my-literature-review%26bm%3Bmy-literature-review.bmml%26bm%3Bmy-literature-review.bmml%26bm%3Bmy-literature-review.bmml</href>
+        <icon>XIcon%7Cmedium</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22137%2C173%2C233%2C212%22%20href%3D%22my-literature-review.bmml%22%20alt%3D%22my-literature-review%22%20id%3D%2218%22/%3E</map>
+        <text>Cancel</text>
+      </controlProperties>
+    </control>
+    <control controlID="19" controlTypeID="com.balsamiq.mockups::PointyButton" x="467" y="216" w="-1" h="-1" measuredW="86" measuredH="39" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>center</direction>
+        <href>my-literature-review%26bm%3Bmy-literature-review.bmml%26bm%3Bmy-literature-review.bmml%26bm%3Bmy-literature-review.bmml</href>
+        <icon>SaveIcon%7Cmedium</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22245%2C173%2C331%2C212%22%20href%3D%22my-literature-review.bmml%22%20alt%3D%22my-literature-review%22%20id%3D%2219%22/%3E</map>
+        <text>Save</text>
+      </controlProperties>
+    </control>
+    <control controlID="22" controlTypeID="com.balsamiq.mockups::TextArea" x="257" y="121" w="404" h="80" measuredW="200" measuredH="140" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Add%20here....</text>
+      </controlProperties>
+    </control>
+    <control controlID="23" controlTypeID="com.balsamiq.mockups::Label" x="258" y="97" w="-1" h="-1" measuredW="44" measuredH="21" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>TITLE</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

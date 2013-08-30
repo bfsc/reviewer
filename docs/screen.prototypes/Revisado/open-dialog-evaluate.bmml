@@ -1,0 +1,69 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="984" measuredH="439" mockupW="762" mockupH="396">
+  <controls>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::TitleWindow" x="222" y="43" w="762" h="396" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <close>true</close>
+        <maximizeRestore>true</maximizeRestore>
+        <minimize>true</minimize>
+        <text>Reviewer</text>
+        <topheight>30</topheight>
+        <verticalScrollbar>false</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="24" controlTypeID="com.balsamiq.mockups::Tree" x="260" y="92" w="305" h="278" measuredW="300" measuredH="309" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>f%20Use%20f%20for%20closed%20folders%0AF%20Use%20F%20for%20open%20folders%0A%5B+%5D%20You%20may%20also%20use%20this%0A%5B-%5D%20and%20this%0A%5Bx%5D%20or%20this%0A%5B%20%5D%20and%20this%0A%3E%20or%20even%20this%0Av%20and%20this%0A-%20Use%20-%20for%20a%20file%20icon%0A_%20or%20_%20to%20leave%20a%20space%20for%20your%20own%20icon%0AF%20use%20spaces%20or%20dots%20for%20hierarchy%0A%20v%20just%20like%0A..-%20this</text>
+        <verticalScrollbar>true</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::Canvas" x="260" y="92" w="305" h="278" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::Canvas" x="565" y="92" w="404" h="278" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <verticalScrollbar>true</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Button" x="600" y="116" w="-1" h="-1" measuredW="105" measuredH="54" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocPDFIcon%7Clarge</icon>
+        <text>File%201</text>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::Button" x="600" y="185" w="-1" h="-1" measuredW="105" measuredH="54" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocExcelIcon%7Clarge</icon>
+        <text>File%201</text>
+      </controlProperties>
+    </control>
+    <control controlID="29" controlTypeID="com.balsamiq.mockups::Button" x="600" y="254" w="-1" h="-1" measuredW="105" measuredH="54" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>FileIcon%7Clarge</icon>
+        <text>File%201</text>
+      </controlProperties>
+    </control>
+    <control controlID="30" controlTypeID="com.balsamiq.mockups::Button" x="600" y="323" w="105" h="47" measuredW="105" measuredH="54" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocWordIcon%7Clarge</icon>
+        <text>File%201</text>
+      </controlProperties>
+    </control>
+    <control controlID="31" controlTypeID="com.balsamiq.mockups::PointyButton" x="774" y="385" w="-1" h="-1" measuredW="96" measuredH="39" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>center</direction>
+        <href>my-literature-review%26bm%3Bmy-literature-review.bmml%26bm%3Bmy-literature-review.bmml%26bm%3Bmy-literature-review.bmml</href>
+        <icon>XIcon%7Cmedium</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22552%2C342%2C648%2C381%22%20href%3D%22my-literature-review.bmml%22%20alt%3D%22my-literature-review%22%20id%3D%2231%22/%3E</map>
+        <text>Cancel</text>
+      </controlProperties>
+    </control>
+    <control controlID="32" controlTypeID="com.balsamiq.mockups::PointyButton" x="882" y="385" w="-1" h="-1" measuredW="87" measuredH="39" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>center</direction>
+        <href>evaluate-individual-studies%26bm%3Bevaluate-individual-studies.bmml%26bm%3Bevaluate-individual-studies.bmml%26bm%3Bevaluate-individual-studies.bmml</href>
+        <icon>FolderIcon%7Cmedium</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22660%2C342%2C747%2C381%22%20href%3D%22evaluate-individual-studies.bmml%22%20alt%3D%22evaluate-individual-studies%22%20id%3D%2232%22/%3E</map>
+        <text>Open</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
