@@ -34,3 +34,7 @@ If you found a bug, tell the development team creating an issue on Github in: ht
 ### Collaborating with code
 
 If you have any improvements you'd like to see in REviewER, add your suggestion to the issue list. If you have already implemented, please send your pull request via GitHub.
+
+### License
+
+This work is licensed under the Eclipse Public License (EPL) version 1.0, which can be found at: http://www.eclipse.org/legal/epl-v10.html
