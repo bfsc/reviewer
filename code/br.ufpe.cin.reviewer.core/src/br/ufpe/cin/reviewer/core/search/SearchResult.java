@@ -3,7 +3,7 @@ package br.ufpe.cin.reviewer.core.search;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 
 public class SearchResult {

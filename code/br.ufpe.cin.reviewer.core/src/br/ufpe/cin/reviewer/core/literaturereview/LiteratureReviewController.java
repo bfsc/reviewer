@@ -15,8 +15,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import br.ufpe.cin.reviewer.core.ITransactionalController;
 import br.ufpe.cin.reviewer.core.exceptions.CoreException;
-import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.persistence.dao.DAOFactory;
 import br.ufpe.cin.reviewer.persistence.dao.literaturereview.ILiteratureReviewDAO;
 import br.ufpe.cin.reviewer.persistence.exceptions.PersistenceException;
