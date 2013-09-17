@@ -48,10 +48,10 @@ import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.core.search.SearchController;
 import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
-import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.SourceType;
+import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
@@ -353,6 +353,11 @@ public class SearchView extends BaseView {
 
 			int currentStudyNumber = 0;
 			for (Study study : searchResult.getAllStudies()) {
+				if (study == null) {
+					System.out.println("CONTINUE.......... Study" + currentStudyNumber);
+					
+					continue;
+				}
 				currentStudyNumber++;
 				
 				TableItem item = new TableItem (table, SWT.NONE);
