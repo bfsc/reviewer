@@ -1,6 +1,6 @@
 package br.ufpe.cin.reviewer.persistence.dao.common;
 
-import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.persistence.dao.JPADAO;
 
 public class JPAStudyDAO extends JPADAO<Study, Integer> implements IStudyDAO {
