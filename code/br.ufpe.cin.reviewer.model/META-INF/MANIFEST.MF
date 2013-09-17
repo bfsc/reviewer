@@ -4,5 +4,5 @@ Bundle-Name: br.ufpe.cin.reviewer.model
 Bundle-SymbolicName: br.ufpe.cin.reviewer.model
 Bundle-Version: 0.1.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: br.ufpe.cin.reviewer.model.common,
- br.ufpe.cin.reviewer.model.literaturereview
+Export-Package: br.ufpe.cin.reviewer.model.literaturereview,
+ br.ufpe.cin.reviewer.model.study
