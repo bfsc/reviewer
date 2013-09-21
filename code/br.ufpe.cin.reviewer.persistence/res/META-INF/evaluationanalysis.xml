@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<entity class="br.ufpe.cin.reviewer.model.phase.EvaluationAnalysis" name="EvaluationAnalysis" access="PROPERTY">
+		<table name="evaluationanalyses" schema="reviewer" />
+		<attributes>
+			<id name="id">
+				<column name="evaluationanalysis_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			
+			<basic name="name">
+				<column name="name" />
+			</basic>
+						
+			<one-to-one name="evaluator" fetch="LAZY">
+				<join-column name="evaluator_id"/>
+			</one-to-one>
+			
+			<one-to-one name="criteria" fetch="LAZY">
+				<join-column name="criteria_id"/>
+			</one-to-one>			
+		</attributes>
+	</entity>
+</entity-mappings>
+			

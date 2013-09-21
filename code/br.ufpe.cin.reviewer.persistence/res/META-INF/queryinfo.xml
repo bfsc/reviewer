@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<entity class="br.ufpe.cin.reviewer.model.search.QueryInfo" name="QueryInfo" access="PROPERTY">
+		<table name="queryinfos" schema="reviewer" />
+		<attributes>
+			<id name="id">
+				<column name="queryinfo_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			
+			<basic name="totalfound">
+				<column name="totalfound" />
+			</basic>
+			
+			<basic name="totalfetched">
+				<column name="totalfetched" />
+			</basic>
+			
+			<basic name="source">
+				<column name="source" />
+			</basic>
+			
+		</attributes>
+	</entity>
+</entity-mappings>
