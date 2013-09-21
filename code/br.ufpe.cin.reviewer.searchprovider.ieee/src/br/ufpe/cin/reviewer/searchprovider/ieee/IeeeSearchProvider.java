@@ -4,7 +4,7 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import br.ufpe.cin.reviewer.model.common.Study;
+import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
