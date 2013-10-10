@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+	<entity class="br.ufpe.cin.reviewer.model.phase.Group" name="Group" access="PROPERTY">
+		<table name="groups" schema="reviewer" />
+		<attributes>
+			<id name="id">
+				<column name="group_id" />
+				<generated-value strategy="IDENTITY" />
+			</id>
+			
+			<one-to-one name="evaluator" fetch="LAZY">
+				<join-column name="evaluator_id"/>
+			</one-to-one>			
+						
+		</attributes>
+	</entity>
+</entity-mappings>
+			
