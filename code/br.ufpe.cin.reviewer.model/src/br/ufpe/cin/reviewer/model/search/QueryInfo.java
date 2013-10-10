@@ -2,7 +2,7 @@ package br.ufpe.cin.reviewer.model.search;
 
 public class QueryInfo {
 
-	private int totalFount;
+	private int totalFound;
 	private int totalFetched;
 	private String source;
 	
@@ -10,12 +10,12 @@ public class QueryInfo {
 		
 	}
 
-	public int getTotalFount() {
-		return totalFount;
+	public int getTotalFound() {
+		return totalFound;
 	}
 
-	public void setTotalFount(int totalFount) {
-		this.totalFount = totalFount;
+	public void setTotalFound(int totalFound) {
+		this.totalFound = totalFound;
 	}
 
 	public int getTotalFetched() {
