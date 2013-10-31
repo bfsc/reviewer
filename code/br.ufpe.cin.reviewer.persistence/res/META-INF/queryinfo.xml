@@ -5,16 +5,16 @@
 		<table name="queryinfos" schema="reviewer" />
 		<attributes>
 			<id name="id">
-				<column name="queryinfo_id" />
+				<column name="query_info_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
-			<basic name="totalfound">
-				<column name="totalfound" />
+			<basic name="total_found">
+				<column name="total_found" />
 			</basic>
 			
-			<basic name="totalfetched">
-				<column name="totalfetched" />
+			<basic name="total_fetched">
+				<column name="total_fetched" />
 			</basic>
 			
 			<basic name="source">

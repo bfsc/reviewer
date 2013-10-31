@@ -5,12 +5,12 @@
 		<table name="automatedsearches" schema="reviewer" />
 		<attributes>
 			<id name="id">
-				<column name="automatedsearch_id" />
+				<column name="automated_search_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
-			<basic name="querystring">
-				<column name="querystring" />
+			<basic name="query_string">
+				<column name="query_string" />
 			</basic>
 			<!-- It will be commited latter, we need to get some information -->
 			<one-to-many name="queryinfos" fetch="LAZY" orphan-removal="true">
