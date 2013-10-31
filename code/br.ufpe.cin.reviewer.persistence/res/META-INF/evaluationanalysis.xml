@@ -5,7 +5,7 @@
 		<table name="evaluationanalyses" schema="reviewer" />
 		<attributes>
 			<id name="id">
-				<column name="evaluationanalysis_id" />
+				<column name="evaluation_analysis_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
