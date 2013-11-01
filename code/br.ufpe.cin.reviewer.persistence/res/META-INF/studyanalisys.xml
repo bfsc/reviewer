@@ -2,16 +2,16 @@
 
 <entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
 	<entity class="br.ufpe.cin.reviewer.model.study.StudyAnalysis" name="StudyAnalysis" access="PROPERTY">
-		<table name="studyanalisys" schema="reviewer" />
+		<table name="study_analisys" schema="reviewer" />
 		<attributes>
 			<id name="id">
-				<column name="studynalysis_id" />
+				<column name="study_analisys_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
 			<one-to-many name="evaluationAnalysis" fetch="LAZY" orphan-removal="true">
 				<join-table name="evaluationanalyses" schema="reviewer">
-					<join-column name="evaluationanalysis_id"/>
+					<join-column name="evaluation_analysis_id"/>
 					<inverse-join-column name="evaluation_id"/>
 				</join-table>
 				<cascade><cascade-all/></cascade>
