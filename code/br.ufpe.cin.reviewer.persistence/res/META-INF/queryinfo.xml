@@ -2,18 +2,18 @@
 
 <entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
 	<entity class="br.ufpe.cin.reviewer.model.search.QueryInfo" name="QueryInfo" access="PROPERTY">
-		<table name="queryinfos" schema="reviewer" />
+		<table name="query_info" schema="reviewer" />
 		<attributes>
 			<id name="id">
 				<column name="query_info_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
-			<basic name="total_found">
+			<basic name="totalFound">
 				<column name="total_found" />
 			</basic>
 			
-			<basic name="total_fetched">
+			<basic name="totalFetched">
 				<column name="total_fetched" />
 			</basic>
 			

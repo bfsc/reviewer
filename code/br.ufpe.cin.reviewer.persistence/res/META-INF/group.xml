@@ -9,9 +9,9 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
-			<one-to-one name="evaluator" fetch="LAZY">
+			<one-to-many name="evaluators" fetch="LAZY">
 				<join-column name="evaluator_id"/>
-			</one-to-one>			
+			</one-to-many>			
 						
 		</attributes>
 	</entity>

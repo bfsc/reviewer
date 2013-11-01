@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import br.ufpe.cin.reviewer.model.literaturereview.Criteria;
 import br.ufpe.cin.reviewer.persistence.JPAEntityManager;
 import br.ufpe.cin.reviewer.persistence.PersistenceConstants;
 import br.ufpe.cin.reviewer.persistence.exceptions.PersistenceException;
@@ -106,4 +107,17 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 		return query;
 	}
 	
+	public static void main(String[] args) {
+		
+		JPADAO<Criteria, Integer> jp = new JPADAO<>(Criteria.class);
+		Criteria c = new Criteria();
+		c.setName("Teste");
+		try {
+			jp.create(c);
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

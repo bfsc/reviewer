@@ -5,10 +5,10 @@ import java.util.List;
 
 public class AutomatedSearch {
 
+	private int id;
 	private String queryString;
 	private List<QueryInfo> queryInfos = new LinkedList<QueryInfo>();
 
-	private int id;
 
 	public int getId() {
 		return id;

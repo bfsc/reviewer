@@ -12,11 +12,11 @@
 			<basic name="query_string">
 				<column name="query_string" />
 			</basic>
-			<!-- It will be commited latter, we need to get some information -->
-			<one-to-many name="queryinfos" fetch="LAZY" orphan-removal="true">
-				<join-table name="literature_review_studies" schema="reviewer">
-					<join-column name="literature_review_id"/>
-					<inverse-join-column name="study_id"/>
+			
+			<one-to-many name="queryInfos" fetch="LAZY" orphan-removal="true">
+				<join-table name="query_info" schema="reviewer">
+					<join-column name="query_info_id"/>
+					<inverse-join-column name="automated_search_id"/>
 				</join-table>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
