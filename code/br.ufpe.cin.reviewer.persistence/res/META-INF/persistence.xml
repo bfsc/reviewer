@@ -6,15 +6,15 @@
  
         <mapping-file>META-INF/literaturereview.xml</mapping-file>
         <mapping-file>META-INF/study.xml</mapping-file>
-        <mapping-file>META-INF/automatedsearch.xml</mapping-file>
         <mapping-file>META-INF/criteria.xml</mapping-file>
         <mapping-file>META-INF/evaluationanalysis.xml</mapping-file>
         <mapping-file>META-INF/evaluator.xml</mapping-file>
         <mapping-file>META-INF/group.xml</mapping-file>
         <mapping-file>META-INF/literaturereview.xml</mapping-file>
+        <mapping-file>META-INF/studyanalisys.xml</mapping-file>
         <mapping-file>META-INF/phase.xml</mapping-file>
-        <mapping-file>META-INF/queryinfo.xml</mapping-file>
-        <mapping-file>META-INF/studyanalisys.xml</mapping-file>       
+        <mapping-file>META-INF/queryinfo.xml</mapping-file>  
+   <!--     <mapping-file>META-INF/automatedsearch.xml</mapping-file>     -->
  
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver" />

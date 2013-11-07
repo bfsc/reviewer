@@ -8,8 +8,7 @@ import br.ufpe.cin.reviewer.model.study.StudyAnalysis;
 public class Phase {
 
 	private int id;
-
-	private List<StudyAnalysis> studyAnalyses = new LinkedList<StudyAnalysis>();
+	private List<StudyAnalysis> studyanalisys = new LinkedList<StudyAnalysis>();
 	private List<Group> groups = new LinkedList<Group>();
 
 	public int getId() {
@@ -20,12 +19,12 @@ public class Phase {
 		this.id = id;
 	}
 
-	public List<StudyAnalysis> getStudyAnalysis() {
-		return studyAnalyses;
+	public List<StudyAnalysis> getStudyanalisys() {
+		return studyanalisys;
 	}
 
-	public void setStudyAnalysis(List<StudyAnalysis> studyAnalyses) {
-		this.studyAnalyses = studyAnalyses;
+	public void setStudyanalisys(List<StudyAnalysis> studyanalisys) {
+		this.studyanalisys = studyanalisys;
 	}
 
 	public List<Group> getGroups() {
