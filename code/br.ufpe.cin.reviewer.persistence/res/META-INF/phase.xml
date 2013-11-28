@@ -13,8 +13,8 @@
 				<join-column name="group_id"/>
 			</one-to-one>
 			
-			<one-to-one name="studyanalisys" fetch="LAZY">
-				<join-column name="evaluationanalysis_id"/>
+			<one-to-one name="study_analisys" fetch="LAZY">
+				<join-column name="study_analisys_id"/>
 			</one-to-one>			
 		</attributes>
 	</entity>
