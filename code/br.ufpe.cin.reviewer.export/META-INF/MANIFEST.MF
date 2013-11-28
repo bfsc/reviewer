@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: br.ufpe.cin.reviewer.export
+Bundle-SymbolicName: br.ufpe.cin.reviewer.export;singleton:=true
+Bundle-Version: 0.1.0
+Require-Bundle: br.ufpe.cin.reviewer.model;bundle-version="0.1.0",
+ br.ufpe.cin.reviewer.logger;bundle-version="0.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: br.ufpe.cin.reviewer.export

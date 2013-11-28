@@ -1,0 +1,15 @@
+<br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview>
+  <id>0</id>
+  <title>Teste</title>
+  <queryString>QueryTest</queryString>
+  <sources class="linked-list"/>
+  <studies>
+    <br.ufpe.cin.reviewer.model.study.Study>
+      <id>0</id>
+      <title>Study Title</title>
+      <authors class="linked-list"/>
+      <institutions class="linked-list"/>
+      <countries class="linked-list"/>
+    </br.ufpe.cin.reviewer.model.study.Study>
+  </studies>
+</br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview>
