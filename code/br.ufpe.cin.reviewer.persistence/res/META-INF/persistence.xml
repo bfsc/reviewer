@@ -13,7 +13,7 @@
         <mapping-file>META-INF/literaturereview.xml</mapping-file>
         <mapping-file>META-INF/studyanalisys.xml</mapping-file>
         <mapping-file>META-INF/phase.xml</mapping-file>
-        <mapping-file>META-INF/queryinfo.xml</mapping-file>  
+        <mapping-file>META-INF/queryinfo.xml</mapping-file>
    <!--     <mapping-file>META-INF/automatedsearch.xml</mapping-file>     -->
  
         <properties>
