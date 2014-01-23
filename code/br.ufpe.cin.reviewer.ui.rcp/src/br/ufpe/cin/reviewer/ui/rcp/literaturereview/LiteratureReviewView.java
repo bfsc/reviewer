@@ -33,6 +33,145 @@ import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class LiteratureReviewView extends BaseView {
+	
+	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";
+
+	private SashForm sash;
+	private Composite listComposite;
+	private Section sectionList;
+	private List list;
+	
+	private Section sectionInfo;
+	private Composite reviewInfoComposite;
+	
+	private Label titleLabel;
+	private Composite criteriaListComposite;
+	
+	private Section sectionCriteria;
+	private List criteriaList;
+	
+	private Section sectionStudies;
+	private Composite studiesComposite;
+	
+	public LiteratureReviewView() {
+		ReviewerViewRegister.putView(ID, this);
+	}
+	
+
+	public void createPartControlImpl(Composite parent) {
+		configureView(parent);
+		createLiteratureWidgets(parent);
+	}
+	
+	public void setFocus() {
+
+	}
+	
+	private void configureView(Composite parent) {
+		super.form.setText(super.form.getText() + " - My literature reviews");
+		super.form.getBody().setLayout(new GridLayout(1, false));
+	}
+
+
+	private void createLiteratureWidgets(Composite parent) {
+		
+		sash = new SashForm(form.getBody(),SWT.HORIZONTAL);
+		sash.setLayout(new GridLayout(4, false));
+		GridData sashLayout = new GridData(GridData.FILL_BOTH);
+		sashLayout.grabExcessHorizontalSpace = true;
+		sashLayout.grabExcessVerticalSpace = true;
+		sash.setLayoutData(sashLayout);
+		sash.getMaximizedControl();
+		
+		
+		//Section for List of reviews
+	    sectionList = toolkit.createSection(sash, Section.SHORT_TITLE_BAR);
+	    sectionList.setText("REVIEWS");
+	    sectionList.setLayout(new GridLayout(1, false));
+	    GridData sectionListLayout = new GridData(GridData.FILL_VERTICAL);
+	    sectionListLayout.horizontalSpan = 1;
+		sectionList.setLayoutData(sectionListLayout);
+		
+		listComposite = toolkit.createComposite(sectionList, SWT.BORDER);
+		listComposite.setLayout(new GridLayout(2, false));
+		listComposite.setLayoutData(new GridData());
+		
+		list = new List (listComposite, SWT.V_SCROLL);
+		GridData listLayoutData = new GridData(GridData.FILL_BOTH);
+		listLayoutData.horizontalSpan = 1;
+		list.setLayoutData(listLayoutData);
+
+		list.add("Teste 1");
+		list.add("Teste 2");
+		list.add("Teste 3");
+		list.add("Teste 4");
+		list.add("Teste 5");
+		//list.addSelectionListener(new LiteratureReviewsListHandler());
+		//refreshView();
+		
+
+		//Section for review information
+	    sectionInfo = toolkit.createSection(sash, Section.SHORT_TITLE_BAR);
+	    sectionInfo.setText("REVIEW INFO");
+	    sectionInfo.setLayout(new GridLayout(1, false));
+		sectionInfo.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		reviewInfoComposite = toolkit.createComposite(sectionInfo, SWT.BORDER);
+		GridData reviewCompositeData = new GridData(GridData.FILL_BOTH);
+		reviewCompositeData.horizontalSpan = 1;
+		reviewInfoComposite.setLayoutData(reviewCompositeData);
+		reviewInfoComposite.setLayout(new GridLayout(1, false));
+		reviewInfoComposite.setVisible(true);
+
+		//Review Title
+		titleLabel = toolkit.createLabel(reviewInfoComposite, "TITLE: ");
+		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+		titleLabel.setLayoutData(new GridData());
+
+		//Criteria List
+	    sectionCriteria = toolkit.createSection(reviewInfoComposite, Section.SHORT_TITLE_BAR);
+	    sectionCriteria.setText("CRITERIONS");
+	    sectionCriteria.setLayout(new GridLayout(2, false));
+	    GridData sectionCriteriaLayout = new GridData(GridData.FILL_HORIZONTAL);
+	    sectionCriteriaLayout.horizontalSpan = 2;
+	    sectionCriteria.setLayoutData(sectionCriteriaLayout);
+		
+		criteriaListComposite = toolkit.createComposite(sectionCriteria, SWT.BORDER);
+		criteriaListComposite.setLayout(new GridLayout(1, false));
+		criteriaListComposite.setLayoutData(new GridData());
+		
+		criteriaList = new List (criteriaListComposite, SWT.V_SCROLL);
+		GridData criterialistLayout = new GridData(GridData.FILL_BOTH);
+		criterialistLayout.horizontalSpan = 1;
+		criteriaList.setLayoutData(criterialistLayout);
+
+		criteriaList.add("Criteria 1");
+		criteriaList.add("Criteria 2");
+		criteriaList.add("Criteria 3");
+		criteriaList.add("Criteria 4");
+		criteriaList.add("Criteria 5");
+		
+		//Studies section
+		sectionStudies = toolkit.createSection(reviewInfoComposite, Section.SHORT_TITLE_BAR);
+		sectionStudies.setText("STUDIES");
+		sectionStudies.setLayout(new GridLayout(2, false));
+	    GridData sectionStudiesLayout = new GridData(GridData.FILL_BOTH);
+	    sectionStudiesLayout.horizontalSpan = 2;
+	    sectionStudies.setLayoutData(sectionStudiesLayout);
+		
+		studiesComposite = toolkit.createComposite(sectionStudies, SWT.BORDER);
+		studiesComposite.setLayout(new GridLayout(1, false));
+		studiesComposite.setLayoutData(new GridData());
+		
+		
+		sash.setWeights(new int[] {1, 3});
+
+		sectionList.setClient(listComposite);
+		sectionInfo.setClient(reviewInfoComposite);
+		sectionCriteria.setClient(criteriaListComposite);
+		sectionStudies.setClient(studiesComposite);
+	}
+	/*
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";
 
@@ -334,4 +473,6 @@ public class LiteratureReviewView extends BaseView {
 		
 	}
 	
+	
+	*/
 }

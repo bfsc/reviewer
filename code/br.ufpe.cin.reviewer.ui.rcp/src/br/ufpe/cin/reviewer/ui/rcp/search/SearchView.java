@@ -466,8 +466,8 @@ public class SearchView extends BaseView {
 					
 					LiteratureReviewView literatureReviewView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
 					if (literatureReviewView != null) {
-						literatureReviewView.setSelectedLiteratureReview(literatureReview);
-						literatureReviewView.refreshView();
+						//literatureReviewView.setSelectedLiteratureReview(literatureReview);
+						//literatureReviewView.refreshView();
 					}
 				}
 			}
