@@ -52,6 +52,16 @@ public class LiteratureReviewView extends BaseView {
 	
 	private Section sectionStudies;
 	private Composite studiesComposite;
+
+	private Section sectionManual;
+	private Composite manualComposite;
+	private Table infoTable;
+	
+	private Section sectionAutomatic;
+	private Composite automaticComposite;
+	private Label QueryStringLabel;
+	private Label QueryLabel;
+	private Table sourceTable;
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -71,7 +81,6 @@ public class LiteratureReviewView extends BaseView {
 		super.form.setText(super.form.getText() + " - My literature reviews");
 		super.form.getBody().setLayout(new GridLayout(1, false));
 	}
-
 
 	private void createLiteratureWidgets(Composite parent) {
 		
@@ -163,6 +172,73 @@ public class LiteratureReviewView extends BaseView {
 		studiesComposite.setLayout(new GridLayout(1, false));
 		studiesComposite.setLayoutData(new GridData());
 		
+		//Manual Studies section
+		sectionManual = toolkit.createSection(studiesComposite, Section.SHORT_TITLE_BAR);
+		sectionManual.setText("MANUAL STUDIES");
+		sectionManual.setLayout(new GridLayout(2, false));
+	    GridData sectionManualLayout = new GridData(GridData.FILL_BOTH);
+	    sectionManualLayout.horizontalSpan = 2;
+	    sectionManual.setLayoutData(sectionManualLayout);
+		
+		manualComposite = toolkit.createComposite(sectionManual, SWT.BORDER);
+		manualComposite.setLayout(new GridLayout(1, false));
+		manualComposite.setLayoutData(new GridData());
+
+		//Info Table
+		infoTable = toolkit.createTable(manualComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		infoTable.setLinesVisible (true);
+		infoTable.setHeaderVisible (true);
+		GridData infoTableLayoutData = new GridData(GridData.FILL_BOTH);
+		infoTable.setLayoutData(infoTableLayoutData);
+		//insert columns and set their names
+		String[] titles = {"info 1", "info 2", "info 3", "info 4"};
+		for (int i=0; i<titles.length; i++) {
+			TableColumn column = new TableColumn (infoTable, SWT.NONE);
+			column.setText (titles [i]);
+		}
+		for (int i=0; i<titles.length; i++) {
+			infoTable.getColumn (i).pack ();
+		}
+		
+		//Automatic Studies section
+		sectionAutomatic = toolkit.createSection(studiesComposite, Section.SHORT_TITLE_BAR);
+		sectionAutomatic.setText("AUTOMATIC STUDIES");
+		sectionAutomatic.setLayout(new GridLayout(2, false));
+	    GridData sectionAutomaticLayout = new GridData(GridData.FILL_BOTH);
+	    sectionAutomaticLayout.horizontalSpan = 2;
+	    sectionAutomatic.setLayoutData(sectionAutomaticLayout);
+		
+		automaticComposite = toolkit.createComposite(sectionAutomatic, SWT.BORDER);
+		automaticComposite.setLayout(new GridLayout(2, false));
+		automaticComposite.setLayoutData(new GridData());
+
+		//Query String Label
+		QueryStringLabel = toolkit.createLabel(automaticComposite, "QUERY STRING: ");
+		QueryStringLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+		QueryStringLabel.setLayoutData(new GridData());
+
+		//Query String Label
+		QueryLabel = toolkit.createLabel(automaticComposite, "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla");
+		QueryLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.NONE));
+		QueryLabel.setLayoutData(new GridData());
+		
+		//Source Table
+		sourceTable = toolkit.createTable(automaticComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		sourceTable.setLinesVisible (true);
+		sourceTable.setHeaderVisible (true);
+		GridData sourceTableLayoutData = new GridData(GridData.FILL_BOTH);
+		sourceTableLayoutData.horizontalSpan = 2;
+		sourceTable.setLayoutData(sourceTableLayoutData);
+		//insert columns and set their names
+		String[] titles2 = {"Source", "Total Founded", "Total Fetched"};
+		for (int i=0; i<titles2.length; i++) {
+			TableColumn column = new TableColumn (sourceTable, SWT.NONE);
+			column.setText (titles2 [i]);
+		}
+		for (int i=0; i<titles2.length; i++) {
+			sourceTable.getColumn (i).pack ();
+		}
+		
 		
 		sash.setWeights(new int[] {1, 3});
 
@@ -170,6 +246,8 @@ public class LiteratureReviewView extends BaseView {
 		sectionInfo.setClient(reviewInfoComposite);
 		sectionCriteria.setClient(criteriaListComposite);
 		sectionStudies.setClient(studiesComposite);
+		sectionManual.setClient(manualComposite);
+		sectionAutomatic.setClient(automaticComposite);
 	}
 	/*
 
