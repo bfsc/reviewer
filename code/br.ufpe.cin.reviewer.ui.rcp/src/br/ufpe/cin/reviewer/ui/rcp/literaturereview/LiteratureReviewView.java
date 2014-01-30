@@ -1,5 +1,15 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
+import org.eclipse.jface.*;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IContributionManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
@@ -8,21 +18,32 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.CoolBar;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.menus.CommandContributionItem;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
@@ -40,28 +61,36 @@ public class LiteratureReviewView extends BaseView {
 	private Composite listComposite;
 	private Section sectionList;
 	private List list;
+	private ToolBar toolbarList;
 	
 	private Section sectionInfo;
 	private Composite reviewInfoComposite;
 	
 	private Label titleLabel;
+	private Label titleInfoLabel;
 	private Composite criteriaListComposite;
 	
 	private Section sectionCriteria;
 	private List criteriaList;
+	private ToolBar toolbarCriteria;
 	
 	private Section sectionStudies;
 	private Composite studiesComposite;
+	private ToolBar toolbarStudies;
 
 	private Section sectionManual;
 	private Composite manualComposite;
 	private Table infoTable;
+	private ToolBar toolbarManual;
 	
 	private Section sectionAutomatic;
 	private Composite automaticComposite;
+	private ToolBar toolbarAutomatic;
 	private Label QueryStringLabel;
 	private Label QueryLabel;
 	private Table sourceTable;
+	
+	private Button evaluateButton;
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -92,14 +121,20 @@ public class LiteratureReviewView extends BaseView {
 		sash.setLayoutData(sashLayout);
 		sash.getMaximizedControl();
 		
-		
 		//Section for List of reviews
 	    sectionList = toolkit.createSection(sash, Section.SHORT_TITLE_BAR);
-	    sectionList.setText("REVIEWS");
+	    sectionList.setText("REVIEWS");	    
 	    sectionList.setLayout(new GridLayout(1, false));
 	    GridData sectionListLayout = new GridData(GridData.FILL_VERTICAL);
 	    sectionListLayout.horizontalSpan = 1;
 		sectionList.setLayoutData(sectionListLayout);
+		
+	    toolbarList = new ToolBar (sectionList, SWT.NONE);
+	    ToolItem itemAddReview = new ToolItem(toolbarList, SWT.BUTTON1);
+	    itemAddReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    ToolItem itemDeleteReview = new ToolItem(toolbarList, SWT.BUTTON1);
+	    itemDeleteReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    sectionList.setTextClient(toolbarList);
 		
 		listComposite = toolkit.createComposite(sectionList, SWT.BORDER);
 		listComposite.setLayout(new GridLayout(2, false));
@@ -124,18 +159,24 @@ public class LiteratureReviewView extends BaseView {
 	    sectionInfo.setText("REVIEW INFO");
 	    sectionInfo.setLayout(new GridLayout(1, false));
 		sectionInfo.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
 
 		reviewInfoComposite = toolkit.createComposite(sectionInfo, SWT.BORDER);
 		GridData reviewCompositeData = new GridData(GridData.FILL_BOTH);
 		reviewCompositeData.horizontalSpan = 1;
 		reviewInfoComposite.setLayoutData(reviewCompositeData);
-		reviewInfoComposite.setLayout(new GridLayout(1, false));
+		reviewInfoComposite.setLayout(new GridLayout(2, false));
 		reviewInfoComposite.setVisible(true);
 
 		//Review Title
 		titleLabel = toolkit.createLabel(reviewInfoComposite, "TITLE: ");
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
+
+		//Review Title
+		titleInfoLabel = toolkit.createLabel(reviewInfoComposite, "Pesquisa 1");
+		titleInfoLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.NONE));
+		titleInfoLabel.setLayoutData(new GridData());
 
 		//Criteria List
 	    sectionCriteria = toolkit.createSection(reviewInfoComposite, Section.SHORT_TITLE_BAR);
@@ -144,6 +185,13 @@ public class LiteratureReviewView extends BaseView {
 	    GridData sectionCriteriaLayout = new GridData(GridData.FILL_HORIZONTAL);
 	    sectionCriteriaLayout.horizontalSpan = 2;
 	    sectionCriteria.setLayoutData(sectionCriteriaLayout);
+		
+	    toolbarCriteria = new ToolBar (sectionCriteria, SWT.NONE);
+	    ToolItem itemAddCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
+	    itemAddCriteria.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    ToolItem itemDeleteCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
+	    itemDeleteCriteria.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    sectionCriteria.setTextClient(toolbarCriteria);
 		
 		criteriaListComposite = toolkit.createComposite(sectionCriteria, SWT.BORDER);
 		criteriaListComposite.setLayout(new GridLayout(1, false));
@@ -168,6 +216,15 @@ public class LiteratureReviewView extends BaseView {
 	    sectionStudiesLayout.horizontalSpan = 2;
 	    sectionStudies.setLayoutData(sectionStudiesLayout);
 		
+	    toolbarStudies = new ToolBar (sectionStudies, SWT.NONE);
+	    ToolItem itemAutomatic = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
+	    itemAutomatic.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    ToolItem itemManual = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
+	    itemManual.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    ToolItem itemDeleteStudies = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
+	    itemDeleteStudies.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    sectionStudies.setTextClient(toolbarStudies);
+		
 		studiesComposite = toolkit.createComposite(sectionStudies, SWT.BORDER);
 		studiesComposite.setLayout(new GridLayout(1, false));
 		studiesComposite.setLayoutData(new GridData());
@@ -179,6 +236,11 @@ public class LiteratureReviewView extends BaseView {
 	    GridData sectionManualLayout = new GridData(GridData.FILL_BOTH);
 	    sectionManualLayout.horizontalSpan = 2;
 	    sectionManual.setLayoutData(sectionManualLayout);
+		
+	    toolbarManual = new ToolBar (sectionManual, SWT.NONE);
+	    ToolItem itemDeleteManual = new ToolItem(toolbarManual, SWT.BUTTON1);
+	    itemDeleteManual.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    sectionManual.setTextClient(toolbarManual);
 		
 		manualComposite = toolkit.createComposite(sectionManual, SWT.BORDER);
 		manualComposite.setLayout(new GridLayout(1, false));
@@ -207,6 +269,11 @@ public class LiteratureReviewView extends BaseView {
 	    GridData sectionAutomaticLayout = new GridData(GridData.FILL_BOTH);
 	    sectionAutomaticLayout.horizontalSpan = 2;
 	    sectionAutomatic.setLayoutData(sectionAutomaticLayout);
+		
+	    toolbarAutomatic = new ToolBar (sectionAutomatic, SWT.NONE);
+	    ToolItem itemDeleteAutomatic = new ToolItem(toolbarAutomatic, SWT.BUTTON1);
+	    itemDeleteAutomatic.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    sectionAutomatic.setTextClient(toolbarAutomatic);
 		
 		automaticComposite = toolkit.createComposite(sectionAutomatic, SWT.BORDER);
 		automaticComposite.setLayout(new GridLayout(2, false));
@@ -239,6 +306,10 @@ public class LiteratureReviewView extends BaseView {
 			sourceTable.getColumn (i).pack ();
 		}
 		
+		evaluateButton = toolkit.createButton(reviewInfoComposite, "evaluate studies", SWT.PUSH);
+		GridData evaluateButtonLayoutData = new GridData();
+		evaluateButtonLayoutData.horizontalAlignment = SWT.RIGHT;
+		evaluateButton.setLayoutData(evaluateButtonLayoutData);
 		
 		sash.setWeights(new int[] {1, 3});
 

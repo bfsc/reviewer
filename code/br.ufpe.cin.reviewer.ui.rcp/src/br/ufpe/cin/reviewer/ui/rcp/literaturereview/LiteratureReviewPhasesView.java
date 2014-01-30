@@ -8,6 +8,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -16,6 +17,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -33,8 +36,61 @@ import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsFactory;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
-public class LiteratureReviewStudiesView extends BaseView {
+public class LiteratureReviewPhasesView extends BaseView {
 
+	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
+	
+	private Section section;
+	private Composite phaseComposite;
+	
+	private Section sectionGroups;
+	private ToolBar toolbarGroups;
+
+	public LiteratureReviewPhasesView() {
+		ReviewerViewRegister.putView(ID, this);
+	}
+	
+	public void createPartControlImpl(Composite parent) {
+		configureView(parent);
+		createLiteratureStudiesWidgets(parent);
+	}
+	
+	public void setFocus() {
+
+	}
+	
+	private void configureView(Composite parent) {
+		super.form.setText(super.form.getText() + " - Literature review studies");
+		form.getBody().setLayout(new GridLayout(2, false));
+	}
+	
+	private void createLiteratureStudiesWidgets(Composite parent) {
+	    section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
+	    section.setLayout(new GridLayout(1, false));
+		section.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		phaseComposite = toolkit.createComposite(section);
+		phaseComposite.setLayout(new GridLayout(2, false));
+		phaseComposite.setLayoutData(new GridData());
+		
+		//Section for List of reviews
+		sectionGroups = toolkit.createSection(phaseComposite, Section.SHORT_TITLE_BAR);
+		sectionGroups.setText("REVIEWS");	    
+		sectionGroups.setLayout(new GridLayout(1, false));
+	    GridData sectionListLayout = new GridData(GridData.FILL_VERTICAL);
+	    sectionListLayout.horizontalSpan = 1;
+	    sectionGroups.setLayoutData(sectionListLayout);
+		
+	    toolbarGroups = new ToolBar (sectionGroups, SWT.NONE);
+	    ToolItem itemAddReview = new ToolItem(toolbarGroups, SWT.BUTTON1);
+	    itemAddReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    ToolItem itemDeleteReview = new ToolItem(toolbarGroups, SWT.BUTTON1);
+	    itemDeleteReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    sectionGroups.setTextClient(toolbarGroups);
+		
+	}
+	
+	/*
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
 	
 	private LiteratureReview literatureReview;
@@ -44,7 +100,7 @@ public class LiteratureReviewStudiesView extends BaseView {
 	private StyledText titleText;
 	private Table table;
 	
-	public LiteratureReviewStudiesView() {
+	public LiteratureReviewPhasesView() {
 		ReviewerViewRegister.putView(ID, this);
 	}
 
@@ -204,5 +260,5 @@ public class LiteratureReviewStudiesView extends BaseView {
 
 	}
 
-	
+	*/
 }
