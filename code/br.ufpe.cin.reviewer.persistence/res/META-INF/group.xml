@@ -9,8 +9,12 @@
 				<generated-value strategy="IDENTITY" />
 			</id>
 			
-			<one-to-many name="evaluators" fetch="LAZY">
-				<join-column name="evaluator_id"/>
+			<one-to-many name="evaluators" fetch="LAZY" orphan-removal="true">
+				<join-table name="evaluators" schema="reviewer">
+					<join-column name="evaluator_id"/>
+					<inverse-join-column name="group_id"/>
+				</join-table>
+				<cascade><cascade-all/></cascade>
 			</one-to-many>			
 						
 		</attributes>

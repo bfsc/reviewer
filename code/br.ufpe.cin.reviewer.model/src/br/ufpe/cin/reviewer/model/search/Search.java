@@ -6,15 +6,15 @@ import br.ufpe.cin.reviewer.model.study.Study;
 
 public class Search {
 
-	private List<Study> studies = new LinkedList<Study>();
 	private int id;
+	private List<Study> studies = new LinkedList<Study>();
 
 	public int getId() {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int searchId) {
+		this.id = searchId;
 	}
 
 	public List<Study> getStudies() {

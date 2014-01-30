@@ -10,9 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.ufpe.cin.reviewer.model.literaturereview.Criteria;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.persistence.JPAEntityManager;
 import br.ufpe.cin.reviewer.persistence.PersistenceConstants;
 import br.ufpe.cin.reviewer.persistence.exceptions.PersistenceException;
+import br.ufpe.cin.reviewer.persistence.util.HSQLUtil;
 
 public class JPADAO<E,K> implements IDAO<E, K> {
 	
@@ -109,11 +111,22 @@ public class JPADAO<E,K> implements IDAO<E, K> {
 	
 	public static void main(String[] args) {
 		
-		JPADAO<Criteria, Integer> jp = new JPADAO<>(Criteria.class);
-		Criteria c = new Criteria();
-		c.setName("Teste");
 		try {
-			jp.create(c);
+
+			HSQLUtil.initDatabase();
+			LiteratureReview lr = new LiteratureReview();
+			lr.setTitle("Teste Literature");
+			JPADAO<LiteratureReview, Integer> jpLR = new JPADAO<>(
+					LiteratureReview.class);
+			Criteria c = new Criteria();
+			c.setName("Teste");	
+			List<Criteria> cr = new LinkedList<Criteria>();
+			cr.add(c);
+			//lr.setCritireon(cr);
+			jpLR.create(lr);
+			
+
+			
 		} catch (PersistenceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

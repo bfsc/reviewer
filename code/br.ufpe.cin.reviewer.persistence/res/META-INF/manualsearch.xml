@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
-	<entity class="br.ufpe.cin.reviewer.model.literaturereview.Criteria" name="Criteria" access="PROPERTY">
-		<table name="critireon" schema="reviewer" />
-		<attributes>
-			<id name="id">
-				<column name="criteria_id" />
-				<generated-value strategy="IDENTITY" />
-			</id>
+	<entity class="br.ufpe.cin.reviewer.model.search.ManualSearch" name="ManualSearch" access="PROPERTY">
+		<discriminator-value>M</discriminator-value>
+		<attributes>				
 			
-			<basic name="name">
-				<column name="name" />
-			</basic>
 		</attributes>
 	</entity>
 </entity-mappings>

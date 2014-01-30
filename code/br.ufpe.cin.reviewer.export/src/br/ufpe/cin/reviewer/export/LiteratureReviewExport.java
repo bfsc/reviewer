@@ -53,7 +53,7 @@ public class LiteratureReviewExport {
 	public static void main(String[] args) {
 		LiteratureReview review = new LiteratureReview();
 		review.setTitle("Teste");
-		review.setQueryString("QueryTest");
+		//review.setQueryString("QueryTest");
 
 		List<Study> studies = new ArrayList<Study>();
 
@@ -62,13 +62,13 @@ public class LiteratureReviewExport {
 		s.setTitle("Study Title");
 
 		studies.add(s);
-		review.setStudies(studies);
+		//review.setStudies(studies);
 
 		//LiteratureReviewExport.exportLR(review);
 		
-		LiteratureReview review2 = LiteratureReviewExport.importLR(review.getTitle()+".xml");
+		//LiteratureReview review2 = LiteratureReviewExport.importLR(review.getTitle()+".xml");
 		
-		System.out.println(review2.getStudies().get(0).getTitle());
+		//System.out.println(review2.getStudies().get(0).getTitle());
 		
 	}
 }

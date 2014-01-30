@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <entity-mappings version="2.0" xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
-	<entity class="br.ufpe.cin.reviewer.model.study.StudyAnalysis" name="StudyAnalysis" access="PROPERTY">
-		<table name="study_analisys" schema="reviewer" />
+	<entity class="br.ufpe.cin.reviewer.model.search.Search" name="Search" access="PROPERTY">
+		<table name="searches" schema="reviewer" />
+		 <inheritance strategy="SINGLE_TABLE"/>
+         <discriminator-column name="search_type"/>
 		<attributes>
 			<id name="id">
-				<column name="study_analisys_id" />
+				<column name="search_id" />
 				<generated-value strategy="IDENTITY" />
-			</id>
+			</id>	
 			
-			<one-to-many name="evaluationAnalysis" fetch="LAZY" orphan-removal="true">
-				<join-table name="evaluationanalyses" schema="reviewer">
-					<join-column name="evaluation_analysis_id"/>
-					<inverse-join-column name="study_analisys_id"/>
+			
+			<one-to-many name="studies" fetch="LAZY" orphan-removal="true">
+				<join-table name="studies" schema="reviewer">
+					<join-column name="study_id"/>
+					<inverse-join-column name="search_id"/>
 				</join-table>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
+			
+			
 		</attributes>
 	</entity>
-		
 </entity-mappings>
 			

@@ -3,87 +3,57 @@ package br.ufpe.cin.reviewer.model.literaturereview;
 import java.util.LinkedList;
 import java.util.List;
 
-import br.ufpe.cin.reviewer.model.study.Study;
+import br.ufpe.cin.reviewer.model.phase.Phase;
+import br.ufpe.cin.reviewer.model.search.Search;
 
 public class LiteratureReview {
 
 	private int id;
-	
 	private String title;
-	private String queryString;
-	private List<LiteratureReviewSource> sources = new LinkedList<LiteratureReviewSource>();
-	private List<Study> studies = new LinkedList<Study>();
 	
+
+	private List<Search> searches = new LinkedList<Search>();
+	private List<Criteria> critireon = new LinkedList<Criteria>();
+	private List<Phase> phases = new LinkedList<Phase>();
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
-	}
+	}	
 	
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
-	public String getQueryString() {
-		return queryString;
-	}
-	
-	public void setQueryString(String queryString) {
-		this.queryString = queryString;
-	}
-	
-	public List<LiteratureReviewSource> getSources() {
-		return sources;
+
+	public List<Search> getSearches() {
+		return searches;
 	}
 
-	public void setSources(List<LiteratureReviewSource> sources) {
-		this.sources = sources;
+	public void setSearches(List<Search> searches) {
+		this.searches = searches;
 	}
 
-	public List<Study> getStudies() {
-		return studies;
+	public List<Criteria> getCritireon() {
+		return critireon;
 	}
 
-	public void setStudies(List<Study> studies) {
-		this.studies = studies;
+	public void setCritireon(List<Criteria> critireon) {
+		this.critireon = critireon;
 	}
-	
-	public int getTotalFound(){
-		int totalFound = 0;
-		for (LiteratureReviewSource literatureReviewSource : this.sources) {
-			totalFound += literatureReviewSource.getTotalFound();
-		}
-		return totalFound;
+
+	public List<Phase> getPhases() {
+		return phases;
 	}
-	
-	public int getTotalFetched(){
-		int totalFetched = 0;
-		for (LiteratureReviewSource literatureReviewSource : this.sources) {
-			totalFetched += literatureReviewSource.getTotalFetched();
-		}
-		return totalFetched;
+
+	public void setPhases(List<Phase> phases) {
+		this.phases = phases;
 	}
-	
-	public void addSource(LiteratureReviewSource source) {
-		this.sources.add(source);
-	}
-	
-	public void removeSource(LiteratureReviewSource source) {
-		this.sources.remove(source);
-	}
-	
-	public void addStudy(Study study) {
-		this.studies.add(study);
-	}
-	
-	public void removeStudy(Study study) {
-		this.studies.remove(study);
-	}
-	
+
 }

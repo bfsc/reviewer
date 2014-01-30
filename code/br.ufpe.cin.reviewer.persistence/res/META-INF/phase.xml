@@ -8,14 +8,23 @@
 				<column name="phase_id" />
 				<generated-value strategy="IDENTITY" />
 			</id>
-								
-			<one-to-one name="groups" fetch="LAZY">
-				<join-column name="group_id"/>
-			</one-to-one>
 			
-			<one-to-one name="study_analisys" fetch="LAZY">
-				<join-column name="study_analisys_id"/>
-			</one-to-one>			
+			<one-to-many name="groups" fetch="LAZY" orphan-removal="true">
+				<join-table name="groups" schema="reviewer">
+					<join-column name="group_id"/>
+					<inverse-join-column name="phase_id"/>
+				</join-table>
+				<cascade><cascade-all/></cascade>
+			</one-to-many>	
+					
+			<one-to-many name="studyAnalisys" fetch="LAZY" orphan-removal="true">
+				<join-table name="study_analisys" schema="reviewer">
+					<join-column name="study_analisys_id"/>
+					<inverse-join-column name="phase_id"/>
+				</join-table>
+				<cascade><cascade-all/></cascade>
+			</one-to-many>	
+			
 		</attributes>
 	</entity>
 </entity-mappings>

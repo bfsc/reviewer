@@ -66,7 +66,8 @@ public class LiteratureReviewController implements ITransactionalController {
 			// TODO DEFINIR NOME DA SHEET
 			CellStyle templateCellStyle = sheet.getRow(1).getCell(0).getCellStyle();
 			
-			List<Study> studies = literatureReview.getStudies();
+			//TODO REFAZER
+			List<Study> studies = literatureReview.getSearches().get(1).getStudies();
 			
 			for (int i = 0; i < studies.size(); i++) {
 				Study study = studies.get(i);

@@ -3,21 +3,11 @@ package br.ufpe.cin.reviewer.model.search;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AutomatedSearch {
+public class AutomatedSearch extends Search{
 
-	private int id;
 	private String queryString;
 	private List<QueryInfo> queryInfos = new LinkedList<QueryInfo>();
-
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	
 	public String getQueryString() {
 		return queryString;
 	}
