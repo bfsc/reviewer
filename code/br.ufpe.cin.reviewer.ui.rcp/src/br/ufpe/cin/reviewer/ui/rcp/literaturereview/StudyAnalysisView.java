@@ -383,9 +383,9 @@ public class StudyAnalysisView extends BaseView {
 		else{
 			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
 			
-			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
 			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 	}
@@ -409,9 +409,9 @@ public class StudyAnalysisView extends BaseView {
 		else{
 			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
 			
-			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
 			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 	}
@@ -489,9 +489,9 @@ public class StudyAnalysisView extends BaseView {
 		public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
 			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewStudiesPerspective.ID));
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
 			
-			LiteratureReviewStudiesView literatureReviewStudiesView = (LiteratureReviewStudiesView) ReviewerViewRegister.getView(LiteratureReviewStudiesView.ID);
+			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
 			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 		
