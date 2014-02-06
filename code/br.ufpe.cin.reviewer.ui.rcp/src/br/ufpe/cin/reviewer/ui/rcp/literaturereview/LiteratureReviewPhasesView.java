@@ -1,6 +1,8 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
@@ -43,7 +45,11 @@ public class LiteratureReviewPhasesView extends BaseView {
 	
 	private Section section;
 	private Composite phaseComposite;
+
+	private int compositeSize;
+	private int numPhases;
 	
+	private List<Label> phasesLabel;
 	private Section sectionGroups;
 	private ToolBar toolbarGroups;
 	private Composite groupsComposite;
@@ -75,20 +81,37 @@ public class LiteratureReviewPhasesView extends BaseView {
 	}
 	
 	private void createLiteratureStudiesWidgets(Composite parent) {
+		//inicializa o tamanho da section
+		numPhases = 4;
+		compositeSize = numPhases;
+		
 	    section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout(1, false));
 		section.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		phaseComposite = toolkit.createComposite(section);
-		phaseComposite.setLayout(new GridLayout(2, false));
+		phaseComposite.setLayout(new GridLayout(compositeSize, false));
 		phaseComposite.setLayoutData(new GridData());
+		
+		//Phases Labels
+		phasesLabel = new ArrayList<>();
+		for(int i = 0; i < numPhases; i++){
+			phasesLabel.add(toolkit.createLabel(phaseComposite, (i+1)+"# Phase >"));
+		}
+	    GridData phasesLabelLayout = new GridData();
+	    phasesLabelLayout.horizontalAlignment = SWT.BEGINNING;
+	    phasesLabelLayout.grabExcessHorizontalSpace = true;
+		for (int i = 0; i < phasesLabel.size(); i++) {
+			phasesLabel.get(i).setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+			phasesLabel.get(i).setLayoutData(phasesLabelLayout);
+		}
 		
 		//Section for Groups
 		sectionGroups = toolkit.createSection(phaseComposite, Section.SHORT_TITLE_BAR);
 		sectionGroups.setText("PHASE EVALUATOR GROUPS");	    
 		sectionGroups.setLayout(new GridLayout(1, false));
-	    GridData sectionGroupsLayout = new GridData(GridData.FILL_VERTICAL);
-	    sectionGroupsLayout.horizontalSpan = 1;
+	    GridData sectionGroupsLayout = new GridData(GridData.FILL_BOTH);
+	    sectionGroupsLayout.horizontalSpan = compositeSize;
 	    sectionGroups.setLayoutData(sectionGroupsLayout);
 		
 	    toolbarGroups = new ToolBar (sectionGroups, SWT.NONE);
@@ -108,13 +131,23 @@ public class LiteratureReviewPhasesView extends BaseView {
 		groupsTable.setHeaderVisible (true);
 		GridData groupsTableLayoutData = new GridData(GridData.FILL_BOTH);
 		groupsTable.setLayoutData(groupsTableLayoutData);
+
+		//insert columns and set their names
+		String[] titles = {"Groups", "Members"};
+		for (int i=0; i<titles.length; i++) {
+			TableColumn column = new TableColumn (groupsTable, SWT.CENTER);
+			column.setText (titles [i]);
+		}
+		for (int i=0; i<titles.length; i++) {
+			groupsTable.getColumn (i).pack ();
+		}
 		
 		//Section for Studies List
 		sectionStudies = toolkit.createSection(phaseComposite, Section.SHORT_TITLE_BAR);
 		sectionStudies.setText("STUDIES LIST");	    
 		sectionStudies.setLayout(new GridLayout(1, false));
-	    GridData sectionStudiesLayout = new GridData(GridData.FILL_VERTICAL);
-	    sectionStudiesLayout.horizontalSpan = 1;
+	    GridData sectionStudiesLayout = new GridData(GridData.FILL_BOTH);
+	    sectionStudiesLayout.horizontalSpan = compositeSize;
 	    sectionStudies.setLayoutData(sectionStudiesLayout);
 		
 	    studiesComposite = toolkit.createComposite(sectionStudies);
@@ -128,15 +161,30 @@ public class LiteratureReviewPhasesView extends BaseView {
 		GridData studiesTableLayoutData = new GridData(GridData.FILL_BOTH);
 		studiesTable.setLayoutData(studiesTableLayoutData);
 		
-		exportButton = toolkit.createButton(phaseComposite, "evaluate studies", SWT.PUSH);
+		//insert columns and set their names
+		String[] titlesStudies = {"CODE v", "STATUS v", "GROUP v", "TITLE v", "YEAR v"};
+		for (int i=0; i<titlesStudies.length; i++) {
+			TableColumn column = new TableColumn (studiesTable, SWT.CENTER);
+			column.setText (titlesStudies [i]);
+		}
+		for (int i=0; i<titlesStudies.length; i++) {
+			studiesTable.getColumn (i).pack ();
+		}
+		
+		exportButton = toolkit.createButton(phaseComposite, "Export", SWT.PUSH);
 		GridData exportButtonLayoutData = new GridData();
 		exportButtonLayoutData.horizontalAlignment = SWT.RIGHT;
+		exportButtonLayoutData.grabExcessHorizontalSpace = true;
 		exportButton.setLayoutData(exportButtonLayoutData);
 		
-		importButton = toolkit.createButton(phaseComposite, "evaluate studies", SWT.PUSH);
+		importButton = toolkit.createButton(phaseComposite, "Import", SWT.PUSH);
 		GridData importButtonLayoutData = new GridData();
 		importButtonLayoutData.horizontalAlignment = SWT.RIGHT;
 		importButton.setLayoutData(importButtonLayoutData);
+		
+		section.setClient(phaseComposite);
+		sectionGroups.setClient(groupsComposite);
+		sectionStudies.setClient(studiesComposite);
 	}
 	
 	/*

@@ -386,7 +386,7 @@ public class StudyAnalysisView extends BaseView {
 			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
 			
 			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
-			literatureReviewStudiesView.setLiteratureReview(literatureReview);
+//			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 	}
 	
@@ -412,7 +412,7 @@ public class StudyAnalysisView extends BaseView {
 			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
 			
 			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
-			literatureReviewStudiesView.setLiteratureReview(literatureReview);
+//			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 	}
 
@@ -492,7 +492,7 @@ public class StudyAnalysisView extends BaseView {
 			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
 			
 			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
-			literatureReviewStudiesView.setLiteratureReview(literatureReview);
+//			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
 		
 	}

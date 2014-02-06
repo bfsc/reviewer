@@ -1,5 +1,11 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.*;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
@@ -19,6 +25,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -44,6 +51,7 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.menus.CommandContributionItem;
+import org.osgi.framework.Bundle;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
@@ -188,7 +196,7 @@ public class LiteratureReviewView extends BaseView {
 		
 	    toolbarCriteria = new ToolBar (sectionCriteria, SWT.NONE);
 	    ToolItem itemAddCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
-	    itemAddCriteria.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemAddCriteria.setImage(new Image(form.getDisplay(), "C:/Arthur/add-1-icon.png"));    
 	    ToolItem itemDeleteCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
 	    itemDeleteCriteria.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
 	    sectionCriteria.setTextClient(toolbarCriteria);
@@ -310,6 +318,7 @@ public class LiteratureReviewView extends BaseView {
 		GridData evaluateButtonLayoutData = new GridData();
 		evaluateButtonLayoutData.horizontalAlignment = SWT.RIGHT;
 		evaluateButton.setLayoutData(evaluateButtonLayoutData);
+		evaluateButton.addSelectionListener(new LiteratureReviewPhasesButtonHandler());
 		
 		sash.setWeights(new int[] {1, 3});
 
@@ -319,6 +328,24 @@ public class LiteratureReviewView extends BaseView {
 		sectionStudies.setClient(studiesComposite);
 		sectionManual.setClient(manualComposite);
 		sectionAutomatic.setClient(automaticComposite);
+	}
+	
+	private class LiteratureReviewPhasesButtonHandler implements SelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
+			
+			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 	/*
 
