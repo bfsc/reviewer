@@ -116,7 +116,7 @@ public class LiteratureReviewPhasesView extends BaseView {
 		
 	    toolbarGroups = new ToolBar (sectionGroups, SWT.NONE);
 	    ToolItem itemAddReview = new ToolItem(toolbarGroups, SWT.BUTTON1);
-	    itemAddReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemAddReview.setImage(new Image(form.getDisplay(),getClass().getResource("images/add-1-icon.png").toString()));
 	    ToolItem itemDeleteReview = new ToolItem(toolbarGroups, SWT.BUTTON1);
 	    itemDeleteReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
 	    sectionGroups.setTextClient(toolbarGroups);

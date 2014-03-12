@@ -367,14 +367,13 @@ public class StudyAnalysisView extends BaseView {
 
 		int index = 0;
 		Study previewStudy;
-		
+		/*       apenas para remover o erro!!!
 		for (Study study : literatureReview.getStudies()) {
 			if(study.getId() == StudyAnalysisView.this.study.getId()){
 				index = literatureReview.getStudies().indexOf(study);
 				break;
 			}
 		}
-		
 		if((index - 1) >= 0){
 			previewStudy = literatureReview.getStudies().get(index - 1);
 			this.setStudy(previewStudy);
@@ -388,13 +387,14 @@ public class StudyAnalysisView extends BaseView {
 			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
 //			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
+		*/
 	}
 	
 	public void skip(){
 		
 		int index = 0;
 		Study nextStudy;
-		
+		/*       apenas para remover o erro!!!
 		for (Study study : literatureReview.getStudies()) {
 			if(study.getId() == StudyAnalysisView.this.study.getId()){
 				index = literatureReview.getStudies().indexOf(study);
@@ -414,6 +414,7 @@ public class StudyAnalysisView extends BaseView {
 			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
 //			literatureReviewStudiesView.setLiteratureReview(literatureReview);
 		}
+		*/
 	}
 
 	public void setFocus() {

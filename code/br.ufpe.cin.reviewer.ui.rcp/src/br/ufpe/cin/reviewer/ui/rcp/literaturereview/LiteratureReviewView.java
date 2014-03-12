@@ -3,6 +3,8 @@ package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.ImageIcon;
+
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -26,6 +28,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -36,6 +40,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -55,7 +60,7 @@ import org.osgi.framework.Bundle;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
-import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
+//import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
@@ -120,6 +125,14 @@ public class LiteratureReviewView extends BaseView {
 	}
 
 	private void createLiteratureWidgets(Composite parent) {
+		//criando imagens
+	    String PLUGIN_ID = "br.ufpe.cin.reviewer.ui.rcp";
+        Bundle bundle = Platform.getBundle(PLUGIN_ID);
+        Image addIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/Add-Green-Button-icon.png"), null)).createImage();
+        Image minusIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/Minus-Green-Button-icon.png"), null)).createImage();
+        Image AutomaticIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/A-Green-Button-icon.png"), null)).createImage();
+        Image ManualIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/M-Green-Button-icon.png"), null)).createImage();
+        Image DeleteIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/D-Green-Button-icon.png"), null)).createImage();
 		
 		sash = new SashForm(form.getBody(),SWT.HORIZONTAL);
 		sash.setLayout(new GridLayout(4, false));
@@ -139,11 +152,11 @@ public class LiteratureReviewView extends BaseView {
 		
 	    toolbarList = new ToolBar (sectionList, SWT.NONE);
 	    ToolItem itemAddReview = new ToolItem(toolbarList, SWT.BUTTON1);
-	    itemAddReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemAddReview.setImage(addIcon);
 	    ToolItem itemDeleteReview = new ToolItem(toolbarList, SWT.BUTTON1);
-	    itemDeleteReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemDeleteReview.setImage(minusIcon);
 	    sectionList.setTextClient(toolbarList);
-		
+	    
 		listComposite = toolkit.createComposite(sectionList, SWT.BORDER);
 		listComposite.setLayout(new GridLayout(2, false));
 		listComposite.setLayoutData(new GridData());
@@ -196,9 +209,10 @@ public class LiteratureReviewView extends BaseView {
 		
 	    toolbarCriteria = new ToolBar (sectionCriteria, SWT.NONE);
 	    ToolItem itemAddCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
-	    itemAddCriteria.setImage(new Image(form.getDisplay(), "C:/Arthur/add-1-icon.png"));    
+
+	    itemAddCriteria.setImage(addIcon);    
 	    ToolItem itemDeleteCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
-	    itemDeleteCriteria.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemDeleteCriteria.setImage(minusIcon);
 	    sectionCriteria.setTextClient(toolbarCriteria);
 		
 		criteriaListComposite = toolkit.createComposite(sectionCriteria, SWT.BORDER);
@@ -225,12 +239,89 @@ public class LiteratureReviewView extends BaseView {
 	    sectionStudies.setLayoutData(sectionStudiesLayout);
 		
 	    toolbarStudies = new ToolBar (sectionStudies, SWT.NONE);
-	    ToolItem itemAutomatic = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
-	    itemAutomatic.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
-	    ToolItem itemManual = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
-	    itemManual.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
-	    ToolItem itemDeleteStudies = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
-	    itemDeleteStudies.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    final ToolItem itemAutomatic = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
+	    itemAutomatic.setImage(AutomaticIcon);
+	    itemAutomatic.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+                //super.widgetSelected(e);
+                Menu menu = new Menu( form.getShell(), SWT.POP_UP);
+
+                MenuItem item1 = new MenuItem(menu, SWT.PUSH);
+                item1.setText("New search");
+                MenuItem item2 = new MenuItem(menu, SWT.PUSH);
+                item2.setText("import BibText");
+
+                Point loc = itemAutomatic.getParent().getLocation();
+                Rectangle rect = itemAutomatic.getBounds();
+
+                Point mLoc = new Point(loc.x-1, loc.y+rect.height);
+
+                menu.setLocation(form.getShell().getDisplay().map(itemAutomatic.getParent().getParent(), null, mLoc));
+
+                menu.setVisible(true);
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+	    final ToolItem itemManual = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
+	    itemManual.setImage(ManualIcon);
+	    itemManual.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+                //super.widgetSelected(e);
+                Menu menu = new Menu( form.getShell(), SWT.POP_UP);
+
+                MenuItem item1 = new MenuItem(menu, SWT.PUSH);
+                item1.setText("Add Study");
+                MenuItem item2 = new MenuItem(menu, SWT.PUSH);
+                item2.setText("Import BibText");
+
+                Point loc = itemManual.getParent().getLocation();
+                Rectangle rect = itemManual.getBounds();
+
+                Point mLoc = new Point(loc.x+38, loc.y+rect.height);
+
+                menu.setLocation(form.getShell().getDisplay().map(itemManual.getParent().getParent(), null, mLoc));
+
+                menu.setVisible(true);
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+	    final ToolItem itemDeleteStudies = new ToolItem(toolbarStudies, SWT.DROP_DOWN);
+	    itemDeleteStudies.setImage(DeleteIcon);
+	    itemDeleteStudies.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+                //super.widgetSelected(e);
+                Menu menu = new Menu( form.getShell(), SWT.POP_UP);
+
+                MenuItem item1 = new MenuItem(menu, SWT.PUSH);
+                item1.setText("Remove by title");
+                MenuItem item2 = new MenuItem(menu, SWT.PUSH);
+                item2.setText("Remove by abstract");
+
+                Point loc = itemDeleteStudies.getParent().getLocation();
+                Rectangle rect = itemDeleteStudies.getBounds();
+
+                Point mLoc = new Point(loc.x+76, loc.y+rect.height);
+
+                menu.setLocation(form.getShell().getDisplay().map(itemDeleteStudies.getParent().getParent(), null, mLoc));
+
+                menu.setVisible(true);
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
 	    sectionStudies.setTextClient(toolbarStudies);
 		
 		studiesComposite = toolkit.createComposite(sectionStudies, SWT.BORDER);
@@ -247,7 +338,7 @@ public class LiteratureReviewView extends BaseView {
 		
 	    toolbarManual = new ToolBar (sectionManual, SWT.NONE);
 	    ToolItem itemDeleteManual = new ToolItem(toolbarManual, SWT.BUTTON1);
-	    itemDeleteManual.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemDeleteManual.setImage(minusIcon);
 	    sectionManual.setTextClient(toolbarManual);
 		
 		manualComposite = toolkit.createComposite(sectionManual, SWT.BORDER);
@@ -280,7 +371,7 @@ public class LiteratureReviewView extends BaseView {
 		
 	    toolbarAutomatic = new ToolBar (sectionAutomatic, SWT.NONE);
 	    ToolItem itemDeleteAutomatic = new ToolItem(toolbarAutomatic, SWT.BUTTON1);
-	    itemDeleteAutomatic.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemDeleteAutomatic.setImage(minusIcon);
 	    sectionAutomatic.setTextClient(toolbarAutomatic);
 		
 		automaticComposite = toolkit.createComposite(sectionAutomatic, SWT.BORDER);
@@ -317,6 +408,8 @@ public class LiteratureReviewView extends BaseView {
 		evaluateButton = toolkit.createButton(reviewInfoComposite, "evaluate studies", SWT.PUSH);
 		GridData evaluateButtonLayoutData = new GridData();
 		evaluateButtonLayoutData.horizontalAlignment = SWT.RIGHT;
+		evaluateButtonLayoutData.grabExcessHorizontalSpace = true;
+		evaluateButtonLayoutData.horizontalSpan = 2;
 		evaluateButton.setLayoutData(evaluateButtonLayoutData);
 		evaluateButton.addSelectionListener(new LiteratureReviewPhasesButtonHandler());
 		
@@ -328,7 +421,7 @@ public class LiteratureReviewView extends BaseView {
 		sectionStudies.setClient(studiesComposite);
 		sectionManual.setClient(manualComposite);
 		sectionAutomatic.setClient(automaticComposite);
-	}
+	}	
 	
 	private class LiteratureReviewPhasesButtonHandler implements SelectionListener {
 		@Override
@@ -345,7 +438,6 @@ public class LiteratureReviewView extends BaseView {
 			// TODO Auto-generated method stub
 			
 		}
-		
 	}
 	/*
 

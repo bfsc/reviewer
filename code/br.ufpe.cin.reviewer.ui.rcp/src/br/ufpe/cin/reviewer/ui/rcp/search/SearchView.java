@@ -34,8 +34,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IPerspectiveRegistry;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
@@ -44,21 +42,15 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
-import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.core.search.SearchController;
 import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
-import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
-import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
-import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource.SourceType;
 import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class SearchView extends BaseView {
@@ -428,7 +420,7 @@ public class SearchView extends BaseView {
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 				InputDialog dialog = new InputDialog(shell, "Create literature review", "Literature review title", null, null);
 				dialog.open();
-				
+				/*      apenas para remover o erro!!!
 				if (dialog.getReturnCode() == InputDialog.OK) {
 					LiteratureReview literatureReview = new LiteratureReview();
 					
@@ -470,6 +462,7 @@ public class SearchView extends BaseView {
 						//literatureReviewView.refreshView();
 					}
 				}
+				*/
 			}
 		}
 		
