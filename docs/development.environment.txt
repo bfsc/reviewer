@@ -9,3 +9,39 @@ DEVELOPMENT ENVIRONMENT
 [AspecJ Eclipse Plugin] - AJDT - http://download.eclipse.org/tools/ajdt/42/update
 
 [Persitence Plugin] - http://download.eclipse.org/releases/kepler (persistence)
+
+[how to import project] - With Eclipse IDE open, select menu items in the following order:
+	File > Import > Git > Project from Git > URI
+	
+	In the window that opens, in the "URI" field, put this address: https://github.com/bfsc/reviewer.git
+	In "Authentication", put your login details to github (this field is optional if just import the project without without intending updates it on Github.
+	
+	When you click "next", the Git plugin in Eclipse will check the repository and show his tree, keep the branch "Master" selected and click "Next".
+	
+	Next window is where you define where the project will be stored locally, on completion, then click "Next" and will appear choice of which will be the local repository that will house the copied files from the remote repository.
+	
+	The next pass is to select the projects to be imported, this is the part that requires more attention process, the projects to be imported are:
+
+		br.ufpe.cin.reviewer.core
+		br.ufpe.cin.reviewer.export
+		br.ufpe.cin.reviewer.logger
+		br.ufpe.cin.reviewer.model
+		br.ufpe.cin.reviewer.persistence
+		br.ufpe.cin.reviewer.searchprovider.acm
+		br.ufpe.cin.reviewer.searchprovider.engineeringvillage
+		br.ufpe.cin.reviewer.searchprovider.ieee
+		br.ufpe.cin.reviewer.searchprovider.sciencedirect
+		br.ufpe.cin.reviewer.searchprovider.scopus
+		br.ufpe.cin.reviewer.searchprovider.spi
+		br.ufpe.cin.reviewer.searchprovider.springerlink
+		br.ufpe.cin.reviewer.searchprovider.teste
+		br.ufpe.cin.reviewer.ui.rcp
+	
+	Certainly perceive that some of these projects appear duplicate names, select only those that appear on the path where they will be stored , there is no reference to "swing".
+	example:
+		br.ufpe.cin.reviewer.core (C:\Users\user\git\reviewer\code\br.ufpe.cin.reviewer.core)
+		br.ufpe.cin.reviewer.core (C:\Users\user\git\reviewer\pocs\swing.version\br.ufpe.cin.reviewer.core)
+	In this case we chose the first option.
+	
+	After you finish the selection, just click "Finish" the git plugin for the Eclipse IDE will import the project.
+	
