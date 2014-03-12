@@ -1,6 +1,6 @@
 ========================================
 DEVELOPMENT ENVIRONMENT
-========================================
+========================================that will lodge the copied files from the remote repository.
 
 [IDE For Eclipse RCP and Plugin Developers] Eclipse Juno - 4.2.2
     For Windows 32 bits - http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR2/eclipse-rcp-juno-SR2-win32.zip
@@ -13,12 +13,12 @@ DEVELOPMENT ENVIRONMENT
 [how to import project] - With Eclipse IDE open, select menu items in the following order:
 	File > Import > Git > Project from Git > URI
 	
-	In the window that opens, in the "URI" field, put this address: https://github.com/bfsc/reviewer.git
-	In "Authentication", put your login details to github (this field is optional if just import the project without without intending updates it on Github.
+	On opening window, fill the field "URI" with this address: https://github.com/bfsc/reviewer.git
+	In "Authentication", put your login details to github (this part is optional, fill if you want to contribute to this project source code updates).
 	
 	When you click "next", the Git plugin in Eclipse will check the repository and show his tree, keep the branch "Master" selected and click "Next".
 	
-	Next window is where you define where the project will be stored locally, on completion, then click "Next" and will appear choice of which will be the local repository that will house the copied files from the remote repository.
+	Next window is where you define where the project will be stored locally, when done, click on "Next" button and will appear choice of which will be the local repository that will lodge the copied files from the remote repository.
 	
 	The next pass is to select the projects to be imported, this is the part that requires more attention process, the projects to be imported are:
 
