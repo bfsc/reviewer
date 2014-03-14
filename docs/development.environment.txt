@@ -1,14 +1,35 @@
 ========================================
 DEVELOPMENT ENVIRONMENT
-========================================that will lodge the copied files from the remote repository.
-
-[IDE For Eclipse RCP and Plugin Developers] Eclipse Juno - 4.2.2
-    For Windows 32 bits - http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR2/eclipse-rcp-juno-SR2-win32.zip
-    For Windows 64 bits - http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/juno/SR2/eclipse-rcp-juno-SR2-win32-x86_64.zip
-
-[AspecJ Eclipse Plugin] - AJDT - http://download.eclipse.org/tools/ajdt/42/update
-
-[Persitence Plugin] - http://download.eclipse.org/releases/kepler (persistence)
+========================================
+[requirements and dependencies] - this project is being developed on the Eclipse RCP (Rich Client Platform) platform, so you need install the Eclipse IDE in its version for RCP and RAP Developers whose link follows below:
+		
+		http://www.eclipse.org/downloads/packages/eclipse-rcp-and-rap-developers/junosr2
+		
+	[installation] - the installation of Eclipse IDE and quite similar for Linux, Mac and Windows, consisting of download the link above by selecting according to your processor architecture,
+					 unzip and open the executable application, where Linux and Mac file name and "Eclipse", in the case of Windows, the file name and "Eclipse.exe"
+	
+	
+	[configuring] - this version of the Eclipse IDE indicated above comes ready to work with Eclipse RCP, but we need to add plugins to the IDE that can work with persistence (JPA).
+					to add the plugins needed for this project, let's go:
+					
+						Help > Install new software
+						
+					A window will open and in the "Work with" select URL:
+					
+					 	Juno - http://download.eclipse.org/releases/juno
+					
+					in the search field, type "persistence", wait until the result of the search appear (this may take a few seconds and the IDE seemed locked but not this),
+					select all the items that will be displayed.
+					
+					and then paste this address in the "Work witch" field:
+					
+					 	http://download.eclipse.org/tools/ajdt/42/update
+						
+					click "Add" and enter the any name you like (I recommend that you set the name as "AJDT" to be easier to remember that you added to this repository).
+					after adding it, select it and expect it to view the content available on the repository, select all the items that are displayed and click "Next.".
+					
+					at this point the Eclipse IDE had analyzed the dependencies and just accept the license to be inciado downloading and installation of plugins, the end will be prompted to restart.
+					after the IDE is restarted, we can import the REviewER for the Eclipse IDE.
 
 [how to import project] - With Eclipse IDE open, select menu items in the following order:
 	File > Import > Git > Project from Git > URI
