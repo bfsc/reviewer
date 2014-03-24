@@ -13,10 +13,7 @@
 			
 			
 			<one-to-many name="studies" fetch="LAZY" orphan-removal="true">
-				<join-table name="studies" schema="reviewer">
-					<join-column name="study_id"/>
-					<inverse-join-column name="search_id"/>
-				</join-table>
+				<join-column name="search_id"/>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
 			

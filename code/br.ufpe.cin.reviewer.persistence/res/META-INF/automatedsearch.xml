@@ -10,10 +10,7 @@
 			</basic>
 			
 			<one-to-many name="queryInfos" fetch="LAZY" orphan-removal="true">
-				<join-table name="query_info" schema="reviewer">
-					<join-column name="query_info_id"/>
-					<inverse-join-column name="search_id"/>
-				</join-table>
+				<join-column name="search_id"/>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
 			

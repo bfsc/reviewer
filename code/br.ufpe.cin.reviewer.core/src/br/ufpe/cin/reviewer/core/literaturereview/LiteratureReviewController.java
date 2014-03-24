@@ -139,4 +139,12 @@ public class LiteratureReviewController implements ITransactionalController {
 		}
 	}
 	
+	public void updateLiteratureReview(LiteratureReview lr){
+		try {
+			dao.update(lr);
+		} catch (PersistenceException e) {
+			throw new CoreException("An error occurred trying to update a literature review.", e);
+		}
+	}
+	
 }

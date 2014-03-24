@@ -1,75 +1,55 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.swing.ImageIcon;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jface.*;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
-import org.eclipse.jface.action.IContributionManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.CoolBar;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.events.IHyperlinkListener;
-import org.eclipse.ui.forms.widgets.Hyperlink;
-import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.menus.CommandContributionItem;
 import org.osgi.framework.Bundle;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
+import br.ufpe.cin.reviewer.model.literaturereview.Criteria;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
-//import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
-import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
+//import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 
 public class LiteratureReviewView extends BaseView {
 	
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";
 
+	private java.util.List<LiteratureReview> literatureReviews;
+	private LiteratureReview selectedLiteratureReview;
+	
+	private Criteria selectedCriteria;
+	
 	private SashForm sash;
 	private Composite listComposite;
 	private Section sectionList;
@@ -119,6 +99,28 @@ public class LiteratureReviewView extends BaseView {
 
 	}
 	
+	public void refreshLiteratureView() {
+		LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+		literatureReviews = literatureReviewController.findAllLiteratureReview();
+		
+		list.removeAll();
+		for (LiteratureReview literatureReview : literatureReviews) {
+			list.add(literatureReview.getTitle());
+		}
+	}	
+	
+	public void refreshCriteriaList() {
+		if (selectedLiteratureReview != null) {
+			java.util.List<Criteria> cr = selectedLiteratureReview
+					.getCritireon();
+
+			criteriaList.removeAll();
+			for (Criteria c : cr) {
+				criteriaList.add(c.getName());
+			}
+		}
+	}
+	
 	private void configureView(Composite parent) {
 		super.form.setText(super.form.getText() + " - My literature reviews");
 		super.form.getBody().setLayout(new GridLayout(1, false));
@@ -166,15 +168,12 @@ public class LiteratureReviewView extends BaseView {
 		listLayoutData.horizontalSpan = 1;
 		list.setLayoutData(listLayoutData);
 
-		list.add("Teste 1");
-		list.add("Teste 2");
-		list.add("Teste 3");
-		list.add("Teste 4");
-		list.add("Teste 5");
-		//list.addSelectionListener(new LiteratureReviewsListHandler());
-		//refreshView();
+		list.addSelectionListener(new LiteratureReviewsListHandler());
+		refreshLiteratureView();
 		
-
+		itemAddReview.addSelectionListener(new LiteratureReviewAddReviewHandler());
+		itemDeleteReview.addSelectionListener(new LiteratureReviewRemoveReviewHandler());
+		
 		//Section for review information
 	    sectionInfo = toolkit.createSection(sash, Section.SHORT_TITLE_BAR);
 	    sectionInfo.setText("REVIEW INFO");
@@ -224,11 +223,11 @@ public class LiteratureReviewView extends BaseView {
 		criterialistLayout.horizontalSpan = 1;
 		criteriaList.setLayoutData(criterialistLayout);
 
-		criteriaList.add("Criteria 1");
-		criteriaList.add("Criteria 2");
-		criteriaList.add("Criteria 3");
-		criteriaList.add("Criteria 4");
-		criteriaList.add("Criteria 5");
+		
+		criteriaList.addSelectionListener(new CriteriaListHandler());
+		refreshCriteriaList();
+		itemAddCriteria.addSelectionListener(new LiteratureReviewAddCriteriaHandler());
+		itemDeleteCriteria.addSelectionListener(new LiteratureReviewRemoveCriteriaHandler());
 		
 		//Studies section
 		sectionStudies = toolkit.createSection(reviewInfoComposite, Section.SHORT_TITLE_BAR);
@@ -384,7 +383,7 @@ public class LiteratureReviewView extends BaseView {
 		QueryStringLabel.setLayoutData(new GridData());
 
 		//Query String Label
-		QueryLabel = toolkit.createLabel(automaticComposite, "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla");
+		QueryLabel = toolkit.createLabel(automaticComposite, "");
 		QueryLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.NONE));
 		QueryLabel.setLayoutData(new GridData());
 		
@@ -421,6 +420,7 @@ public class LiteratureReviewView extends BaseView {
 		sectionStudies.setClient(studiesComposite);
 		sectionManual.setClient(manualComposite);
 		sectionAutomatic.setClient(automaticComposite);
+	
 	}	
 	
 	private class LiteratureReviewPhasesButtonHandler implements SelectionListener {
@@ -438,6 +438,177 @@ public class LiteratureReviewView extends BaseView {
 			// TODO Auto-generated method stub
 			
 		}
+	}
+	
+	private void populateReviewInfo() {
+		
+		refreshCriteriaList();
+		/*titleText.setText(selectedLiteratureReview.getTitle());
+
+		this.queryStringText.setText(selectedLiteratureReview.getQueryString());
+		this.queryStringText.setLineJustify(0, this.queryStringText.getLineCount(), true);
+		
+		sourcesTable.removeAll();
+		
+		TableItem generalItem = new TableItem (sourcesTable, SWT.NONE);
+		generalItem.setText(0, "ALL");
+		generalItem.setText(1, String.valueOf(selectedLiteratureReview.getTotalFound()));
+		generalItem.setText(2, String.valueOf(selectedLiteratureReview.getTotalFetched()));
+		
+		for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
+			TableItem item = new TableItem (sourcesTable, SWT.NONE);
+			item.setText(0, source.getName());
+			item.setText(1, String.valueOf(source.getTotalFound()));
+			item.setText(2, String.valueOf(source.getTotalFetched()));
+		}
+		
+		for (int i=0; i < sourcesTable.getColumnCount(); i++) {
+			sourcesTable.getColumn(i).pack();
+		}
+		
+		WidgetsUtil.refreshComposite(form.getBody());
+		WidgetsUtil.refreshComposite(reviewInfoBodyComposite);*/
+	}
+	
+	
+	private class LiteratureReviewsListHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			int selectionIndex = list.getSelectionIndex();
+			
+			if (selectionIndex >= 0) {
+				selectedLiteratureReview = literatureReviews.get(selectionIndex);
+				populateReviewInfo();
+				reviewInfoComposite.setVisible(true);				
+			}
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+	}
+	
+	private class LiteratureReviewAddReviewHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			InputDialog dialog = new InputDialog(shell, "Create literature review", "Literature review title", null, null);
+			dialog.open();
+			
+			if (dialog.getReturnCode() == InputDialog.OK) {
+				LiteratureReview literatureReview = new LiteratureReview();
+				
+				literatureReview.setTitle(dialog.getValue());
+				
+				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+				literatureReviewController.createLiteratureReview(literatureReview);
+				refreshLiteratureView();
+			}
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+	}
+	
+	private class LiteratureReviewRemoveReviewHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+
+			MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+			dialog.setText("Reviewer");
+			dialog.setMessage("Do you really want to delete this literature review?");
+			
+			int returnCode = dialog.open();
+			
+			if (returnCode == SWT.OK) {
+				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+				literatureReviewController.deleteLiteratureReview(selectedLiteratureReview);
+				
+				list.remove(selectedLiteratureReview.getTitle());
+				literatureReviews.remove(selectedLiteratureReview);
+				
+				selectedLiteratureReview = null;
+				reviewInfoComposite.setVisible(false);
+	
+				refreshLiteratureView();
+			}
+			
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class LiteratureReviewAddCriteriaHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			InputDialog dialog = new InputDialog(shell, "Create Criteria", "Criteria Description", null, null);
+			dialog.open();
+			
+			if (dialog.getReturnCode() == InputDialog.OK) {
+				Criteria c = new Criteria();
+				c.setName(dialog.getValue());
+				selectedLiteratureReview.getCritireon().add(c);
+				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+				literatureReviewController.updateLiteratureReview(selectedLiteratureReview);
+				refreshCriteriaList();
+			}
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
+	}
+	
+	private class LiteratureReviewRemoveCriteriaHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+
+			MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+			dialog.setText("Reviewer");
+			dialog.setMessage("Do you really want to delete this literature review?");
+			
+			int returnCode = dialog.open();
+			
+			if (returnCode == SWT.OK) {
+				selectedLiteratureReview.getCritireon().remove(criteriaList.getSelectionIndex());			
+				
+				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+				literatureReviewController.updateLiteratureReview(selectedLiteratureReview);
+				refreshCriteriaList();
+			}
+			
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private class CriteriaListHandler implements SelectionListener {
+
+		public void widgetSelected(SelectionEvent e) {
+			int selectionIndex = criteriaList.getSelectionIndex();
+			
+			if (selectionIndex >= 0) {
+				selectedCriteria = selectedLiteratureReview.getCritireon().get(selectionIndex);
+			}
+		}
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			
+		}
+		
 	}
 	/*
 

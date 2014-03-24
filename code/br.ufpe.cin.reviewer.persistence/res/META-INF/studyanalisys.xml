@@ -10,10 +10,7 @@
 			</id>
 			
 			<one-to-many name="evaluationAnalysis" fetch="LAZY" orphan-removal="true">
-				<join-table name="evaluationanalyses" schema="reviewer">
-					<join-column name="evaluation_analysis_id"/>
-					<inverse-join-column name="study_analisys_id"/>
-				</join-table>
+				<join-column name="study_analisys_id"/>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
 		</attributes>

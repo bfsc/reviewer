@@ -14,26 +14,17 @@
 			</basic>
 			
 		    <one-to-many name="searches" fetch="LAZY" orphan-removal="true">
-				<join-table name="searches" schema="reviewer">
-					<join-column name="searches_id"/>
-					<inverse-join-column name="literature_review_id"/>
-				</join-table>
+				<join-column name="literature_review_id"/>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
 			
-			<one-to-many name="critireon" fetch="LAZY" orphan-removal="true">
-				<join-table name="critireon" schema="reviewer">
-					<join-column name="criteria_id"/>
-					<inverse-join-column name="literature_review_id"/>
-				</join-table>
+			<one-to-many name="critireon" fetch="EAGER" orphan-removal="true">
+			    <join-column name="literature_review_id"/>				
 				<cascade><cascade-all/></cascade>
 			</one-to-many>
 			
 			<one-to-many name="phases" fetch="LAZY" orphan-removal="true">
-				<join-table name="phases" schema="reviewer">
-					<join-column name="phase_id"/>
-					<inverse-join-column name="literature_review_id"/>
-				</join-table>
+				<join-column name="literature_review_id"/>
 				<cascade><cascade-all/></cascade>
 			</one-to-many>	
 			
