@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
@@ -42,15 +44,21 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.core.search.SearchController;
 import br.ufpe.cin.reviewer.core.search.SearchFilter;
 import br.ufpe.cin.reviewer.core.search.SearchResult;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.search.AutomatedSearch;
+import br.ufpe.cin.reviewer.model.search.QueryInfo;
 import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView;
 import br.ufpe.cin.reviewer.ui.rcp.util.WidgetsUtil;
 
 public class SearchView extends BaseView {
@@ -323,7 +331,7 @@ public class SearchView extends BaseView {
 			errorsLink.addHyperlinkListener(new ShowErrorsLinkHandler());
 			errorsLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 			
-			Hyperlink studyLink = toolkit.createHyperlink(c, "CREATE LITERATURE REVIEW from these results...", SWT.NONE);			
+			Hyperlink studyLink = toolkit.createHyperlink(c, "SAVE RESULTS...", SWT.NONE);			
 			studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
 			studyLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		}
@@ -418,51 +426,49 @@ public class SearchView extends BaseView {
 
 			public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-				InputDialog dialog = new InputDialog(shell, "Create literature review", "Literature review title", null, null);
+				InputDialog dialog = new InputDialog(shell, "Save Results", "Save Results to Literature Review?", null, null);
 				dialog.open();
-				/*      apenas para remover o erro!!!
 				if (dialog.getReturnCode() == InputDialog.OK) {
-					LiteratureReview literatureReview = new LiteratureReview();
 					
-					literatureReview.setTitle(dialog.getValue());
-					if(searchString != null) {
-						literatureReview.setQueryString(searchString);
-					}
+					AutomatedSearch s = new AutomatedSearch();					
+					s.setQueryString(searchString);
+					
 					
 					// Adding studies to the literature review
 					int studyCounter = 1;
 					for (Study study : searchResult.getAllStudies()) {
 						study.setCode("S" + studyCounter);
-						literatureReview.addStudy(study);
+						s.getStudies().add(study);
 						studyCounter++;
 					}
 					
 					// Adding sources to the literature review
 					for (SearchProviderResult result : searchResult.getSearchProviderResults()) {
 						if (result.getTotalFetched() > 0) {
-							LiteratureReviewSource source = new LiteratureReviewSource();
-							source.setName(result.getSearchProviderName());
-							source.setTotalFound(result.getTotalFound());
-							source.setTotalFetched(result.getTotalFetched());
-							source.setType(SourceType.AUTOMATIC);
-							literatureReview.addSource(source);
+							//LiteratureReviewSource source = new LiteratureReviewSource();
+							QueryInfo qi = new QueryInfo();
+							qi.setSource(result.getSearchProviderName());
+							qi.setTotalFetched(result.getTotalFetched());
+							qi.setTotalFound(result.getTotalFound());
+							s.getQueryInfos().add(qi);
 						}
 					}
+					LiteratureReviewView lrView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
+					LiteratureReview lr = lrView.getSelectedLiteratureReview();					
 					
-					LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-					literatureReviewController.createLiteratureReview(literatureReview);
+					lr.getSearches().add(s);
+					
+					LiteratureReviewController literatureReviewController = new LiteratureReviewController();				
+					literatureReviewController.updateLiteratureReview(lr);
+					lrView.populateReviewInfo();
 					
 					IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 					activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));
 					
-					LiteratureReviewView literatureReviewView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
-					if (literatureReviewView != null) {
-						//literatureReviewView.setSelectedLiteratureReview(literatureReview);
-						//literatureReviewView.refreshView();
-					}
+				
 				}
-				*/
+				
 			}
 		}
 		
@@ -532,5 +538,4 @@ public class SearchView extends BaseView {
 		}
 		
 	}
-	
 }

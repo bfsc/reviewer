@@ -113,6 +113,8 @@ CREATE CACHED TABLE reviewer.studies(
 	abstract VARCHAR(50000),
 	year VARCHAR(100),
 	url VARCHAR(10000),
+	search_id INTEGER,
+	CONSTRAINT s_search_fk FOREIGN KEY(search_id) REFERENCES reviewer.searches(search_id),
 );
 
 CREATE CACHED TABLE reviewer.studies_authors(

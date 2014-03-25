@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IPerspectiveRegistry;
@@ -36,9 +37,14 @@ import org.osgi.framework.Bundle;
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.Criteria;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.search.AutomatedSearch;
+import br.ufpe.cin.reviewer.model.search.QueryInfo;
+import br.ufpe.cin.reviewer.model.search.Search;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
+import br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.search.SearchView;
 //import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 
 public class LiteratureReviewView extends BaseView {
@@ -119,6 +125,10 @@ public class LiteratureReviewView extends BaseView {
 				criteriaList.add(c.getName());
 			}
 		}
+	}
+	
+	public LiteratureReview getSelectedLiteratureReview() {
+		return this.selectedLiteratureReview;
 	}
 	
 	private void configureView(Composite parent) {
@@ -248,6 +258,22 @@ public class LiteratureReviewView extends BaseView {
 
                 MenuItem item1 = new MenuItem(menu, SWT.PUSH);
                 item1.setText("New search");
+                item1.addSelectionListener(new SelectionListener() {
+					
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(SearchPerspective.ID));
+						
+					}
+					
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
                 MenuItem item2 = new MenuItem(menu, SWT.PUSH);
                 item2.setText("import BibText");
 
@@ -440,37 +466,42 @@ public class LiteratureReviewView extends BaseView {
 		}
 	}
 	
-	private void populateReviewInfo() {
+	public void populateReviewInfo() {
 		
-		refreshCriteriaList();
-		/*titleText.setText(selectedLiteratureReview.getTitle());
-
-		this.queryStringText.setText(selectedLiteratureReview.getQueryString());
-		this.queryStringText.setLineJustify(0, this.queryStringText.getLineCount(), true);
-		
-		sourcesTable.removeAll();
-		
-		TableItem generalItem = new TableItem (sourcesTable, SWT.NONE);
-		generalItem.setText(0, "ALL");
-		generalItem.setText(1, String.valueOf(selectedLiteratureReview.getTotalFound()));
-		generalItem.setText(2, String.valueOf(selectedLiteratureReview.getTotalFetched()));
-		
-		for (LiteratureReviewSource source : selectedLiteratureReview.getSources()) {
-			TableItem item = new TableItem (sourcesTable, SWT.NONE);
-			item.setText(0, source.getName());
-			item.setText(1, String.valueOf(source.getTotalFound()));
-			item.setText(2, String.valueOf(source.getTotalFetched()));
-		}
-		
-		for (int i=0; i < sourcesTable.getColumnCount(); i++) {
-			sourcesTable.getColumn(i).pack();
-		}
-		
-		WidgetsUtil.refreshComposite(form.getBody());
-		WidgetsUtil.refreshComposite(reviewInfoBodyComposite);*/
+		refreshCriteriaList();		
+		refreshAutomaticSearchTable();		
 	}
 	
 	
+	private void refreshAutomaticSearchTable() {
+		
+		sourceTable.removeAll();
+		
+		for (Search s: selectedLiteratureReview.getSearches()) {
+			
+			if (s instanceof AutomatedSearch) {
+				AutomatedSearch as = (AutomatedSearch)s;
+				this.QueryLabel.setText(as.getQueryString());				
+				
+				/*TableItem generalItem = new TableItem (sourceTable, SWT.NONE);
+				generalItem.setText(0, "ALL");
+				generalItem.setText(1, String.valueOf(selectedLiteratureReview.getTotalFound()));
+				generalItem.setText(2, String.valueOf(selectedLiteratureReview.getTotalFetched()));*/
+				
+				for (QueryInfo qi : as.getQueryInfos()) {
+					TableItem item = new TableItem (sourceTable, SWT.NONE);
+					item.setText(0, qi.getSource());
+					item.setText(1, String.valueOf(qi.getTotalFound()));
+					item.setText(2, String.valueOf(qi.getTotalFound()));
+				}
+				
+				for (int i=0; i < sourceTable.getColumnCount(); i++) {
+					sourceTable.getColumn(i).pack();
+				}		
+			}
+		}
+	}
+
 	private class LiteratureReviewsListHandler implements SelectionListener {
 
 		public void widgetSelected(SelectionEvent e) {
