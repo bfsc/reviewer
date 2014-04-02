@@ -301,20 +301,33 @@ public class SearchView extends BaseView {
 		private Composite resultCompositeLabels;
 		private Label labelTotalFound;
 		private Label labelTotalFetched;
+		private Button saveButton;
 		private Hyperlink errorsLink;
 		
 		public ResultComposite(Composite parent, int style) {
 			super(parent, style);
 			
 			//Composite for labels
-			resultCompositeLabels = toolkit.createComposite(this);
+			resultCompositeLabels = toolkit.createComposite(this,SWT.NONE);
 			resultCompositeLabels.setLayout(new GridLayout(2, false));
+			GridData resultCompositeData = new GridData();
+			//o erro esta nessas duas linhas comentadas
+			//resultCompositeData.horizontalAlignment = SWT.FILL;
+			//resultCompositeData.grabExcessHorizontalSpace = true;
+			resultCompositeLabels.setLayoutData(resultCompositeData);
 
 			labelTotalFound = toolkit.createLabel(resultCompositeLabels, "Total Found:");
 			labelTotalFound.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 			
 			labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:");
 			labelTotalFetched.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+			/*
+			saveButton = toolkit.createButton(resultCompositeLabels, "Save", SWT.NONE);
+			GridData saveButtonData = new GridData();
+			saveButtonData.grabExcessHorizontalSpace = true;
+			saveButtonData.horizontalAlignment = SWT.RIGHT;
+			saveButton.setLayoutData(saveButtonData);
+			*/
 			
 			table = toolkit.createTable(this, SWT.BORDER | SWT.FULL_SELECTION);
 			table.setLinesVisible (true);
