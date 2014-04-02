@@ -37,8 +37,8 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		//HSQLUtil.initDatabase();
-		//JPAEntityManager.ENTITY_MANAGER.isOpen();
+		HSQLUtil.initDatabase();
+		JPAEntityManager.ENTITY_MANAGER.isOpen();
 	}
 
 	/*
@@ -71,7 +71,7 @@ public class Activator extends AbstractUIPlugin {
 	}
 	
 	protected void initializeImageRegistry(ImageRegistry reg) {
-//		super.initializeImageRegistry(reg);
+		super.initializeImageRegistry(reg);
 		
         Bundle bundle = Platform.getBundle(PLUGIN_ID);
 

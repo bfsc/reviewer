@@ -6,6 +6,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.persistence.EntityTransaction;
+
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.study.Study;
+import br.ufpe.cin.reviewer.persistence.JPAEntityManager;
 import br.ufpe.cin.reviewer.persistence.PersistenceConstants;
 
 public class HSQLUtil {
@@ -53,7 +58,7 @@ public class HSQLUtil {
 		
 		return exist;
 	}
-	
+//	
 //	public static void main(String[] args) {
 //		HSQLUtil.initDatabase();
 //		
@@ -75,11 +80,11 @@ public class HSQLUtil {
 //		
 //		LiteratureReview literatureReview = new LiteratureReview();
 //		literatureReview.setTitle("How to characterize context of empirical software engineering studies?");
-//		literatureReview.addStudy(study);
+////		literatureReview.addStudy(study);
 //		
 //		EntityTransaction transaction = JPAEntityManager.ENTITY_MANAGER.getTransaction();
 //		transaction.begin();
-////		JPAEntityManager.ENTITY_MANAGER.persist(study);
+//		JPAEntityManager.ENTITY_MANAGER.persist(study);
 //		JPAEntityManager.ENTITY_MANAGER.persist(literatureReview);
 //		transaction.commit();
 //		
@@ -89,5 +94,5 @@ public class HSQLUtil {
 //			e.printStackTrace();
 //		}
 //	}
-	
+//	
 }

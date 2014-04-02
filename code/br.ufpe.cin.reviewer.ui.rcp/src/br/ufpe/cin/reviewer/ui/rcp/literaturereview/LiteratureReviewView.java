@@ -87,9 +87,12 @@ public class LiteratureReviewView extends BaseView {
 	private ToolBar toolbarAutomatic;
 	private Label QueryStringLabel;
 	private Label QueryLabel;
+	private Label SourceLabel;
 	private Table sourceTable;
 	
+	private Composite buttonInfoComposite;
 	private Button evaluateButton;
+	private Button exportButton;
 	
 	public LiteratureReviewView() {
 		ReviewerViewRegister.putView(ID, this);
@@ -195,7 +198,7 @@ public class LiteratureReviewView extends BaseView {
 		GridData reviewCompositeData = new GridData(GridData.FILL_BOTH);
 		reviewCompositeData.horizontalSpan = 1;
 		reviewInfoComposite.setLayoutData(reviewCompositeData);
-		reviewInfoComposite.setLayout(new GridLayout(2, false));
+		reviewInfoComposite.setLayout(new GridLayout(3, false));
 		reviewInfoComposite.setVisible(true);
 
 		//Review Title
@@ -206,14 +209,16 @@ public class LiteratureReviewView extends BaseView {
 		//Review Title
 		titleInfoLabel = toolkit.createLabel(reviewInfoComposite, "Pesquisa 1");
 		titleInfoLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.NONE));
-		titleInfoLabel.setLayoutData(new GridData());
+		GridData titleInfoLabelData = new GridData(GridData.FILL_HORIZONTAL);
+		titleInfoLabelData.horizontalSpan = 2;
+		titleInfoLabel.setLayoutData(titleInfoLabelData);
 
 		//Criteria List
 	    sectionCriteria = toolkit.createSection(reviewInfoComposite, Section.SHORT_TITLE_BAR);
 	    sectionCriteria.setText("CRITERIONS");
 	    sectionCriteria.setLayout(new GridLayout(2, false));
 	    GridData sectionCriteriaLayout = new GridData(GridData.FILL_HORIZONTAL);
-	    sectionCriteriaLayout.horizontalSpan = 2;
+	    sectionCriteriaLayout.horizontalSpan = 3;
 	    sectionCriteria.setLayoutData(sectionCriteriaLayout);
 		
 	    toolbarCriteria = new ToolBar (sectionCriteria, SWT.NONE);
@@ -232,7 +237,6 @@ public class LiteratureReviewView extends BaseView {
 		GridData criterialistLayout = new GridData(GridData.FILL_BOTH);
 		criterialistLayout.horizontalSpan = 1;
 		criteriaList.setLayoutData(criterialistLayout);
-
 		
 		criteriaList.addSelectionListener(new CriteriaListHandler());
 		refreshCriteriaList();
@@ -244,7 +248,7 @@ public class LiteratureReviewView extends BaseView {
 		sectionStudies.setText("STUDIES");
 		sectionStudies.setLayout(new GridLayout(2, false));
 	    GridData sectionStudiesLayout = new GridData(GridData.FILL_BOTH);
-	    sectionStudiesLayout.horizontalSpan = 2;
+	    sectionStudiesLayout.horizontalSpan = 3;
 	    sectionStudies.setLayoutData(sectionStudiesLayout);
 		
 	    toolbarStudies = new ToolBar (sectionStudies, SWT.NONE);
@@ -412,6 +416,13 @@ public class LiteratureReviewView extends BaseView {
 		QueryLabel = toolkit.createLabel(automaticComposite, "");
 		QueryLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.NONE));
 		QueryLabel.setLayoutData(new GridData());
+
+		//Source Label
+		SourceLabel = toolkit.createLabel(automaticComposite, "SOURCE");
+		SourceLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
+		GridData sourceLabelData = new GridData();
+		sourceLabelData.horizontalSpan = 2;
+		SourceLabel.setLayoutData(sourceLabelData);
 		
 		//Source Table
 		sourceTable = toolkit.createTable(automaticComposite, SWT.BORDER | SWT.FULL_SELECTION);
@@ -430,11 +441,25 @@ public class LiteratureReviewView extends BaseView {
 			sourceTable.getColumn (i).pack ();
 		}
 		
-		evaluateButton = toolkit.createButton(reviewInfoComposite, "evaluate studies", SWT.PUSH);
+		buttonInfoComposite = toolkit.createComposite(reviewInfoComposite);
+		buttonInfoComposite.setLayout(new GridLayout(2, false));
+		GridData buttonInfoData = new GridData(GridData.FILL_HORIZONTAL);
+		buttonInfoData.horizontalSpan = 3;
+		buttonInfoData.grabExcessHorizontalSpace = true;
+		buttonInfoComposite.setLayoutData(buttonInfoData);
+		
+		exportButton = toolkit.createButton(buttonInfoComposite, "Export review", SWT.PUSH);
+		GridData exportButtonLayoutData = new GridData(GridData.FILL_HORIZONTAL);
+		exportButtonLayoutData.horizontalAlignment = SWT.RIGHT;
+		//exportButtonLayoutData.grabExcessHorizontalSpace = true;
+		exportButtonLayoutData.horizontalSpan = 1;
+		exportButton.setLayoutData(exportButtonLayoutData);
+		
+		evaluateButton = toolkit.createButton(buttonInfoComposite, "evaluate studies", SWT.PUSH);
 		GridData evaluateButtonLayoutData = new GridData();
 		evaluateButtonLayoutData.horizontalAlignment = SWT.RIGHT;
-		evaluateButtonLayoutData.grabExcessHorizontalSpace = true;
-		evaluateButtonLayoutData.horizontalSpan = 2;
+		//evaluateButtonLayoutData.grabExcessHorizontalSpace = true;
+		evaluateButtonLayoutData.horizontalSpan = 1;
 		evaluateButton.setLayoutData(evaluateButtonLayoutData);
 		evaluateButton.addSelectionListener(new LiteratureReviewPhasesButtonHandler());
 		
