@@ -4,6 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
@@ -29,6 +33,7 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.Section;
+import org.osgi.framework.Bundle;
 
 import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
@@ -50,6 +55,7 @@ public class LiteratureReviewPhasesView extends BaseView {
 	private int numPhases;
 	
 	private List<Label> phasesLabel;
+	private Button addPhasesButton;
 	private Section sectionGroups;
 	private ToolBar toolbarGroups;
 	private Composite groupsComposite;
@@ -59,6 +65,7 @@ public class LiteratureReviewPhasesView extends BaseView {
 	private Composite studiesComposite;
 	private Table studiesTable;
 
+	private Composite buttonsComposite;
 	private Button exportButton;
 	private Button importButton;
 
@@ -81,9 +88,15 @@ public class LiteratureReviewPhasesView extends BaseView {
 	}
 	
 	private void createLiteratureStudiesWidgets(Composite parent) {
+		//criando imagens
+	    String PLUGIN_ID = "br.ufpe.cin.reviewer.ui.rcp";
+        Bundle bundle = Platform.getBundle(PLUGIN_ID);
+        Image addIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/Add-Green-Button-icon.png"), null)).createImage();
+        Image minusIcon = ImageDescriptor.createFromURL(FileLocator.find(bundle, new Path("images/Minus-Green-Button-icon.png"), null)).createImage();
+		
 		//inicializa o tamanho da section
 		numPhases = 4;
-		compositeSize = numPhases;
+		compositeSize = numPhases + 1;
 		
 	    section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
 	    section.setLayout(new GridLayout(1, false));
@@ -100,11 +113,18 @@ public class LiteratureReviewPhasesView extends BaseView {
 		}
 	    GridData phasesLabelLayout = new GridData();
 	    phasesLabelLayout.horizontalAlignment = SWT.BEGINNING;
-	    phasesLabelLayout.grabExcessHorizontalSpace = true;
+	    //phasesLabelLayout.grabExcessHorizontalSpace = true;
 		for (int i = 0; i < phasesLabel.size(); i++) {
 			phasesLabel.get(i).setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 			phasesLabel.get(i).setLayoutData(phasesLabelLayout);
 		}
+		
+		addPhasesButton = toolkit.createButton(phaseComposite, "", SWT.PUSH);
+		addPhasesButton.setImage(addIcon);
+		GridData addPhasesLayoutData = new GridData();
+		addPhasesLayoutData.horizontalAlignment = SWT.LEFT;
+		addPhasesLayoutData.grabExcessHorizontalSpace = true;
+		addPhasesButton.setLayoutData(addPhasesLayoutData);
 		
 		//Section for Groups
 		sectionGroups = toolkit.createSection(phaseComposite, Section.SHORT_TITLE_BAR);
@@ -116,9 +136,9 @@ public class LiteratureReviewPhasesView extends BaseView {
 		
 	    toolbarGroups = new ToolBar (sectionGroups, SWT.NONE);
 	    ToolItem itemAddReview = new ToolItem(toolbarGroups, SWT.BUTTON1);
-	    itemAddReview.setImage(new Image(form.getDisplay(),getClass().getResource("images/add-1-icon.png").toString()));
+	    itemAddReview.setImage(addIcon);
 	    ToolItem itemDeleteReview = new ToolItem(toolbarGroups, SWT.BUTTON1);
-	    itemDeleteReview.setImage(new Image(form.getDisplay(),"C:/Arthur/add-1-icon.png"));
+	    itemDeleteReview.setImage(minusIcon);
 	    sectionGroups.setTextClient(toolbarGroups);
 		
 	    groupsComposite = toolkit.createComposite(sectionGroups);
@@ -144,7 +164,7 @@ public class LiteratureReviewPhasesView extends BaseView {
 		
 		//Section for Studies List
 		sectionStudies = toolkit.createSection(phaseComposite, Section.SHORT_TITLE_BAR);
-		sectionStudies.setText("STUDIES LIST");	    
+		sectionStudies.setText("PHASE STUDIES");	    
 		sectionStudies.setLayout(new GridLayout(1, false));
 	    GridData sectionStudiesLayout = new GridData(GridData.FILL_BOTH);
 	    sectionStudiesLayout.horizontalSpan = compositeSize;
@@ -171,13 +191,19 @@ public class LiteratureReviewPhasesView extends BaseView {
 			studiesTable.getColumn (i).pack ();
 		}
 		
-		exportButton = toolkit.createButton(phaseComposite, "Export", SWT.PUSH);
+		buttonsComposite = toolkit.createComposite(phaseComposite);
+		buttonsComposite.setLayout(new GridLayout(2, false));
+	    GridData buttonCompositeLayout = new GridData(GridData.FILL_HORIZONTAL);
+	    buttonCompositeLayout.horizontalSpan = compositeSize;
+	    buttonsComposite.setLayoutData(buttonCompositeLayout);
+		
+		exportButton = toolkit.createButton(buttonsComposite, "Export", SWT.PUSH);
 		GridData exportButtonLayoutData = new GridData();
 		exportButtonLayoutData.horizontalAlignment = SWT.RIGHT;
 		exportButtonLayoutData.grabExcessHorizontalSpace = true;
 		exportButton.setLayoutData(exportButtonLayoutData);
 		
-		importButton = toolkit.createButton(phaseComposite, "Import", SWT.PUSH);
+		importButton = toolkit.createButton(buttonsComposite, "Import", SWT.PUSH);
 		GridData importButtonLayoutData = new GridData();
 		importButtonLayoutData.horizontalAlignment = SWT.RIGHT;
 		importButton.setLayoutData(importButtonLayoutData);
