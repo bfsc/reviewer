@@ -12,6 +12,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -21,6 +23,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -191,6 +194,12 @@ public class LiteratureReviewPhasesView extends BaseView {
 			studiesTable.getColumn (i).pack ();
 		}
 		
+		TableItem item = new TableItem(studiesTable,SWT.NONE);
+		item.setText("item1");
+		item.setText(0, "code1");
+		//aqui não está adicionando o listener
+		//item.addListener(SWT.Selection, (Listener) new ItemLinkHandler());
+		
 		buttonsComposite = toolkit.createComposite(phaseComposite);
 		buttonsComposite.setLayout(new GridLayout(2, false));
 	    GridData buttonCompositeLayout = new GridData(GridData.FILL_HORIZONTAL);
@@ -212,7 +221,23 @@ public class LiteratureReviewPhasesView extends BaseView {
 		sectionGroups.setClient(groupsComposite);
 		sectionStudies.setClient(studiesComposite);
 	}
-	
+
+	private class ItemLinkHandler implements SelectionListener {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyAnalysisPerspective.ID));
+			
+			StudyAnalysisView studyAnalysisView = (StudyAnalysisView) ReviewerViewRegister.getView(StudyAnalysisView.ID);
+		}
+
+		@Override
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
 	/*
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
 	
