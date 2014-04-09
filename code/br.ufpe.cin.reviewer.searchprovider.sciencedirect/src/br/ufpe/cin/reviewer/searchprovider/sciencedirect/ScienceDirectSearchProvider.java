@@ -85,8 +85,6 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			HtmlPage exportPage = exportInput.click();
 			
 			// Selecting the export format (BIB) as well as the content format (with abstract)
-//			HtmlInput contentFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_CONTENT_FORMAT);
-//			contentFormatInput.setChecked(true);
 			HtmlInput exportFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_EXPORT_FORMAT);
 			exportFormatInput.setChecked(true);
 			
@@ -98,9 +96,10 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
 			
 			browser.closeAllWindows();
+			
 		} catch (Exception e) {
 			result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);			
-			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
+			throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
 		return  result;
