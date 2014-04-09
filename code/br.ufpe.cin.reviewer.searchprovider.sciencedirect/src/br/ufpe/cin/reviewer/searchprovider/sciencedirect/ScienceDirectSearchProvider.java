@@ -13,6 +13,7 @@ import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -22,21 +23,22 @@ import com.gargoylesoftware.htmlunit.html.HtmlStrong;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
  
+
 public class ScienceDirectSearchProvider implements SearchProvider {
 
 	public static final String SEARCH_PROVIDER_NAME = "SCIENCE_DIRECT";
 	
 	private static final String URL_MAIN_SITE = "http://www.sciencedirect.com";
 	
-	private static final String XPATH_BUTTON_EXPORT = "//input[@type='submit' and @value='Export' and @name='Export' and @alt='Export' and @class='button']";
-	private static final String XPATH_INPUT_EXPORT_FORMAT = "//input[@type='radio' and @id='BIBTEX' and @name='citation-type' and @value='BIBTEX' and @class='artRadio expRadio']";
-	private static final String XPATH_INPUT_CONTENT_FORMAT = "//input[@type='radio' and @id='cite-abs' and @name='format' and @value='cite-abs' and @class='artRadio expRadio']";
-	private static final String XPATH_INPUT_EXPORT = "//input[@id='exportIcon_sci_dir' and @value='Export citations' and @name='export' and @class='listAction' and @type='submit']";
-	private static final String XPATH_STRONG_TOTAL_FOUND = "//div[@class='iconLinks']//strong";
-	private static final String XPATH_BUTTON_SEARCH = "//input[@type='submit' and @class='button' and @value='Search' and @name='RegularSearch' and @alt='Search']";
-	private static final String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='SearchText' and @wrap='virtual' and @rows='5' and @cols='60']";
-	private static final String XPATH_ANCHOR_EXPERT_SEARCH = "//div[@class='advExpertLink' and @style='float:right;']//a";
-	private static final String XPATH_ANCHOR_ADVANCED_SEARCH = "//a[@style='vertical-align:bottom;font-size:0.92em;']";
+	String XPATH_BUTTON_EXPORT = "//input[@class='button export_button' and @id='export_button' and @type='submit']";
+	String XPATH_INPUT_EXPORT_FORMAT = "//input[@type='radio' and @id='BIBTEX' and @name='citation-type' and @value='BIBTEX' and @class='artRadio expRadio BIBTEX']";   
+    String XPATH_INPUT_CONTENT_FORMAT = "//input[@type='radio' and @id='cite-abs' and @name='format' and @value='cite-abs' and @class='artRadio expRadio']";
+    String XPATH_INPUT_EXPORT = "//input[@id='exportIcon_sci_dir' and @value='Export' and @name='export' and @class='listAction export export_general initialImage' and @type='button' and @title='Export citations' and @data-attr='toolbar']"; 
+    String XPATH_STRONG_TOTAL_FOUND = "//div[@class='iconLinks']//strong";
+    String XPATH_BUTTON_SEARCH = "//input[@type='submit' and @class='button' and @value='Search' and @name='RegularSearch' and @alt='Search']";  
+    String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='SearchText' and @wrap='virtual' and @rows='5' and @cols='60']";
+    String XPATH_ANCHOR_EXPERT_SEARCH = "//div[@class='advExpertLink' and @style='float:right;']//a";
+    String XPATH_ANCHOR_ADVANCED_SEARCH = "//a[@class='advanced']";
 	
 	private AtomicBoolean die;
 	
@@ -49,7 +51,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 		
 		try {
 			// Create the web browser
-			WebClient browser = new WebClient();
+			WebClient browser = new WebClient(BrowserVersion.CHROME);
 			browser.getOptions().setThrowExceptionOnScriptError(false);
 			browser.getOptions().setJavaScriptEnabled(false);
 			browser.getOptions().setCssEnabled(false);
@@ -83,8 +85,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			HtmlPage exportPage = exportInput.click();
 			
 			// Selecting the export format (BIB) as well as the content format (with abstract)
-			HtmlInput contentFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_CONTENT_FORMAT);
-			contentFormatInput.setChecked(true);
+//			HtmlInput contentFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_CONTENT_FORMAT);
+//			contentFormatInput.setChecked(true);
 			HtmlInput exportFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_EXPORT_FORMAT);
 			exportFormatInput.setChecked(true);
 			
