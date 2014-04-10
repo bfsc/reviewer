@@ -183,6 +183,7 @@ public class LiteratureReviewPhasesView extends BaseView {
 		studiesTable.setHeaderVisible (true);
 		GridData studiesTableLayoutData = new GridData(GridData.FILL_BOTH);
 		studiesTable.setLayoutData(studiesTableLayoutData);
+		studiesTable.addMouseListener(new StudyMouseHandler());
 		
 		//insert columns and set their names
 		String[] titlesStudies = {"CODE v", "STATUS v", "GROUP v", "TITLE v", "YEAR v"};
@@ -238,6 +239,28 @@ public class LiteratureReviewPhasesView extends BaseView {
 			
 		}
 	}
+
+
+	private class StudyMouseHandler implements MouseListener {
+
+		public void mouseDoubleClick(MouseEvent e) {
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyAnalysisPerspective.ID));
+			
+			StudyAnalysisView studyAnalysisView = (StudyAnalysisView) ReviewerViewRegister.getView(StudyAnalysisView.ID);
+		}
+
+		public void mouseDown(MouseEvent e) {
+			
+		}
+
+		public void mouseUp(MouseEvent e) {
+			
+		}
+		
+	}
+	
 	/*
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewStudiesView";
 	
