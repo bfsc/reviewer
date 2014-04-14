@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -17,11 +18,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.eclipse.ui.forms.widgets.Section;
 
 import br.ufpe.cin.reviewer.core.common.StudyController;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
@@ -38,6 +41,14 @@ public class StudyAnalysisView extends BaseView {
 	
 	private Study study;
 	private LiteratureReview literatureReview;
+
+	private SashForm sash;
+	private Section sectionInfo;
+	private Section sectionAbstract;
+	private Composite infoComposite;
+	private Composite abstractComposite;
+	private Table criteriaTable;
+	private Table groupTable;
 	
 	private StyledText codeStyledText;
 	private StyledText titleStyledText;
@@ -194,8 +205,39 @@ public class StudyAnalysisView extends BaseView {
 
 		GridData layoutData;
 		
+		sash = new SashForm(form.getBody(),SWT.HORIZONTAL);
+		sash.setLayout(new GridLayout(2, false));
+		GridData sashLayout = new GridData(GridData.FILL_BOTH);
+		sashLayout.horizontalSpan = 5;
+		sashLayout.grabExcessHorizontalSpace = true;
+		sashLayout.grabExcessVerticalSpace = true;
+		sash.setLayoutData(sashLayout);
+		sash.getMaximizedControl();
+		
+		sectionInfo = toolkit.createSection(sash, Section.NO_TITLE);
+	    sectionInfo.setText("REVIEWS");	    
+	    sectionInfo.setLayout(new GridLayout(1, false));
+	    GridData sectionInfoLayout = new GridData(GridData.FILL_VERTICAL);
+	    sectionInfoLayout.horizontalSpan = 1;
+	    sectionInfo.setLayoutData(sectionInfoLayout);
+		
+		sectionAbstract = toolkit.createSection(sash, Section.NO_TITLE);
+		sectionAbstract.setText("REVIEWS");	    
+		sectionAbstract.setLayout(new GridLayout(1, false));
+	    GridData sectionAbstractLayout = new GridData(GridData.FILL_VERTICAL);
+	    sectionAbstractLayout.horizontalSpan = 1;
+	    sectionAbstract.setLayoutData(sectionAbstractLayout);
+
+		infoComposite = toolkit.createComposite(sectionInfo, SWT.BORDER);
+		infoComposite.setLayout(new GridLayout(2, false));
+		infoComposite.setLayoutData(new GridData());
+
+		abstractComposite = toolkit.createComposite(sectionAbstract, SWT.BORDER);
+		abstractComposite.setLayout(new GridLayout(2, false));
+		abstractComposite.setLayoutData(new GridData());
+		
 		// Code widgets
-		Label codeLabel = toolkit.createLabel(form.getBody(), "CODE: ");
+		Label codeLabel = toolkit.createLabel(infoComposite, "CODE: ");
 		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
@@ -208,8 +250,14 @@ public class StudyAnalysisView extends BaseView {
 		this.codeStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.codeStyledText, true, true);
 		
+		Label codeInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Title widgets
-		Label titleLabel = toolkit.createLabel(form.getBody(), "TITLE: ");
+		Label titleLabel = toolkit.createLabel(infoComposite, "TITLE: ");
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
@@ -222,8 +270,14 @@ public class StudyAnalysisView extends BaseView {
 		this.titleStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.titleStyledText, true, true);
 		
+		Label titleInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Status widgets
-		Label statusLabel = toolkit.createLabel(form.getBody(), "STATUS: ");
+		Label statusLabel = toolkit.createLabel(infoComposite, "STATUS: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		statusLabel.setLayoutData(layoutData);
@@ -234,8 +288,14 @@ public class StudyAnalysisView extends BaseView {
 		this.statusStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.statusStyledText, true, true);
 		
+		Label statusInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Source widgets
-		Label sourceLabel = toolkit.createLabel(form.getBody(), "SOURCE: ");
+		Label sourceLabel = toolkit.createLabel(infoComposite, "SOURCE: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		sourceLabel.setLayoutData(layoutData);
@@ -246,8 +306,14 @@ public class StudyAnalysisView extends BaseView {
 		this.sourceStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.sourceStyledText, true, true);
 		
+		Label sourceInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Authors widgets
-		Label authorsLabel = toolkit.createLabel(form.getBody(), "AUTHORS: ");
+		Label authorsLabel = toolkit.createLabel(infoComposite, "AUTHORS: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		authorsLabel.setLayoutData(layoutData);
@@ -258,8 +324,14 @@ public class StudyAnalysisView extends BaseView {
 		this.authorsStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.authorsStyledText, true, true);
 		
+		Label authorsInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Institutions widgets
-		Label institutionsLabel = toolkit.createLabel(form.getBody(), "INSTITUTIONS: ");
+		Label institutionsLabel = toolkit.createLabel(infoComposite, "INSTITUTIONS: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		institutionsLabel.setLayoutData(layoutData);
@@ -270,8 +342,14 @@ public class StudyAnalysisView extends BaseView {
 		this.institutionsStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.institutionsStyledText, true, true);
 		
+		Label institutionsInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Countries widgets
-		Label countriesLabel = toolkit.createLabel(form.getBody(), "COUNTRIES: ");
+		Label countriesLabel = toolkit.createLabel(infoComposite, "COUNTRIES: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		countriesLabel.setLayoutData(layoutData);
@@ -282,8 +360,14 @@ public class StudyAnalysisView extends BaseView {
 		this.countriesStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.countriesStyledText, true, true);
 		
+		Label countriesInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// Year widgets
-		Label yearLabel = toolkit.createLabel(form.getBody(), "YEAR: ");
+		Label yearLabel = toolkit.createLabel(infoComposite, "YEAR: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		yearLabel.setLayoutData(layoutData);
@@ -294,8 +378,14 @@ public class StudyAnalysisView extends BaseView {
 		this.yearStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.yearStyledText, true, true);
 		
+		Label yearInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
 		// URL widgets
-		Label urlLabel = toolkit.createLabel(form.getBody(), "URL: ");
+		Label urlLabel = toolkit.createLabel(infoComposite, "URL: ");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		urlLabel.setLayoutData(layoutData);
@@ -306,8 +396,23 @@ public class StudyAnalysisView extends BaseView {
 		this.urlStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.urlStyledText, true, true);
 		
+		Label urlInfoLabel = toolkit.createLabel(infoComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+		
+		//Groups Table
+		groupTable = toolkit.createTable(infoComposite, SWT.BORDER | SWT.FULL_SELECTION);
+		groupTable.setLinesVisible (true);
+		groupTable.setHeaderVisible (true);
+		GridData groupTableLayoutData = new GridData(GridData.FILL_BOTH);
+		groupTableLayoutData.horizontalSpan = 2;
+		groupTable.setLayoutData(groupTableLayoutData);
+		//criteriaTable.addMouseListener(new StudyMouseHandler());
+		
 		// Abstract widgets
-		Label abstractLabel = toolkit.createLabel(form.getBody(), "ABSTRACT:");
+		Label abstractLabel = toolkit.createLabel(abstractComposite, "ABSTRACT:");
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
 		layoutData.horizontalSpan = 1;
 		abstractLabel.setLayoutData(layoutData);
@@ -317,6 +422,21 @@ public class StudyAnalysisView extends BaseView {
 		abstractStyledText.setLayoutData(layoutData);
 		this.abstractStyledText.addFocusListener(new StyleTextFocusHandler());
 		this.toolkit.adapt(this.abstractStyledText, true, true);
+		
+		Label abstractInfoLabel = toolkit.createLabel(abstractComposite, "000");
+		codeLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, UIConstants.SYSTEM_FONT_HEIGHT, SWT.BOLD));
+		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_BEGINNING);
+		layoutData.horizontalSpan = 1;
+		codeLabel.setLayoutData(layoutData);
+
+		//Criteria Table
+		criteriaTable = toolkit.createTable(form.getBody(), SWT.BORDER | SWT.FULL_SELECTION);
+		criteriaTable.setLinesVisible (true);
+		criteriaTable.setHeaderVisible (true);
+		GridData criteriaTableLayoutData = new GridData(GridData.FILL_BOTH);
+		criteriaTableLayoutData.horizontalSpan = 5;
+		criteriaTable.setLayoutData(criteriaTableLayoutData);
+		//criteriaTable.addMouseListener(new StudyMouseHandler());
 		
 		// Back button
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END);
@@ -361,6 +481,11 @@ public class StudyAnalysisView extends BaseView {
 		studyLinkLayout.horizontalAlignment = SWT.END;
 		studyLink.setLayoutData(studyLinkLayout);
 		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
+		
+		sash.setWeights(new int[] {1, 3});
+
+		sectionInfo.setClient(infoComposite);
+		sectionAbstract.setClient(abstractComposite);
 	}
 	
 	public void back(){
