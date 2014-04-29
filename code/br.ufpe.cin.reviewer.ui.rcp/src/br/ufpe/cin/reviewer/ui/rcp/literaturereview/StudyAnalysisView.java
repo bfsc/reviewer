@@ -398,9 +398,7 @@ public class StudyAnalysisView extends BaseView {
 		criteriaTable.setHeaderVisible (true);
 		GridData criteriaTableLayoutData = new GridData(GridData.FILL_BOTH);
 		criteriaTableLayoutData.horizontalSpan = 5;
-		criteriaTableLayoutData.verticalAlignment = SWT.END;
 		criteriaTableLayoutData.grabExcessVerticalSpace = true;
-		criteriaTableLayoutData.grabExcessHorizontalSpace = true;
 		criteriaTable.setLayoutData(criteriaTableLayoutData);
 		//criteriaTable.addMouseListener(new StudyMouseHandler());
 		
@@ -415,21 +413,23 @@ public class StudyAnalysisView extends BaseView {
 		}
 		
 		// View all studies link
-		Hyperlink studyLink = toolkit.createHyperlink(form.getBody(), "View all studies", SWT.WRAP);
+		Button studyLink = toolkit.createButton(form.getBody(), "View all studies", SWT.PUSH);
+		//Hyperlink studyLink = toolkit.createHyperlink(form.getBody(), "View all studies", SWT.WRAP);
 		GridData studyLinkLayout = new GridData(GridData.VERTICAL_ALIGN_END);
 		layoutData.horizontalSpan = 1;
 		studyLinkLayout.grabExcessVerticalSpace = true;
+		studyLinkLayout.grabExcessHorizontalSpace = true;
 		studyLink.setLayoutData(studyLinkLayout);
-		studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
+		//studyLink.addHyperlinkListener(new LiteratureReviewStudiesLinkHandler());
 		
 		// Back button
 		layoutData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		Button back = toolkit.createButton(form.getBody(), "Back", SWT.PUSH);
 		layoutData.horizontalSpan = 1;
 		layoutData.grabExcessVerticalSpace = true;
-		layoutData.grabExcessHorizontalSpace = true;
+		//layoutData.grabExcessHorizontalSpace = true;
 		layoutData.verticalAlignment = SWT.END;
-		layoutData.horizontalAlignment = SWT.END;
+		layoutData.horizontalAlignment = SWT.RIGHT;
 		back.setLayoutData(layoutData);
 		back.addSelectionListener(new BackButtonHandler());
 		
@@ -439,7 +439,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.grabExcessVerticalSpace = true;
 		//layoutData.grabExcessHorizontalSpace = true;
 		layoutData.verticalAlignment = SWT.END;
-		//layoutData.horizontalAlignment = SWT.END;
+		layoutData.horizontalAlignment = SWT.RIGHT;
 		include.setLayoutData(layoutData);
 		layoutData = new GridData();
 		include.addSelectionListener(new IncludeButtonHandler());
@@ -448,9 +448,9 @@ public class StudyAnalysisView extends BaseView {
 		Button exclude = toolkit.createButton(form.getBody(), "Exclude", SWT.PUSH);
 		layoutData.horizontalSpan = 1;
 		layoutData.grabExcessVerticalSpace = true;
-		layoutData.grabExcessHorizontalSpace = true;
+		//layoutData.grabExcessHorizontalSpace = true;
 		layoutData.verticalAlignment = SWT.END;
-		layoutData.horizontalAlignment = SWT.END;
+		layoutData.horizontalAlignment = SWT.RIGHT;
 		exclude.setLayoutData(layoutData);
 		layoutData = new GridData();
 		exclude.addSelectionListener(new ExcludeButtonHandler());
@@ -460,7 +460,7 @@ public class StudyAnalysisView extends BaseView {
 		layoutData.horizontalSpan = 1;
 		layoutData.grabExcessVerticalSpace = true;
 		layoutData.verticalAlignment = SWT.END;
-		layoutData.horizontalAlignment = SWT.END;
+		layoutData.horizontalAlignment = SWT.RIGHT;
 		skip.setLayoutData(layoutData);
 		skip.addSelectionListener(new SkipButtonHandler());
 		
