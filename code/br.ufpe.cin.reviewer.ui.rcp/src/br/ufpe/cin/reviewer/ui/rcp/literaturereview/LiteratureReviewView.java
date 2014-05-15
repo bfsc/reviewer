@@ -7,6 +7,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
@@ -17,6 +18,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
@@ -44,7 +47,6 @@ import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
 import br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective;
-import br.ufpe.cin.reviewer.ui.rcp.search.SearchView;
 //import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReviewSource;
 
 public class LiteratureReviewView extends BaseView {
@@ -306,6 +308,22 @@ public class LiteratureReviewView extends BaseView {
 
                 MenuItem item1 = new MenuItem(menu, SWT.PUSH);
                 item1.setText("Add Study");
+                item1.addSelectionListener(new SelectionListener() {
+					
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						MessageBox manualDialog = new MessageBox(form.getShell(), SWT.ICON_ERROR);
+						manualDialog.setText("Reviewer");
+						manualDialog.setMessage("Teste");
+						int returnCode = manualDialog.open();
+					}
+					
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
                 MenuItem item2 = new MenuItem(menu, SWT.PUSH);
                 item2.setText("Import BibText");
 
@@ -472,7 +490,7 @@ public class LiteratureReviewView extends BaseView {
 		sectionManual.setClient(manualComposite);
 		sectionAutomatic.setClient(automaticComposite);
 	
-	}	
+	}
 	
 	private class LiteratureReviewPhasesButtonHandler implements SelectionListener {
 		@Override
