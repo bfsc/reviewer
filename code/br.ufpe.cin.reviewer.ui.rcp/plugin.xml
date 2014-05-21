@@ -43,6 +43,12 @@
             id="br.ufpe.cin.reviewer.ui.rcp.EvaluatorPerspective"
             name="Evaluator Perspective">
       </perspective>
+      <perspective
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyPerspective"
+            fixed="true"
+            id="br.ufpe.cin.reviewer.ui.rcp.ManualStudyPerspective"
+            name="Manual Study Perspective">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -75,6 +81,12 @@
             class="br.ufpe.cin.reviewer.ui.rcp.evaluator.EvaluatorView"
             id="br.ufpe.cin.reviewer.ui.rcp.evaluator.EvaluatorView"
             name="Evaluator View">
+      </view>
+      <view
+            allowMultiple="false"
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView"
+            id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView"
+            name="Manual Study View">
       </view>
    </extension>
    <extension
