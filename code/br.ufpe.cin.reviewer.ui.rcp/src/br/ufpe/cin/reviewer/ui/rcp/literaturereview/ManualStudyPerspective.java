@@ -7,7 +7,6 @@ public class ManualStudyPerspective implements IPerspectiveFactory {
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.ManualStudyPerspective";
 	
-	@Override
 	public void createInitialLayout(IPageLayout layout) {
 		layout.setEditorAreaVisible(false);
 		layout.setFixed(true);

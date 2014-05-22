@@ -7,7 +7,6 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
@@ -18,8 +17,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
@@ -312,10 +309,10 @@ public class LiteratureReviewView extends BaseView {
 					
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						MessageBox manualDialog = new MessageBox(form.getShell(), SWT.ICON_ERROR);
-						manualDialog.setText("Reviewer");
-						manualDialog.setMessage("Teste");
-						int returnCode = manualDialog.open();
+						IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(ManualStudyPerspective.ID));
+								
 					}
 					
 					@Override

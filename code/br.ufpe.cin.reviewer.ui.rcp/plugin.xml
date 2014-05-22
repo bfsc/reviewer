@@ -161,6 +161,9 @@
                visible="true">
          </view>
       </perspectiveExtension>
+       <perspectiveExtension
+             targetID="br.ufpe.cin.reviewer.ui.rcp.ManualStudyPerspective">
+       </perspectiveExtension>
    </extension>
    <extension
          id="reviewer"
