@@ -163,6 +163,17 @@
       </perspectiveExtension>
        <perspectiveExtension
              targetID="br.ufpe.cin.reviewer.ui.rcp.ManualStudyPerspective">
+         <view
+               closeable="false"
+               id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView"
+               minimized="false"
+               moveable="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="true"
+               visible="true">
+         </view>
        </perspectiveExtension>
    </extension>
    <extension

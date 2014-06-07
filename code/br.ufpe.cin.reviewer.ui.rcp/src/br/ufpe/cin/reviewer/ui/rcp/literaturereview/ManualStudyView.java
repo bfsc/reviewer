@@ -1,28 +1,16 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
-import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView.BackButtonHandler;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView.ExcludeButtonHandler;
-import br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView.SkipButtonHandler;
 
 public class ManualStudyView extends BaseView {
 
-	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyAnalysisView";
+	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView";
 
 	private Section section;
 	private Composite infoComposite;
