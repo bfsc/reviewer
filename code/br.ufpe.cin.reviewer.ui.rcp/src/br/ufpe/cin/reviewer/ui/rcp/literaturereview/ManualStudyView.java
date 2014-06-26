@@ -148,7 +148,8 @@ public class ManualStudyView extends BaseView {
 		saveButton = toolkit.createButton(buttonsComposite, "Save", SWT.PUSH);
 		GridData saveButtonLayoutData = new GridData();
 		saveButtonLayoutData.horizontalAlignment = SWT.RIGHT;
-		saveButton.setLayoutData(cancelButtonLayoutData);
+		//saveButtonLayoutData.grabExcessHorizontalSpace = true;
+		saveButton.setLayoutData(saveButtonLayoutData);
 		
 		section.setClient(sectionComposite);
 		sectionInfo.setClient(infoComposite);
