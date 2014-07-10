@@ -5,6 +5,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -14,7 +16,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import br.ufpe.cin.reviewer.ui.rcp.Activator;
 import br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewPerspective;
-import br.ufpe.cin.reviewer.ui.rcp.search.SearchPerspective;
+import br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModePerspective;
 
 public abstract class BaseView extends ViewPart {
 
@@ -45,9 +47,27 @@ public abstract class BaseView extends ViewPart {
 
 		public void run() {
 			super.run();
-			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
-			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(SearchPerspective.ID));
+			
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		    // File standard dialog
+		    FileDialog fileDialog = new FileDialog(shell);
+		    // Set the text
+		    fileDialog.setText("Select File");
+		    // Set filter on .txt files
+		    //fileDialog.setFilterExtensions(new String[] { "*.txt" });
+		    // Put in a readable name for the filter
+		    //fileDialog.setFilterNames(new String[] { "Textfiles(*.txt)" });
+		    // Open Dialog and save result of selection
+		    String selected = fileDialog.open();
+		    System.out.println(selected);
+		    
+		    if (selected != null) {
+			    System.out.println("entra aqui");
+			    
+		    	IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+		    	IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		    	activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyEvaluatorModePerspective.ID));
+		    }
 		}
 		
 		public ImageDescriptor getImageDescriptor() {
@@ -56,7 +76,7 @@ public abstract class BaseView extends ViewPart {
 		}
 		
 		public String getToolTipText() {
-			return "Search studies";
+			return "Evaluator";
 		}
 		
 	}

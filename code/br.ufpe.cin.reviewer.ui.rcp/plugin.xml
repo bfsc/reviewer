@@ -49,6 +49,12 @@
             id="br.ufpe.cin.reviewer.ui.rcp.ManualStudyPerspective"
             name="Manual Study Perspective">
       </perspective>
+      <perspective
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModePerspective"
+            fixed="true"
+            id="br.ufpe.cin.reviewer.ui.rcp.StudyEvaluatorModePerspective"
+            name="Study Evaluator Mode Perspective">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -87,6 +93,12 @@
             class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView"
             id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView"
             name="Manual Study View">
+      </view>
+      <view
+            allowMultiple="false"
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModeView"
+            id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModeView"
+            name="Study Evaluator Mode View">
       </view>
    </extension>
    <extension
@@ -166,6 +178,20 @@
          <view
                closeable="false"
                id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.ManualStudyView"
+               minimized="false"
+               moveable="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="true"
+               visible="true">
+         </view>
+       </perspectiveExtension>
+       <perspectiveExtension
+             targetID="br.ufpe.cin.reviewer.ui.rcp.StudyEvaluatorModePerspective">
+         <view
+               closeable="false"
+               id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModeView"
                minimized="false"
                moveable="false"
                relationship="left"

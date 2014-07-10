@@ -222,7 +222,6 @@ public class LiteratureReviewView extends BaseView {
 		
 	    toolbarCriteria = new ToolBar (sectionCriteria, SWT.NONE);
 	    ToolItem itemAddCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
-
 	    itemAddCriteria.setImage(addIcon);    
 	    ToolItem itemDeleteCriteria = new ToolItem(toolbarCriteria, SWT.BUTTON1);
 	    itemDeleteCriteria.setImage(minusIcon);
