@@ -55,6 +55,11 @@
             id="br.ufpe.cin.reviewer.ui.rcp.StudyEvaluatorModePerspective"
             name="Study Evaluator Mode Perspective">
       </perspective>
+      <perspective
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyInfoEvaluatorPerspective"
+            id="br.ufpe.cin.reviewer.ui.rcp.StudyInfoEvaluatorPerspective"
+            name="Study Info Evaluator Perspective">
+      </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -99,6 +104,12 @@
             class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModeView"
             id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModeView"
             name="Study Evaluator Mode View">
+      </view>
+      <view
+            allowMultiple="false"
+            class="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyInfoEvaluatorView"
+            id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyInfoEvaluatorView"
+            name="Study Info Evaluator View">
       </view>
    </extension>
    <extension
@@ -192,6 +203,20 @@
          <view
                closeable="false"
                id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyEvaluatorModeView"
+               minimized="false"
+               moveable="false"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false"
+               standalone="true"
+               visible="true">
+         </view>
+       </perspectiveExtension>
+       <perspectiveExtension
+             targetID="br.ufpe.cin.reviewer.ui.rcp.StudyInfoEvaluatorPerspective">
+         <view
+               closeable="false"
+               id="br.ufpe.cin.reviewer.ui.rcp.literaturereview.StudyInfoEvaluatorView"
                minimized="false"
                moveable="false"
                relationship="left"

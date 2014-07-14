@@ -1,6 +1,8 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -10,6 +12,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Section;
 
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
@@ -40,6 +45,12 @@ public class StudyEvaluatorModeView extends BaseView {
 		super.form.setText(super.form.getText() + " - Study Evaluator Mode");
 		form.getBody().setLayout(new GridLayout(1, false));
 	}
+	
+	@Override
+	public void setFocus() {
+		// TODO Auto-generated method stub
+
+	}
 
 	private void createStudyWidgets(Composite parent) {
 		section = toolkit.createSection(form.getBody(), Section.NO_TITLE);
@@ -63,7 +74,7 @@ public class StudyEvaluatorModeView extends BaseView {
 		GridData studiesTableLayoutData = new GridData(GridData.FILL_BOTH);
 		studiesTableLayoutData.horizontalSpan = 2;
 		studiesTable.setLayoutData(studiesTableLayoutData);
-		//studiesTable.addMouseListener(new StudyMouseHandler());
+		studiesTable.addMouseListener(new StudyMouseHandler());
 		
 		//insert columns and set their names
 		String[] titlesStudies = {"CODE v", "STATUS v", "GROUP v", "TITLE v", "YEAR v"};
@@ -88,10 +99,24 @@ public class StudyEvaluatorModeView extends BaseView {
 		section.setClient(sectionComposite);
 	}
 
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
+	private class StudyMouseHandler implements MouseListener {
 
+		public void mouseDoubleClick(MouseEvent e) {
+			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyAnalysisPerspective.ID));
+			
+			StudyAnalysisView studyAnalysisView = (StudyAnalysisView) ReviewerViewRegister.getView(StudyAnalysisView.ID);
+		}
+
+		public void mouseDown(MouseEvent e) {
+			
+		}
+
+		public void mouseUp(MouseEvent e) {
+			
+		}
+		
 	}
 
 }
