@@ -104,9 +104,9 @@ public class StudyEvaluatorModeView extends BaseView {
 		public void mouseDoubleClick(MouseEvent e) {
 			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyAnalysisPerspective.ID));
+			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(StudyInfoEvaluatorPerspective.ID));
 			
-			StudyAnalysisView studyAnalysisView = (StudyAnalysisView) ReviewerViewRegister.getView(StudyAnalysisView.ID);
+			StudyInfoEvaluatorView studyInfoEvaluatorView = (StudyInfoEvaluatorView) ReviewerViewRegister.getView(StudyInfoEvaluatorView.ID);
 		}
 
 		public void mouseDown(MouseEvent e) {
