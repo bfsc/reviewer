@@ -34,7 +34,7 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 	String XPATH_INPUT_EXPORT_FORMAT = "//input[@type='radio' and @id='BIBTEX' and @name='citation-type' and @value='BIBTEX' and @class='artRadio expRadio BIBTEX']";   
     String XPATH_INPUT_CONTENT_FORMAT = "//input[@type='radio' and @id='cite-abs' and @name='format' and @value='cite-abs' and @class='artRadio expRadio']";
     String XPATH_INPUT_EXPORT = "//input[@id='exportIcon_sci_dir' and @value='Export' and @name='export' and @class='listAction export export_general initialImage' and @type='button' and @title='Export citations' and @data-attr='toolbar']"; 
-    String XPATH_STRONG_TOTAL_FOUND = "//div[@class='iconLinks']//strong";
+    String XPATH_STRONG_TOTAL_FOUND = "//div[@class='iconLinks rssSearchBlk']//strong";
     String XPATH_BUTTON_SEARCH = "//input[@type='submit' and @class='button' and @value='Search' and @name='RegularSearch' and @alt='Search']";  
     String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='SearchText' and @wrap='virtual' and @rows='5' and @cols='60']";
     String XPATH_ANCHOR_EXPERT_SEARCH = "//div[@class='advExpertLink' and @style='float:right;']//a";
@@ -78,7 +78,8 @@ public class ScienceDirectSearchProvider implements SearchProvider {
 			
 			// Extraction total found studies
 			HtmlStrong totalFoundStrong = resultsPage.getFirstByXPath(XPATH_STRONG_TOTAL_FOUND);
-			result.setTotalFound(Integer.parseInt(totalFoundStrong.getTextContent().replaceAll(",", "").trim()));
+			String total = totalFoundStrong.getTextContent().replaceAll("[a-zA-Z]+", "").replace(':', ' ').replaceAll(",", "").trim();
+			result.setTotalFound(Integer.parseInt(total));
 			
 			// Calling the export page
 			HtmlInput exportInput = resultsPage.getFirstByXPath(XPATH_INPUT_EXPORT);
