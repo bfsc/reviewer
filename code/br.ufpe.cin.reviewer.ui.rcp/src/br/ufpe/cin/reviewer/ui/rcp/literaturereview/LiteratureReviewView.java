@@ -38,8 +38,10 @@ import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
 import br.ufpe.cin.reviewer.model.literaturereview.Criteria;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.search.AutomatedSearch;
+import br.ufpe.cin.reviewer.model.search.ManualSearch;
 import br.ufpe.cin.reviewer.model.search.QueryInfo;
 import br.ufpe.cin.reviewer.model.search.Search;
+import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 import br.ufpe.cin.reviewer.ui.rcp.common.UIConstants;
@@ -201,12 +203,12 @@ public class LiteratureReviewView extends BaseView {
 		reviewInfoComposite.setVisible(true);
 
 		//Review Title
-		titleLabel = toolkit.createLabel(reviewInfoComposite, "TITLE: ");
+		titleLabel = toolkit.createLabel(reviewInfoComposite, "TITLE:                                                            ");
 		titleLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		titleLabel.setLayoutData(new GridData());
-
+		
 		//Review Title
-		titleInfoLabel = toolkit.createLabel(reviewInfoComposite, "Pesquisa 1");
+		titleInfoLabel = toolkit.createLabel(reviewInfoComposite, "");
 		titleInfoLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.NONE));
 		GridData titleInfoLabelData = new GridData(GridData.FILL_HORIZONTAL);
 		titleInfoLabelData.horizontalSpan = 2;
@@ -264,12 +266,16 @@ public class LiteratureReviewView extends BaseView {
 					
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
-						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(SearchPerspective.ID));
+						if ((selectedLiteratureReview != null)){
+							IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+							activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(SearchPerspective.ID));
+						} else {
+							createSelectLiteratureMessage();
+						}
 						
 					}
-					
+
 					@Override
 					public void widgetDefaultSelected(SelectionEvent e) {
 						// TODO Auto-generated method stub
@@ -308,9 +314,13 @@ public class LiteratureReviewView extends BaseView {
 					
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
-						IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(ManualStudyPerspective.ID));
+						if ((selectedLiteratureReview != null) ) {
+							IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+							IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+							activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(ManualStudyPerspective.ID));
+						} else {
+							createSelectLiteratureMessage();
+						}
 								
 					}
 					
@@ -395,7 +405,7 @@ public class LiteratureReviewView extends BaseView {
 		GridData infoTableLayoutData = new GridData(GridData.FILL_BOTH);
 		infoTable.setLayoutData(infoTableLayoutData);
 		//insert columns and set their names
-		String[] titles = {"info 1", "info 2", "info 3", "info 4"};
+		String[] titles = {"Title", "Source", "Year", "Authors"};
 		for (int i=0; i<titles.length; i++) {
 			TableColumn column = new TableColumn (infoTable, SWT.NONE);
 			column.setText (titles [i]);
@@ -432,7 +442,7 @@ public class LiteratureReviewView extends BaseView {
 		QueryLabel.setLayoutData(new GridData());
 
 		//Source Label
-		SourceLabel = toolkit.createLabel(automaticComposite, "SOURCE");
+		SourceLabel = toolkit.createLabel(automaticComposite, "SOURCES:");
 		SourceLabel.setFont(new Font(UIConstants.APP_DISPLAY, UIConstants.SYSTEM_FONT_NAME, 10, SWT.BOLD));
 		GridData sourceLabelData = new GridData();
 		sourceLabelData.horizontalSpan = 2;
@@ -491,11 +501,15 @@ public class LiteratureReviewView extends BaseView {
 	private class LiteratureReviewPhasesButtonHandler implements SelectionListener {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
-			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
-			
-			LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
+			if ((selectedLiteratureReview != null)) {
+				IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPhasesPerspective.ID));
+				
+				LiteratureReviewPhasesView literatureReviewStudiesView = (LiteratureReviewPhasesView) ReviewerViewRegister.getView(LiteratureReviewPhasesView.ID);
+			} else {
+				createSelectLiteratureMessage();
+			}
 		}
 
 		@Override
@@ -506,9 +520,10 @@ public class LiteratureReviewView extends BaseView {
 	}
 	
 	public void populateReviewInfo() {
-		
+		this.titleLabel.setText("TITLE: " + this.selectedLiteratureReview.getTitle());
 		refreshCriteriaList();		
-		refreshAutomaticSearchTable();		
+		refreshAutomaticSearchTable();	
+		refreshManualSearchTable();	
 	}
 	
 	
@@ -537,6 +552,31 @@ public class LiteratureReviewView extends BaseView {
 				for (int i=0; i < sourceTable.getColumnCount(); i++) {
 					sourceTable.getColumn(i).pack();
 				}		
+			}
+		}
+	}
+	
+	private void refreshManualSearchTable() {
+		
+		infoTable.removeAll();
+		
+		for (Search s: selectedLiteratureReview.getSearches()) {
+			
+			if (s instanceof ManualSearch) {
+				ManualSearch ms = (ManualSearch)s;
+				
+				for (Study study : ms.getStudies()) {
+					TableItem item = new TableItem (infoTable, SWT.NONE);
+					item.setText(0, study.getTitle());
+					item.setText(1, study.getSource());
+					item.setText(2, study.getYear());
+					String auth = String.valueOf(study.getAuthors());
+					item.setText(3, auth.substring(1, (auth.length()-1)));
+				}
+				
+				for (int i=0; i < infoTable.getColumnCount(); i++) {
+					infoTable.getColumn(i).pack();
+				}	
 			}
 		}
 	}
@@ -586,26 +626,28 @@ public class LiteratureReviewView extends BaseView {
 	private class LiteratureReviewRemoveReviewHandler implements SelectionListener {
 
 		public void widgetSelected(SelectionEvent e) {
-
-			MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-			dialog.setText("Reviewer");
-			dialog.setMessage("Do you really want to delete this literature review?");
-			
-			int returnCode = dialog.open();
-			
-			if (returnCode == SWT.OK) {
-				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-				literatureReviewController.deleteLiteratureReview(selectedLiteratureReview);
+			if ((selectedLiteratureReview != null)) {
+				MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+				dialog.setText("Reviewer");
+				dialog.setMessage("Do you really want to delete this literature review?");
 				
-				list.remove(selectedLiteratureReview.getTitle());
-				literatureReviews.remove(selectedLiteratureReview);
+				int returnCode = dialog.open();
 				
-				selectedLiteratureReview = null;
-				reviewInfoComposite.setVisible(false);
-	
-				refreshLiteratureView();
+				if (returnCode == SWT.OK) {
+					LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+					literatureReviewController.deleteLiteratureReview(selectedLiteratureReview);
+					
+					list.remove(selectedLiteratureReview.getTitle());
+					literatureReviews.remove(selectedLiteratureReview);
+					
+					selectedLiteratureReview = null;
+					reviewInfoComposite.setVisible(false);
+		
+					refreshLiteratureView();
+				}
+			} else {
+				createSelectLiteratureMessage();
 			}
-			
 		}
 
 		@Override
@@ -618,17 +660,22 @@ public class LiteratureReviewView extends BaseView {
 	private class LiteratureReviewAddCriteriaHandler implements SelectionListener {
 
 		public void widgetSelected(SelectionEvent e) {
-			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-			InputDialog dialog = new InputDialog(shell, "Create Criteria", "Criteria Description", null, null);
-			dialog.open();
 			
-			if (dialog.getReturnCode() == InputDialog.OK) {
-				Criteria c = new Criteria();
-				c.setName(dialog.getValue());
-				selectedLiteratureReview.getCritireon().add(c);
-				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-				literatureReviewController.updateLiteratureReview(selectedLiteratureReview);
-				refreshCriteriaList();
+			if ((selectedLiteratureReview != null) ) {
+				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+				InputDialog dialog = new InputDialog(shell, "Create Criteria", "Criteria Description", null, null);
+				dialog.open();
+				
+				if (dialog.getReturnCode() == InputDialog.OK) {
+					Criteria c = new Criteria();
+					c.setName(dialog.getValue());
+					selectedLiteratureReview.getCritireon().add(c);
+					LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+					literatureReviewController.updateLiteratureReview(selectedLiteratureReview);
+					refreshCriteriaList();
+				}
+			} else {
+				createSelectLiteratureMessage();
 			}
 		}
 
@@ -642,20 +689,30 @@ public class LiteratureReviewView extends BaseView {
 
 		public void widgetSelected(SelectionEvent e) {
 
-			MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
-			dialog.setText("Reviewer");
-			dialog.setMessage("Do you really want to delete this literature review?");
-			
-			int returnCode = dialog.open();
-			
-			if (returnCode == SWT.OK) {
-				selectedLiteratureReview.getCritireon().remove(criteriaList.getSelectionIndex());			
-				
-				LiteratureReviewController literatureReviewController = new LiteratureReviewController();
-				literatureReviewController.updateLiteratureReview(selectedLiteratureReview);
-				refreshCriteriaList();
+			if (selectedLiteratureReview != null) {
+				if (criteriaList.getSelectionIndex() != -1) {
+					MessageBox dialog =  new MessageBox(form.getShell(), SWT.ICON_QUESTION | SWT.OK| SWT.CANCEL);
+					dialog.setText("Reviewer");
+					dialog.setMessage("Do you really want to delete this criteria?");
+					
+					int returnCode = dialog.open();
+					
+					if (returnCode == SWT.OK) {
+						selectedLiteratureReview.getCritireon().remove(criteriaList.getSelectionIndex());			
+						
+						LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+						literatureReviewController.updateLiteratureReview(selectedLiteratureReview);
+						refreshCriteriaList();
+					}
+				} else {
+					Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					MessageBox box = new MessageBox(shell);
+					box.setMessage("Select a Criteria.");
+					box.open();
+				}
+			} else {
+				createSelectLiteratureMessage();
 			}
-			
 		}
 
 		@Override
@@ -679,7 +736,15 @@ public class LiteratureReviewView extends BaseView {
 			
 		}
 		
+	}	
+
+	private void createSelectLiteratureMessage() {
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		MessageBox box = new MessageBox(shell);
+		box.setMessage("Select a Literature Review.");
+		box.open();
 	}
+	
 	/*
 
 	public static final String ID = "br.ufpe.cin.reviewer.ui.rcp.literaturereview.LiteratureReviewView";

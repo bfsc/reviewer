@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.dialogs.IMessageProvider;
-import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -51,6 +51,7 @@ import br.ufpe.cin.reviewer.core.search.SearchResult;
 import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
 import br.ufpe.cin.reviewer.model.search.AutomatedSearch;
 import br.ufpe.cin.reviewer.model.search.QueryInfo;
+import br.ufpe.cin.reviewer.model.search.Search;
 import br.ufpe.cin.reviewer.model.study.Study;
 import br.ufpe.cin.reviewer.searchprovider.extensions.SearchProviderExtensionsRegistry;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
@@ -321,13 +322,97 @@ public class SearchView extends BaseView {
 			
 			labelTotalFetched = toolkit.createLabel(resultCompositeLabels, "Total Found:");
 			labelTotalFetched.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
-			/*
-			saveButton = toolkit.createButton(resultCompositeLabels, "Save", SWT.NONE);
-			GridData saveButtonData = new GridData();
-			saveButtonData.grabExcessHorizontalSpace = true;
-			saveButtonData.horizontalAlignment = SWT.RIGHT;
-			saveButton.setLayoutData(saveButtonData);
-			*/
+		
+			saveButton = toolkit.createButton(resultCompositeLabels, "Save Results", SWT.BORDER_SOLID | SWT.COLOR_CYAN);
+			saveButton.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
+			saveButton.addSelectionListener(new SelectionListener() {
+					
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					LiteratureReviewView lrView = (LiteratureReviewView) ReviewerViewRegister
+							.getView(LiteratureReviewView.ID);
+					LiteratureReview lr = lrView.getSelectedLiteratureReview();
+					
+					boolean hasAutomatedSearch = false;
+					for (Search s: lr.getSearches()) {						
+						if (s instanceof AutomatedSearch) {
+							hasAutomatedSearch = true;
+							break;
+						}
+					}
+
+					boolean confirm = false;
+					
+					Shell shell = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow().getShell();
+					if (hasAutomatedSearch) {
+						confirm = MessageDialog.openConfirm(shell,
+								"Save New Results", 
+								"A previous automated search exists. Do you want to delete and save the new results to" + lr.getTitle()
+										+ "?");
+					} else {
+						confirm = MessageDialog.openConfirm(shell,
+								"Save Results", "Save Results to " + lr.getTitle()
+										+ "?");
+					}
+					
+					if (confirm) {
+						if (hasAutomatedSearch) {
+							for (Search s: lr.getSearches()) {						
+								if (s instanceof AutomatedSearch) {
+									lr.getSearches().remove(s);
+									break;
+								}
+							}
+						}
+						AutomatedSearch s = new AutomatedSearch();
+						s.setQueryString(searchString);
+
+						// Adding studies to the literature review
+						int studyCounter = 1;
+						for (Study study : searchResult.getAllStudies()) {
+							study.setCode("S" + studyCounter);
+							s.getStudies().add(study);
+							studyCounter++;
+						}
+
+						// Adding sources to the literature review
+						for (SearchProviderResult result : searchResult
+								.getSearchProviderResults()) {
+							if (result.getTotalFetched() > 0) {
+								// LiteratureReviewSource source = new
+								// LiteratureReviewSource();
+								QueryInfo qi = new QueryInfo();
+								qi.setSource(result.getSearchProviderName());
+								qi.setTotalFetched(result.getTotalFetched());
+								qi.setTotalFound(result.getTotalFound());
+								s.getQueryInfos().add(qi);
+							}
+						}
+
+						lr.getSearches().add(s);
+
+						LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+						literatureReviewController.updateLiteratureReview(lr);
+						lrView.populateReviewInfo();
+
+						IPerspectiveRegistry perspectiveRegistry = PlatformUI
+								.getWorkbench().getPerspectiveRegistry();
+						IWorkbenchPage activePage = PlatformUI.getWorkbench()
+								.getActiveWorkbenchWindow().getActivePage();
+						activePage.setPerspective(perspectiveRegistry
+								.findPerspectiveWithId(LiteratureReviewPerspective.ID));
+
+					}
+
+				}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 			
 			table = toolkit.createTable(this, SWT.BORDER | SWT.FULL_SELECTION);
 			table.setLinesVisible (true);
@@ -344,9 +429,9 @@ public class SearchView extends BaseView {
 			errorsLink.addHyperlinkListener(new ShowErrorsLinkHandler());
 			errorsLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 			
-			Hyperlink studyLink = toolkit.createHyperlink(c, "SAVE RESULTS...", SWT.NONE);			
+			/*Hyperlink studyLink = toolkit.createHyperlink(c, "SAVE RESULTS...", SWT.NONE);			
 			studyLink.addHyperlinkListener(new CreateLiteratureReviewLinkHandler());
-			studyLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+			studyLink.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));*/
 		}
 		
 		public Table getTable(){
@@ -367,8 +452,6 @@ public class SearchView extends BaseView {
 			int currentStudyNumber = 0;
 			for (Study study : searchResult.getAllStudies()) {
 				if (study == null) {
-					System.out.println("CONTINUE.......... Study" + currentStudyNumber);
-					
 					continue;
 				}
 				currentStudyNumber++;
@@ -438,49 +521,7 @@ public class SearchView extends BaseView {
 			}
 
 			public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
-				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-				InputDialog dialog = new InputDialog(shell, "Save Results", "Save Results to Literature Review?", null, null);
-				dialog.open();
-				if (dialog.getReturnCode() == InputDialog.OK) {
-					
-					AutomatedSearch s = new AutomatedSearch();					
-					s.setQueryString(searchString);
-					
-					
-					// Adding studies to the literature review
-					int studyCounter = 1;
-					for (Study study : searchResult.getAllStudies()) {
-						study.setCode("S" + studyCounter);
-						s.getStudies().add(study);
-						studyCounter++;
-					}
-					
-					// Adding sources to the literature review
-					for (SearchProviderResult result : searchResult.getSearchProviderResults()) {
-						if (result.getTotalFetched() > 0) {
-							//LiteratureReviewSource source = new LiteratureReviewSource();
-							QueryInfo qi = new QueryInfo();
-							qi.setSource(result.getSearchProviderName());
-							qi.setTotalFetched(result.getTotalFetched());
-							qi.setTotalFound(result.getTotalFound());
-							s.getQueryInfos().add(qi);
-						}
-					}
-					LiteratureReviewView lrView = (LiteratureReviewView) ReviewerViewRegister.getView(LiteratureReviewView.ID);
-					LiteratureReview lr = lrView.getSelectedLiteratureReview();					
-					
-					lr.getSearches().add(s);
-					
-					LiteratureReviewController literatureReviewController = new LiteratureReviewController();				
-					literatureReviewController.updateLiteratureReview(lr);
-					lrView.populateReviewInfo();
-					
-					IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
-					IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));
-					
 				
-				}
 				
 			}
 		}

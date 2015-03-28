@@ -1,15 +1,33 @@
 package br.ufpe.cin.reviewer.ui.rcp.literaturereview;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Section;
 
+import br.ufpe.cin.reviewer.core.literaturereview.LiteratureReviewController;
+import br.ufpe.cin.reviewer.model.literaturereview.LiteratureReview;
+import br.ufpe.cin.reviewer.model.search.ManualSearch;
+import br.ufpe.cin.reviewer.model.study.Study;
+import br.ufpe.cin.reviewer.model.study.Study.StudyStatus;
 import br.ufpe.cin.reviewer.ui.rcp.common.BaseView;
 import br.ufpe.cin.reviewer.ui.rcp.common.ReviewerViewRegister;
 
@@ -30,12 +48,12 @@ public class ManualStudyView extends BaseView {
 
 	private Text abstractText;
 	private Text titleText;
-	private Text typeText;
 	private Text sourceText;
 	private Text authorsText;
 	private Text institutionsText;
 	private Text countriesText;
 	private Text yearText;
+	private Text URLText;
 
 	private Button cancelButton;
 	private Button saveButton;
@@ -101,38 +119,43 @@ public class ManualStudyView extends BaseView {
 		Label titleLabel = toolkit.createLabel(infoComposite, "Title: ");
 		titleText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
 		titleText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		Label typeLabel = toolkit.createLabel(infoComposite, "Type: ");
-		typeText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
-		typeText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(titleText);
 		
 		Label sourceLabel = toolkit.createLabel(infoComposite, "Source: ");
 		sourceText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
 		sourceText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(sourceText);
 		
 		Label authorsLabel = toolkit.createLabel(infoComposite, "Authors: ");
 		authorsText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
 		authorsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(authorsText);
 		
 		Label institutionsLabel = toolkit.createLabel(infoComposite, "Institutions: ");
 		institutionsText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
 		institutionsText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(institutionsText);
 		
 		Label countriesLabel = toolkit.createLabel(infoComposite, "Countries: ");
 		countriesText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
 		countriesText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(countriesText);
 		
 		Label yearLabel = toolkit.createLabel(infoComposite, "Year: ");
 		yearText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
 		yearText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(yearText);
+		
+		Label URLLabel = toolkit.createLabel(infoComposite, "URL: ");
+		URLText = toolkit.createText(infoComposite, "", SWT.WRAP | SWT.BORDER);
+		URLText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createTabTraverseListener(URLText);
 		
 		//Abstract
 		Label abstractLabel = toolkit.createLabel(abstractComposite, "Abstract: ");
 		abstractText = toolkit.createText(abstractComposite, "", SWT.WRAP | SWT.BORDER);
 		abstractText.setLayoutData(new GridData(GridData.FILL_BOTH));
-		//abstractText.addFocusListener(new SearchTextHandler());
-		//TableWrapData td = new TableWrapData(TableWrapData.FILL_GRAB);
-		//abstractText.setLayoutData(td);
+		createTabTraverseListener(abstractText);
 	    
 		buttonsComposite = toolkit.createComposite(sectionComposite);
 		buttonsComposite.setLayout(new GridLayout(2, false));
@@ -145,15 +168,117 @@ public class ManualStudyView extends BaseView {
 		cancelButtonLayoutData.grabExcessHorizontalSpace = true;
 		cancelButton.setLayoutData(cancelButtonLayoutData);
 		
+		cancelButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IPerspectiveRegistry perspectiveRegistry = PlatformUI.getWorkbench().getPerspectiveRegistry();
+				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				activePage.setPerspective(perspectiveRegistry.findPerspectiveWithId(LiteratureReviewPerspective.ID));			
+						
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		saveButton = toolkit.createButton(buttonsComposite, "Save", SWT.PUSH);
 		GridData saveButtonLayoutData = new GridData();
 		saveButtonLayoutData.horizontalAlignment = SWT.RIGHT;
 		//saveButtonLayoutData.grabExcessHorizontalSpace = true;
 		saveButton.setLayoutData(saveButtonLayoutData);
 		
+		saveButton.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				LiteratureReviewView lrView = (LiteratureReviewView) ReviewerViewRegister
+						.getView(LiteratureReviewView.ID);
+				LiteratureReview lr = lrView.getSelectedLiteratureReview();
+
+				Shell shell = PlatformUI.getWorkbench()
+						.getActiveWorkbenchWindow().getShell();
+				boolean confirm = MessageDialog.openConfirm(shell,
+						"Save Manual Search?", "Save Manual Search to " + lr.getTitle()
+								+ "?");
+				if (confirm) {
+					ManualSearch s = new ManualSearch();
+					Study study = new Study();
+					
+					study.setAbstract(abstractText.getText());
+					study.setTitle(titleText.getText());
+					study.setSource(sourceText.getText());
+					
+					String authors = authorsText.getText();
+					StringTokenizer token = new StringTokenizer(authors, ",");
+					List<String> authorsList = new ArrayList<String>();
+					while (token.hasMoreTokens()) {
+						authorsList.add(token.nextToken().trim());
+					}
+					study.setAuthors(authorsList);
+					
+					
+					String institutions = institutionsText.getText();
+					token = new StringTokenizer(institutions, ",");
+					List<String> institutionsList = new ArrayList<String>();
+					while (token.hasMoreTokens()) {
+						institutionsList.add(token.nextToken().trim());
+					}
+					study.setInstitutions(institutionsList);
+					
+					
+					String countries = countriesText.getText();
+					token = new StringTokenizer(countries, ",");
+					List<String> countriesList = new ArrayList<String>();
+					while (token.hasMoreTokens()) {
+						countriesList.add(token.nextToken().trim());
+					}
+					study.setCountries(countriesList);					
+					
+					study.setYear(yearText.getText());
+					study.setStatus(StudyStatus.NOT_EVALUATED);
+					study.setUrl(URLText.getText());					
+					
+					s.getStudies().add(study);					
+					lr.getSearches().add(s);
+
+					LiteratureReviewController literatureReviewController = new LiteratureReviewController();
+					literatureReviewController.updateLiteratureReview(lr);
+					lrView.populateReviewInfo();
+
+					IPerspectiveRegistry perspectiveRegistry = PlatformUI
+							.getWorkbench().getPerspectiveRegistry();
+					IWorkbenchPage activePage = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow().getActivePage();
+					activePage.setPerspective(perspectiveRegistry
+							.findPerspectiveWithId(LiteratureReviewPerspective.ID));
+				}
+						
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		section.setClient(sectionComposite);
 		sectionInfo.setClient(infoComposite);
 		sectionAbstract.setClient(abstractComposite);
+	}
+
+	private void createTabTraverseListener(Text textField) {
+		textField.addTraverseListener(new TraverseListener() {
+		    public void keyTraversed(TraverseEvent e) {
+		        if (e.detail == SWT.TRAVERSE_TAB_NEXT || e.detail == SWT.TRAVERSE_TAB_PREVIOUS) {
+		            e.doit = true;
+		        }
+		    }
+		});
 	}
 
 	public void setFocus() {
