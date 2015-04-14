@@ -7,19 +7,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import br.ufpe.cin.reviewer.logger.ReviewerLogger;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlDivision;
 import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlRadioButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 import com.gargoylesoftware.htmlunit.html.HtmlSpan;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
@@ -28,20 +32,19 @@ public class ScopusSearchProvider implements SearchProvider {
 
 	public static final String SEARCH_PROVIDER_NAME = "SCOPUS";
 	
-	private static final String EXPORT_FORMAT_BIBTEX = "BIB";
 	private static final String OUTPUT_FORMAT_WITH_ABSTRACT = "CiteAbsKeyws";
 	
-	private static final String XPATH_EXPORT_BUTTON = "//input[@type='submit' and @value='Export']";
-	private static final String XPATH_SELECT_OUTPUT_FORMAT = "//select[@name='view' and @onchange='javascript:changeHelpSection(this);']";
-	private static final String XPATH_SELECT_EXPORT_FORMAT = "//select[@name='exportFormat' and @id='exportFormat']";
-	private static final String XPATH_ANCHOR_EXPORT_RESULTS = "//a[@class='jsEnabled icon export']";
+	private static final String XPATH_EXPORT_BUTTON = "//input[@type='button' and @title='Export']";
+	private static final String XPATH_SELECT_OUTPUT_FORMAT = "//select[@id='exportView']";
+	private static final String XPATH_SELECT_EXPORT_FORMAT = "//input[@type='radio' and @id='BIB']";
+	private static final String XPATH_ANCHOR_EXPORT_RESULTS = "//a[@class='icon oneClickExport clickAction exportNormal']";
 	private static final String XPATH_SELECT_ALL_CHECKBOX = "//input[@type='checkbox' and @name='selectAllCheckBox']";
-	private static final String XPATH_SEARCH_BUTTON = "//input[@type='submit' and @value='Search']";
+	private static final String XPATH_SEARCH_BUTTON = "//input[@type='submit' and @title='Search']";
 	private static final String XPATH_DIV_SEARCH_FIELD = "//div[@id='searchfield']";
 	
 	private static final String URL_SCOPUS_ADVANCED_SEARCH = "http://www.scopus.com/search/form.url?display=advanced";
 	
-	private static final String XPATH_TOTAL_FOUND = "//span[@class='Bold txtLarge1']";
+	private static final String XPATH_TOTAL_FOUND = "//span[@class='resultsCount']";
 
 	private AtomicBoolean die;
 	
@@ -54,7 +57,7 @@ public class ScopusSearchProvider implements SearchProvider {
 		
 		try {
 			// Create the web browser
-			WebClient browser = new WebClient();
+			WebClient browser = new WebClient(BrowserVersion.FIREFOX_24);
 			browser.getOptions().setThrowExceptionOnScriptError(false);
 			browser.getOptions().setJavaScriptEnabled(true);
 			browser.getOptions().setCssEnabled(false);
@@ -92,14 +95,17 @@ public class ScopusSearchProvider implements SearchProvider {
 			HtmlPage exportPage = exportAnchor.click();
 			
 			// Selecting the export format (BIB) as well as the output informations (with abstract)
-			HtmlSelect exportFormatSelect = exportPage.getFirstByXPath(XPATH_SELECT_EXPORT_FORMAT);
+			/*HtmlSelect exportFormatSelect = exportPage.getFirstByXPath(XPATH_SELECT_EXPORT_FORMAT);
 			for (HtmlOption option : exportFormatSelect.getOptions()) {
 				if (option.getValueAttribute().equalsIgnoreCase(EXPORT_FORMAT_BIBTEX)) {
 					option.setSelected(true);
 				} else {
 					option.setSelected(false);
 				}
-			}
+			}*/
+			
+			HtmlRadioButtonInput exportFormatRadio = exportPage.getFirstByXPath(XPATH_SELECT_EXPORT_FORMAT);
+			exportFormatRadio.setChecked(true);
 			
 			HtmlSelect outputSelect = exportPage.getFirstByXPath(XPATH_SELECT_OUTPUT_FORMAT);
 			for (HtmlOption option : outputSelect.getOptions()) {
@@ -111,7 +117,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			}
 			
 			// Exporting the results according to the selections above
-			HtmlSubmitInput exportButton = exportPage.getFirstByXPath(XPATH_EXPORT_BUTTON);
+			HtmlButtonInput exportButton = exportPage.getFirstByXPath(XPATH_EXPORT_BUTTON);
 			exportButton.setAttribute("onclick", "");
 			Page exportedStudiesPage = exportButton.click();
 			
@@ -121,6 +127,7 @@ public class ScopusSearchProvider implements SearchProvider {
 			if (result.getRaisedErrors().isEmpty()) {
 				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
 			}
+			ReviewerLogger.error(e.getMessage());
 			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		

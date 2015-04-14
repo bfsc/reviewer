@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import br.ufpe.cin.reviewer.logger.ReviewerLogger;
 import br.ufpe.cin.reviewer.model.common.Study;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProvider;
 import br.ufpe.cin.reviewer.searchprovider.spi.SearchProviderResult;
@@ -14,17 +15,17 @@ import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderError;
 import br.ufpe.cin.reviewer.searchprovider.spi.exceptions.SearchProviderException;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlBold;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlButtonInput;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlListItem;
-import com.gargoylesoftware.htmlunit.html.HtmlOption;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 
 public class EngineeringVillageSearchProvider implements SearchProvider {
@@ -33,15 +34,14 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 	
 	private static final String URL_MAIN_SITE = "http://www.engineeringvillage.com";
 	
-	private static final String XPATH_BUTTON_DOWNLOAD = "//input[@type='submit' and @name='submit' and @value='Download']";
-	private static final String XPATH_INPUT_DOWNLOAD = "//input[@id='rdBib' and @type='radio' and @name='downloadformat' and @value='bib']";
-	private static final String XPATH_OPTION_RECORD_OUTPUT = "//option[@value='abstract']";
+	private static final String XPATH_BUTTON_DOWNLOAD = "//input[@type='button' and @name='Save']";
+	private static final String XPATH_INPUT_DOWNLOAD = "//input[@id='rdBib']";
 	private static final String XPATH_ANCHOR_DOWNLOAD = "//a[@id='downloadlink' and @title='Download selections']";
 	private static final String XPATH_LIST_ITEM_MAXIMUM = "//li[@id='Maximum' and @class='pageselect_action' and @action='maximum']";
 	private static final String XPATH_IMG_SELECTION_OPTION = "//img[@id='pageselect_toggle' and @title='Selection options' and @class='pageselect_toggle closed']";
 	private static final String XPATH_BOLD_TOTAL_FOUND = "//div[@id='querydisplay']//p//b";
 	private static final String XPATH_BUTTON_SEARCH = "//input[@type='submit' and @value='Search' and @style='float:right;' and @class='button']";
-	private static final String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='searchWord1' and @wrap='PHYSICAL' and @id='srchWrd1' and @style='height:4em;width:560px; resize:none;overflow:auto']";
+	private static final String XPATH_TEXTAREA_SEARCH_STRING = "//textarea[@name='searchWord1']";
 	private static final String XPATH_ANCHOR_EXPERT_SEARCH = "//a[@class='tablink' and @title='Expert Search']";
 	
 	private AtomicBoolean die;
@@ -55,10 +55,11 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 		
 		try {
 			// Create the web browser
-			WebClient browser = new WebClient(BrowserVersion.FIREFOX_17);
+			WebClient browser = new WebClient(BrowserVersion.FIREFOX_24);
 			browser.getOptions().setThrowExceptionOnScriptError(false);
 			browser.getOptions().setJavaScriptEnabled(true);
 			browser.getOptions().setCssEnabled(false);
+			browser.setAjaxController(new NicelyResynchronizingAjaxController());
 			
 			// Throwing an exception if the search string is invalid.
 			if (searchString == null || searchString.trim().equalsIgnoreCase("")) {
@@ -82,7 +83,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			HtmlPage resultsPage = searchButton.click();
 			
 			// Extraction total found studies
-			HtmlBold totalFoundBold = (HtmlBold) resultsPage.getByXPath(XPATH_BOLD_TOTAL_FOUND).get(1);
+			HtmlBold totalFoundBold = (HtmlBold) resultsPage.getByXPath(XPATH_BOLD_TOTAL_FOUND).get(0);
 			int totalFound = Integer.parseInt(totalFoundBold.getTextContent().replaceAll(",", "").trim());
 			result.setTotalFound(totalFound);
 			
@@ -104,15 +105,17 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			HtmlAnchor downloadAnchor = resultsPage.getFirstByXPath(XPATH_ANCHOR_DOWNLOAD);
 			HtmlPage exportPage = downloadAnchor.click();
 			
+			browser.waitForBackgroundJavaScriptStartingBefore(10000);
+			
 			// Selecting the export format (BIB) as well as the content format (with abstract)
-			HtmlOption recordOutputOption = exportPage.getFirstByXPath(XPATH_OPTION_RECORD_OUTPUT);
-			recordOutputOption.setSelected(true);
 			HtmlInput downloadFormatInput = exportPage.getFirstByXPath(XPATH_INPUT_DOWNLOAD);
 			downloadFormatInput.setChecked(true);
 			
 			// Downloading the results according to the selections above
-			HtmlSubmitInput downloadButton = exportPage.getFirstByXPath(XPATH_BUTTON_DOWNLOAD);
+			HtmlButtonInput downloadButton = exportPage.getFirstByXPath(XPATH_BUTTON_DOWNLOAD);
 			Page exportedStudiesPage = downloadButton.click();
+			
+			browser.waitForBackgroundJavaScript(10000);
 			
 			// Extract studies data
 			result.getStudies().addAll(extractStudiesData(exportedStudiesPage.getWebResponse().getContentAsStream()));
@@ -122,6 +125,7 @@ public class EngineeringVillageSearchProvider implements SearchProvider {
 			if (result.getRaisedErrors().isEmpty()) {
 				result.addError(SearchProviderError.SEARCH_PROVIDER_COMMON_ERROR);
 			}	
+			ReviewerLogger.error(e.getMessage());
 			//throw new SearchProviderException("An error occurred trying to search the following query string:" + searchString, e);
 		}
 		
