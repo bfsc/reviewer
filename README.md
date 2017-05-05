@@ -17,6 +17,10 @@ How to use
 
 TODO
 
+Contact
+-----------------
+Bruno Cartaxo - brunocartaxo [at] gmail
+
 How to contribute
 -----------------
 
